@@ -1,0 +1,47 @@
+<% readonly ||= false %>
+
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading"></div>
+         <div class="panel-body">
+            <%= form_for @product_section, :url => fabrication_order_room_product_product_section_path, :html => { :class => "product_section", :role => 'form' } do |f| %>
+              <% if @product_section.errors.any? %>
+              <div id="error_expl" class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><%= pluralize(product_section.errors.count, "error") %> prohibited this product_section from being saved:</h3>
+                </div>
+                <div class="panel-body">
+                  <ul>
+                  <% @product_section.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              </div>
+              <% end %>
+              <%= render :partial => 'shared/flash_messages' %>
+
+              <div class="form-group">
+                <%= f.label :name %>
+                  <%= f.text_field :name, :class => 'form-control', id: :product_name, :readonly => readonly %>
+              </div>
+
+              <div class="form-group">
+                <%= f.label :status %>
+                  <%= f.collection_select :status, @statuses, :name, :name, { include_blank: false }, class: 'form-control select-bootstrap'  %>
+              </div>
+
+
+              <div class="actions <%= 'hide' if readonly %>">
+                  <%= f.submit nil, :class => 'btn btn-primary' %>
+                  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                       edit_fabrication_order_path(params[:fabrication_order_id]), :class => 'btn btn-default' %>
+            </div>
+          <% end %>
+         </div>
+      </div>
+   </div>
+</div>

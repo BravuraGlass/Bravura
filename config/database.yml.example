@@ -1,0 +1,33 @@
+default: &default
+  adapter: mysql2
+  #adapter: sqlite3
+  socket: /tmp/mysql.sock
+
+development:
+  <<: *default
+  database: bravurarcrm_development
+  username: root
+  password: root
+  host: localhost
+
+  #adapter: sqlite3
+  #database: db/development.sqlite3
+  #pool: 5
+  #timeout: 5000
+
+# Warning: The database defined as "test" will be erased and
+# re-generated from your development database when you run "rake".
+# Do not set this db to the same as development or production.
+test:
+  <<: *default
+  database: bravuracrm_test
+  username: root
+  password: root
+  host: localhost
+
+production:
+  <<: *default
+  database: bravuracrm_production
+  username: user
+  password: password
+  host: localhost

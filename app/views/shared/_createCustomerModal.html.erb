@@ -1,0 +1,20 @@
+<div id="createCustomerModal" tabindex="-1" role="dialog" aria-labelledby="createCustomerModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 id="createCustomerModalLabel" class="modal-title">Create Customer</h4>
+        </div>
+        <div class="modal-body">
+            <% @customer = Customer.new %>
+            <%= render :partial => 'customers/form', locals: {readonly: false, ajax: true, loadmap: false} %>
+        </div>
+        <div class="modal-footer">
+          <button type="button" id="createCustomerCancelButton" data-dismiss="modal" class="btn btn-default">Cancel</button>
+          <button type="button" id="createCustomerSaveButton" class="btn btn-primary">Create and Select Customer</button>
+        </div>
+      </div>
+  </div>
+</div>

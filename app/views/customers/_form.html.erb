@@ -1,0 +1,89 @@
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading">General Information</div>
+         <div class="panel-body">
+            <%= form_for @customer, :html => { :class => "customer", :role => 'form' } do |f| %>
+              <% if @customer.errors.any? %>
+              <div id="error_expl" class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><%= pluralize(@customer.errors.count, "error") %> prohibited this @customer from being saved:</h3>
+                </div>
+                <div class="panel-body">
+                  <ul>
+                  <% @customer.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              </div>
+              <% end %>
+                <%= render :partial => 'shared/flash_messages' %>
+                <div class="row">
+                  <div class="<%= ajax ? 'col-md-6' : 'col-md-4' %>">
+                    <div class="form-group">
+                      <%= f.label "First Name" %>
+                      <%= f.text_field :contact_firstname, :class => 'form-control', id: :customer_contact_firstname, :readonly => readonly %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Last Name" %>
+                      <%= f.text_field :contact_lastname, :class => 'form-control', id: :customer_contact_lastname, :readonly => readonly %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Company Name" %>
+                      <%= f.text_field :company_name, :class => 'form-control', id: :customer_company_name, :readonly => readonly %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Phone number" %>
+                      <%= f.text_field :phone_number, :class => 'form-control', id: :customer_phone_number, :readonly => readonly,
+                      "data-masked" => "true", "data-inputmask" => "'mask': '(999) 999-9999'" %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Second phone number" %>
+                      <%= f.text_field :phone_number2, :class => 'form-control', id: :customer_phone_number2, :readonly => readonly,
+                      "data-masked" => "true", "data-inputmask" => "'mask': '(999) 999-9999'" %>
+                    </div>
+                  </div>
+                  <div class="<%= ajax ? 'col-md-6' : 'col-md-4' %>">
+                    <div class="form-group">
+                      <%= f.label "Address" %>
+                      <%= f.text_field :address, :class => 'form-control', :id => :customer_address, :readonly => readonly %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Apt#" %>
+                      <%= f.text_field :address2, :class => 'form-control', :id => :customer_address2, :readonly => readonly %>
+                    </div>
+                    <div id="location_map">
+                      <%= render :partial => 'shared/location_map',  locals: {readonly: readonly, hidemap: true, address_field_id: 'customer_address'} %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Email" %>
+                      <%= f.email_field :email, :class => 'form-control', id: :customer_email, :readonly => readonly %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Second email" %>
+                      <%= f.email_field :email2, :class => 'form-control', id: :customer_email2, :readonly => readonly %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Fax" %>
+                      <%= f.text_field :fax, :class => 'form-control', id: :customer_fax, :readonly => readonly,
+                      "data-masked" => "true", "data-inputmask" => "'mask': '(999) 999-9999'"  %>
+                    </div>
+                    <div class="form-group">
+                      <%= f.label "Notes" %>
+                      <%= f.text_area :notes, :class => 'form-control', id: :customer_notes, :readonly => readonly %>
+                    </div>
+                  </div>
+                </div>
+                <% unless ajax %>
+                <div class="actions">
+                  <%= f.submit nil, :class => 'btn btn-primary' %>
+                </div>
+                <% end %>
+          <% end %>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,51 @@
+<h3>Statuses
+   <small>List of existing statuses</small>
+</h3>
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <small></small>
+            </div>
+            <div class="panel-body">
+               <table class="datatable-basic table table-striped table-hover responsive">
+                  <thead>
+                    <tr>
+                                            <th class="sort-alpha">Name</th>
+                                            <th class="sort-alpha">Order</th>
+                                            <th class="sort-alpha">Category</th>
+                                            <th class="no-sort">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <% @statuses.each do |status| %>
+                        <tr>
+                            <td><%= status.name %></td>
+                            <td><%= status.order %></td>
+                            <td><%= status.category.titleize %></td>
+                            <td>
+                            <%= link_to 'Show',
+                                        status_path(status), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Edit',
+                                        edit_status_path(status), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Delete',
+                                        status_path(status),
+                                        :method => :delete,
+                                        :data => { :confirm => 'Are you sure you want to delete the status?' },
+                                        :class => 'btn btn-xs btn-danger' %>
+                          </td>
+                        </tr>
+                      <% end %>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<%= link_to 'New Status',
+            new_status_path,
+            :class => 'btn btn-primary' %>

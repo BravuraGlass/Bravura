@@ -1,0 +1,53 @@
+<%% readonly ||= false %>
+<%- readonly ||= false %>
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading"></div>
+         <div class="panel-body">
+            <%%= form_for @<%= singular_table_name %>, :html => { :class => "<%= singular_table_name %>", :role => 'form' } do |f| %>
+              <%% if @<%= singular_table_name%>.errors.any? %>
+              <div id="error_expl" class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><%%= pluralize(<%= singular_table_name %>.errors.count, "error") %> prohibited this <%= singular_table_name %> from being saved:</h3>
+                </div>
+                <div class="panel-body">
+                  <ul>
+                  <%% @<%= singular_table_name %>.errors.full_messages.each do |msg| %>
+                    <li><%%= msg %></li>
+                  <%% end %>
+                  </ul>
+                </div>
+              </div>
+              <%% end %>
+
+            <% attributes.each do |attribute| -%>
+              <% if attribute.password_digest? -%>
+                <div class="form-group">
+                  <%%= f.label :password %>
+                  <%%= f.password_field :password, :class => 'form-control', id: :<%= field_id(:password) %>, :readonly => readonly %>
+                </div>
+
+                <div class="form-group">
+                  <%%= f.label :password_confirmation %>
+                  <%%= f.password_field :password_confirmation, :class => 'form-control', id: :<%= field_id(:password_confirmation)%>, :readonly => readonly  %>
+                </div>
+              <% else -%>
+                <div class="form-group">
+                  <%%= f.label :<%= attribute.column_name %> %>
+                  <%%= f.<%= attribute.field_type %> :<%= attribute.column_name %>, :class => 'form-control', id: :<%= field_id(attribute.column_name) %>, :readonly => readonly %>
+                </div>
+              <% end -%>
+            <% end -%>
+            <div class="actions <%%= 'hide' if readonly %>">
+              <%%= f.submit nil, :class => 'btn btn-primary' %>
+              <%%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                      <%= plural_table_name %>_path, :class => 'btn btn-default' %>
+            </div>
+          <%% end %>
+         </div>
+      </div>
+   </div>
+</div>

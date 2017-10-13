@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+   <meta charset="utf-8">
+   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+   <meta name="description" content="Bravura CRM">
+   <title>Bravura Glass Company NY - CRM</title>
+   <!-- =============== VENDOR STYLES ===============-->
+   <%= stylesheet_link_tag 'base' %>
+   <!-- =============== VIEW VENDOR STYLES ===============-->
+
+   <!-- =============== APP STYLES ===============-->
+
+   <!-- For third-generation iPad with high-resolution Retina display: -->
+   <!-- Size should be 144 x 144 pixels -->
+   <%= favicon_link_tag 'apple-touch-icon-144x144', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '144x144' %>
+
+   <!-- For iPhone with high-resolution Retina display: -->
+   <!-- Size should be 114 x 114 pixels -->
+   <%= favicon_link_tag 'apple-touch-icon-114x114', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '114x114' %>
+
+   <!-- For first- and second-generation iPad: -->
+   <!-- Size should be 72 x 72 pixels -->
+   <%= favicon_link_tag 'apple-touch-icon-72x72', :rel => 'apple-touch-icon-precomposed', :type => 'image/png', :sizes => '72x72' %>
+
+   <!-- For non-Retina iPhone, iPod Touch, and Android 2.1+ devices: -->
+   <!-- Size should be 57 x 57 pixels -->
+   <%= favicon_link_tag 'apple-touch-icon', :rel => 'apple-touch-icon-precomposed', :type => 'image/png' %>
+
+   <!-- For all other devices -->
+   <!-- Size should be 32 x 32 pixels -->
+   <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
+   <%= stylesheet_link_tag 'application', media: 'all', id: "maincss" %>
+   <%= csrf_meta_tags %>
+</head>
+
+<body>
+   <div class="wrapper">
+      <!-- top navbar-->
+      <header class="topnavbar-wrapper">
+         <%= render partial: "layouts/partials/topnavbar" %>
+      </header>
+      <!-- sidebar-->
+      <aside class="aside">
+         <%= render partial: "layouts/partials/sidebar" %>
+      </aside>
+      <!-- offsidebar-->
+      <aside class="offsidebar hide">
+         <%= render partial: "layouts/partials/offsidebar" %>
+      </aside>
+      <!-- Main section-->
+      <section>
+         <!-- Page content-->
+         <div class="content-wrapper">
+            <%= yield %>
+         </div>
+      </section>
+      <!-- Page footer-->
+      <footer>
+         <%= render partial: "layouts/partials/footer" %>
+      </footer>
+   </div>
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=<%=ENV['google-map-key']%>&libraries=places&callback=initMaps"></script>
+   <!-- =============== VENDOR SCRIPTS ===============-->
+   <%= javascript_include_tag 'base' %>
+   <!-- =============== VIEW VENDOR SCRIPTS ===============-->
+   <%= javascript_include_tag params[:controller] %>
+   <!-- =============== APP SCRIPTS ===============-->
+   <%= javascript_include_tag 'application' %>
+
+   <%= yield :body_area %>
+
+
+
+</body>
+
+</html>

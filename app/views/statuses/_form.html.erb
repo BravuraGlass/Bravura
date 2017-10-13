@@ -1,0 +1,47 @@
+<% readonly ||= false %>
+
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading"></div>
+         <div class="panel-body">
+            <%= form_for @status, :html => { :class => "status", :role => 'form' } do |f| %>
+              <% if @status.errors.any? %>
+              <div id="error_expl" class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><%= pluralize(status.errors.count, "error") %> prohibited this status from being saved:</h3>
+                </div>
+                <div class="panel-body">
+                  <ul>
+                  <% @status.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              </div>
+              <% end %>
+              <%= render :partial => 'shared/flash_messages' %>
+                <div class="form-group">
+                  <%= f.label :name %>
+                  <%= f.text_field :name, :class => 'form-control', id: :status_name, :readonly => readonly %>
+                </div>
+                <div class="form-group">
+                  <%= f.label :order %>
+                  <%= f.number_field :order, :class => 'form-control', id: :order, min: "0", max: "100", :readonly => readonly %>
+                </div>
+                <div class="form-group">
+                  <%= f.label :category %>
+                  <%= f.select :category, options_for_select(@status_categories.collect { |s| [s[0].titleize, s[0]] }, selected: @status.category), {} , class: "form-control" %>
+                </div>
+                <div class="actions <%= 'hide' if readonly %>">
+                  <%= f.submit nil, :class => 'btn btn-primary' %>
+                  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                      statuses_path, :class => 'btn btn-default' %>
+                </div>
+          <% end %>
+         </div>
+      </div>
+   </div>
+</div>

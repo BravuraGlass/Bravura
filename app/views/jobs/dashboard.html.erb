@@ -1,0 +1,96 @@
+<h3>Dashboard
+   <small>Active Jobs Status</small>
+</h3>
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <small></small>
+            </div>
+            <div class="panel-body">
+               <%= render :partial => 'shared/flash_messages' %>
+               <div class="row actions-panel">
+                <div class="col-xs-12">
+                  <div class="btn-group">
+                    <%= form_tag( dashboard_path, method: :get, id: "filter-form" ) do |f| %>
+                    <div data-toggle="buttons" class="btn-group">
+                      <label class="btn btn-primary <%= @filter_all ? 'active': '' %>">
+                      <input type="radio" class="filter-button" name="filter" value="all" <%= @filter_all ? 'checked="true"': '' %>>All</label>
+                      <label class="btn btn-primary <%= @filter_today ? 'active': '' %>">
+                      <input type="radio" class="filter-button" name="filter" value="today" <%= @filter_today ? 'checked="true"': '' %>>Today</label>
+                      <label class="btn btn-primary <%= @filter_tomorrow ? 'active': '' %>">
+                      <input type="radio" class="filter-button" name="filter" value="tomorrow" <%= @filter_tomorrow ? 'checked="true"': '' %>>Tomorrow</label>
+                      <label class="btn btn-primary <%= @filter_nextweek ? 'active': '' %>" >
+                      <input type="radio" class="filter-button" name="filter" value="nextweek" <%= @filter_nextweek ? 'checked="true"': '' %>>Next Week</label>
+                    </div>
+                    <% end %>
+                  </div>
+                </div>
+               </div>
+               <table class="datatable table table-striped table-hover responsive">
+                  <thead>
+                    <tr>
+                      <th class="sort-alpha">Date</th>
+                      <th class="sort-alpha">Job</th>
+                      <th class="sort-alpha">Customer</th>
+                      <th class="sort-alpha">Job Status</th>
+                      <th class="sort-alpha">FO Status</th>
+                      <th class="sort-alpha">Sections Done</th>
+                      <th class="no-sort">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% if @jobs.nil? %>
+                      <tr>
+                        <td colspan="7">There are no jobs matching the criteria</td>
+                      </tr>
+                    <% else %>
+                      <% @jobs.each do |job| %>
+                        <tr>
+                          <td><%= l(job.duedate, format: '%Y/%m/%d') if job.duedate %></td>
+                          <td>
+                            <span>(<%= job.id %>) <%= job.address[0...30] %></span>
+                            <% job.comments[0..1].each do |c| %>
+                              <div class="comment">
+                                <span class="comment-date"><%= l(c.created_at, format: :short) %>,</span>
+                                <span class="comment-author"><%= c.user.first_name %> </span>said:
+                                <%= c.body %>
+                                </div>
+                            <% end %>
+                          </td>
+                          <td title="<%= job.customer.contact_details %>"><%= job.customer.contact_info %></td>
+                          <td><%= job.status %></td>
+                          <td><%= job.fabrication_order ? job.fabrication_order.status : '' %></td>
+                          <td>
+                            <%
+                            if job.fabrication_order
+                              status = job.fabrication_order.sections_status
+                              class_status = status[:done] ? 'green' : 'yellow'
+                            %>
+                              <span id="job-detail-<%= job.id %>" data-job-details="<%= job.fabrication_order.sections_to_json %>" class="job-detail-element <%= class_status %>"><%= "#{status[:ready]} of #{status[:total]}" %></span>
+                            <% end %>
+                          </td>
+                          <td>
+                            <%= job.fabrication_order ?
+                                link_to("View FO", edit_fabrication_order_path(job.fabrication_order), :class => 'btn btn-default btn-xs') :
+                                link_to('Create FO', job_fabrication_orders_path(job), method: :post, class: 'btn btn-default btn-xs') %>
+                            <%= link_to 'Print FO', f_orders_qr_path(job.fabrication_order), target: "_blank", :class => 'btn btn-default btn-xs' if job.fabrication_order %>
+                            <%= link_to 'Edit Job', select_job_path(job), :class => 'btn btn-default btn-xs' %>
+
+                            </td>
+                        </tr>
+                        <% end %>
+                    <% end %>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+<%= render :partial => 'productDetail' %>
+<%= link_to 'New Fabrication Order',
+            new_fabrication_order_path,
+            :class => 'btn btn-primary' %>

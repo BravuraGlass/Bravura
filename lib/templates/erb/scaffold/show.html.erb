@@ -1,0 +1,75 @@
+<%% <%- auditlog_class = AuditLog -%> %>
+  <div class="page-header">
+    <h1>
+      <%= plural_table_name.titleize %>
+    </h1>
+  </div>
+  <h3>
+    <small>View <%= singular_table_name %> details</small>
+  </h3>
+  <div>
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a data-toggle="pill" href="#general">General Information</a></li>
+      <li role="presentation"><a data-toggle="pill" href="#audit">Audit</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="general">
+        <div class="row">
+          <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+              <!-- START panel-->
+              <div class="panel panel-default">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                  <%%= render :partial => 'form', locals: {readonly: true},  <%= singular_table_name %>: @<%= singular_table_name %> %>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="audit">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <small></small>
+              </div>
+              <div class="panel-body">
+                <table class="datatable table table-striped table-hover responsive">
+                    <thead>
+                      <tr>
+                        <th class="sort-alpha"><%= auditlog_class.human_attribute_name(:user_name) %></th>
+                        <th class="sort-alpha"><%= auditlog_class.human_attribute_name(:where) %></th>
+                        <th class="sort-alpha"><%= auditlog_class.human_attribute_name(:ip) %></th>
+                        <th class="sort-alpha"><%= auditlog_class.human_attribute_name(:user_agent) %></th>
+                        <th class="no-sort"><%= auditlog_class.human_attribute_name(:details) %></th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <%% @<%=singular_table_name%>.audit_logs.each do |log| %>
+                          <tr>
+                            <td><%%= log.user_name %></td>
+                            <td><%%= log.where %></td>
+                            <td><%%= log.ip %></td>
+                            <td><%%= log.user_agent %></td>
+                            <td><%%= log.details %></td>
+                          </tr>
+                        <%% end %>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="action-buttons">
+    <%%= link_to 'Back',  <%= plural_table_name%>_path, :class => 'btn btn-default'  %>
+      <%%= link_to 'Edit', edit_<%=singular_table_name%>_path(@<%=singular_table_name%>), :class => 'btn btn-default' %>
+        <%%= link_to 'Destroy', <%=singular_table_name%>_path(@<%=singular_table_name%>),
+          :method => 'delete',
+          :data => { :confirm => 'Are you sure you want to delete the <%=singular_table_name.titleize%>' },
+          :class => 'btn btn-danger' %>
+  </div>

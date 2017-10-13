@@ -1,0 +1,61 @@
+var BRAVURA = BRAVURA || {};
+
+BRAVURA.showRooms = function showRooms(){
+  $('#roomsPanel').toggleClass('hide');
+};
+
+BRAVURA.showCreateEditProductModal = function showCreateEditProductModal(){
+  $('#createEditProductModal').modal({
+      show: true,
+      keyboard: false
+  });
+};
+
+BRAVURA.toggleProductSections = function toggleProductSections(element, id){
+  // switching the expand/collapse option
+  if($(element).hasClass('fa-plus')){
+    $(element).removeClass('fa-plus').addClass('fa-minus');
+  } else {
+    $(element).removeClass('fa-minus').addClass('fa-plus');
+  }
+  $('#productsList').find("tr[data-parent='"+id+"']").toggleClass('hide');
+};
+
+BRAVURA.closeCreateEditProductModal = function closeCreateEditProductModal() {
+  $('#createEditRoomModal').modal('hide');
+};
+
+BRAVURA.saveCreateEditProductModal = function saveStatusChange(){
+  // do the save
+  var product = {
+    room_id: $("#product_room_id").val(),
+    fabrication_order_id: $("#fabrication_order_id").val(),
+    room_name: $("#product_room_name").val(),
+    product_type_id: $("#product_product_type_id").val(),
+    name: $("#product_name").val(),
+    sections: $("#product_sections").val()
+  };
+  var fabrication_order_id = $('#fabrication_order_id').val();
+  $.ajax({
+    method: "POST",
+    url: "/fabrication_orders/"+fabrication_order_id+"/products.json",
+    data: { "product": product }
+  })
+  .done(function(response){
+    $('#createEditRoomModal').modal('hide');
+    window.location.reload();
+  })
+  .fail(function(response){
+    alert('There was an error saving the product');
+  });
+
+};
+
+// set the behavior on document ready
+$(document).ready(function(){
+  $('#createEditRoomModalCancelButton').on('click', function() { BRAVURA.closeCreateEditProductModal(); });
+  $('#createEditProductModalSaveButton').on('click', function() { BRAVURA.saveCreateEditProductModal(); });
+  $('#newProductButton').on('click', function() { BRAVURA.showCreateEditProductModal(); });
+
+  $('.edit-product-button').on('click', function() { BRAVURA.showCreateSectionModal(); });
+});

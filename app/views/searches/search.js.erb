@@ -1,0 +1,18 @@
+$('.content-wrapper').empty();
+$('.content-wrapper').append('<div class="pull-right"><a class= "btn btn-danger btn-md" href=""><i class="fa fa-times" aria-hidden="true"></i> Cancel Search</a></div>');
+
+<%  unless @customers.blank?  %>
+$('.content-wrapper').append("<%= escape_javascript(render :partial => 'customers' ) %>")
+<% end %>
+
+<%  unless @jobs.blank?  %>
+$('.content-wrapper').append("<%= escape_javascript(render :partial => 'jobs' ) %>");
+<% end %>
+
+<%  unless @tasks.blank?  %>
+$('.content-wrapper').append("<%= escape_javascript(render :partial => 'tasks' ) %>");
+<% end %>
+
+<%  unless @fabrication_orders.blank?  %>
+$('.content-wrapper').append("<%= escape_javascript(render :partial => 'fabrication_orders' ) %>");
+<% end %>

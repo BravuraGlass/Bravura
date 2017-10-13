@@ -1,0 +1,2 @@
+module ProductSectionsHelper
+end

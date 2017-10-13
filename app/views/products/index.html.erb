@@ -1,0 +1,57 @@
+<h3>Products
+   <small>List of existing products</small>
+</h3>
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <small></small>
+            </div>
+            <div class="panel-body">
+               <table class="datatable table table-striped table-hover responsive">
+                  <thead>
+                    <tr>
+                                            <th class="sort-alpha">Product type</th>
+                                            <th class="sort-alpha">Name</th>
+                                            <th class="sort-alpha">Description</th>
+                                            <th class="sort-alpha">Status</th>
+                                            <th class="sort-alpha">Sku</th>
+                                            <th class="sort-alpha">Price</th>
+                                            <th class="no-sort">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <% @products.each do |product| %>
+                        <tr>
+                                                    <td><%= product.product_type %></td>
+                                                    <td><%= product.name %></td>
+                                                    <td><%= product.description %></td>
+                                                    <td><%= product.status %></td>
+                                                    <td><%= product.sku %></td>
+                                                    <td><%= product.price %></td>
+                                                    <td>
+                            <%= link_to 'Show',
+                                        product_path(product), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Edit',
+                                        edit_product_path(product), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Delete',
+                                        product_path(product),
+                                        :method => :delete,
+                                        :data => { :confirm => 'Are you sure you want to delete the product?' },
+                                        :class => 'btn btn-xs btn-danger' %>
+                          </td>
+                        </tr>
+                      <% end %>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<%= link_to 'New Product',
+            new_product_path,
+            :class => 'btn btn-primary' %>

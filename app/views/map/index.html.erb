@@ -1,0 +1,38 @@
+<div id="map-filters" class="row filter-container">
+  <div class="col-md-8">
+    <%= form_tag( map_index_path, {class: 'form-inline', method: 'get'}) do -%>
+      <div class="form-group">
+        <div class="checkbox c-checkbox">
+          <label>
+            <input type="checkbox" name="show_tasks" id="show_tasks" <%= "checked" if @show_tasks %>/>
+            <span class="fa fa-check"></span>Show Tasks
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <div class="checkbox c-checkbox">
+          <label>
+            <input type="checkbox" name="show_jobs" id="show_jobs" <%= "checked" if @show_jobs %> />
+            <span class="fa fa-check"></span>Show Jobs
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
+        <%= date_field("", "date", value: @selected_date, class: 'btn btn-default' ) %>
+      </div>
+      <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
+    <% end -%>
+  </div>
+  <div class="col-md-1 center">
+    Job: <%= image_tag  "/assets/mapicons/job.png" %>
+  </div>
+  <div class="col-md-2 center">
+    Confirmed: <%= image_tag  "/assets/mapicons/confirmed_appointment.png" %>
+  </div>
+  <div class="col-md-1 center">
+    Task: <%= image_tag  "/assets/mapicons/task.png" %>
+  </div>
+</div>
+<div id="map" class="full-map">
+  <%= render :partial => 'shared/location_map', :locals => {hidemap: false} %>
+</div>

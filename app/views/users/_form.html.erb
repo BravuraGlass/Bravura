@@ -1,0 +1,82 @@
+<% readonly ||= false %>
+<% if is_admin(current_user) %>
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading"></div>
+         <div class="panel-body">
+            <%= form_for @user, :html => { :class => "user", :role => 'form' } do |f| %>
+              <% if @user.errors.any? %>
+              <div id="error_expl" class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><%= pluralize(user.errors.count, "error") %> prohibited this user from being saved:</h3>
+                </div>
+                <div class="panel-body">
+                  <ul>
+                  <% @user.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              </div>
+              <% end %>
+              <%= render :partial => 'shared/flash_messages' %>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <%= f.label :first_name %>
+                    <%= f.text_field :first_name, :class => 'form-control', id: :user_first_name, :readonly => readonly %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label :last_name %>
+                    <%= f.text_field :last_name, :class => 'form-control', id: :user_last_name, :readonly => readonly %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label :email %>
+                    <%= f.email_field :email, :class => 'form-control', id: :user_email, :readonly => readonly %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label "Password" %>
+                    <%= f.password_field :password, :class => 'form-control', id: :user_crypted_password, :readonly => readonly %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label "Repeat Password" %>
+                    <%= f.password_field :password, :class => 'form-control', id: :user_crypted_password_repeat, :readonly => readonly %>
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <%= f.label "Phone number" %>
+                    <%= f.text_field :phonenumber, :class => 'form-control', id: :user_phonenumber,
+                    :readonly => readonly, "data-masked" => "true", "data-inputmask" => "'mask': '(999) 999-9999'"  %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label :address %>
+                    <%= f.text_field :address, :class => 'form-control', id: :user_address, :readonly => readonly %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label :type_of_user %>
+                    <%= f.select :type_of_user, options_for_select([['System Administrator', 0], ['Sales Representative', 1], ['Field Worker', 2] ], selected: @user.type_of_user ), {}, class: "form-control" %>
+                  </div>
+                  <div class="form-group">
+                    <%= f.label :late_access %>
+                    <%= f.check_box :late_access, :class => 'form-control', id: :late_access, :readonly => readonly %>
+                  </div>
+                </div>
+              </div>
+
+                <div class="actions <%= 'hide' if readonly %>">
+                  <%= f.submit nil, :class => 'btn btn-primary' %>
+                  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                      users_path, :class => 'btn btn-default' %>
+                </div>
+          <% end %>
+         </div>
+      </div>
+   </div>
+</div>
+<% else %>
+    <div> You're not allowed to reach this page</div>
+<% end %>

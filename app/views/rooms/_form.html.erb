@@ -1,0 +1,44 @@
+<% readonly ||= false %>
+
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading"></div>
+         <div class="panel-body">
+            <%= form_for @room, :url => fabrication_order_room_path,  :html => { :class => "room", :role => 'form' } do |f| %>
+              <% if @room.errors.any? %>
+              <div id="error_expl" class="panel panel-danger">
+                <div class="panel-heading">
+                  <h3 class="panel-title"><%= pluralize(room.errors.count, "error") %> prohibited this room from being saved:</h3>
+                </div>
+                <div class="panel-body">
+                  <ul>
+                  <% @room.errors.full_messages.each do |msg| %>
+                    <li><%= msg %></li>
+                  <% end %>
+                  </ul>
+                </div>
+              </div>
+              <% end %>
+              <%= render :partial => 'shared/flash_messages' %>
+
+                <div class="form-group">
+                  <%= f.label :name %>
+                  <%= f.text_field :name, :class => 'form-control', id: :room_name, :readonly => readonly %>
+                </div>
+                <div class="form-group">
+                  <%= f.label :description %>
+                  <%= f.text_area :description, :class => 'form-control', id: :room_description, :readonly => readonly %>
+                </div>
+                <div class="actions <%= 'hide' if readonly %>">
+                <%= f.submit 'Save Room', :class => 'btn btn-primary' %>
+                <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                      fabrication_order_room_path, :class => 'btn btn-default' %>
+            </div>
+          <% end %>
+         </div>
+      </div>
+   </div>
+</div>

@@ -1,0 +1,80 @@
+<% %>
+  <div class="page-header">
+    <h1>
+      Employees
+    </h1>
+  </div>
+  <h3>
+    <small>View employee details</small>
+  </h3>
+  <div>
+    <% if is_admin(current_user) %>
+
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a data-toggle="pill" href="#general">General Information</a></li>
+      <li role="presentation"><a data-toggle="pill" href="#audit">Audit</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="general">
+        <div class="row">
+          <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+              <!-- START panel-->
+              <div class="panel panel-default">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                  <%= render :partial => 'form', locals: {readonly: true},  employee: @employee %>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="audit">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <small></small>
+              </div>
+              <div class="panel-body">
+                <table class="datatable table table-striped table-hover responsive">
+                    <thead>
+                      <tr>
+                        <th class="sort-alpha">User name</th>
+                        <th class="sort-alpha">Where</th>
+                        <th class="sort-alpha">Ip</th>
+                        <th class="sort-alpha">User agent</th>
+                        <th class="no-sort">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <% @employee.audit_logs.each do |log| %>
+                          <tr>
+                            <td><%= log.user_name %></td>
+                            <td><%= log.where %></td>
+                            <td><%= log.ip %></td>
+                            <td><%= log.user_agent %></td>
+                            <td><%= log.details %></td>
+                          </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="action-buttons">
+    <%= link_to 'Back',  employees_path, :class => 'btn btn-default'  %>
+      <%= link_to 'Edit', edit_employee_path(@employee), :class => 'btn btn-default' %>
+        <%= link_to 'Destroy', employee_path(@employee),
+          :method => 'delete',
+          :data => { :confirm => 'Are you sure you want to delete the Employee' },
+          :class => 'btn btn-danger' %>
+  </div>
+  <% else %>
+      <div> You're not allowed to reach this page</div>
+  <% end %>

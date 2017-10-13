@@ -1,0 +1,166 @@
+<div class="<%= 'hide' if (hidemap)%>">
+  <div id="location-map"></div>
+  <div id="infowindow-content">
+    <span id="place-title" class="title"></span><br>
+    <span id="place-subtitle"></span><br>
+    <span id="place-detail"></span>
+    <span id="place-detail"></span>
+  </div>
+</div>
+<script>
+
+function initMaps() {
+   initMapaddress();
+   initMapcustomer_address();
+}
+
+function initMap<%= address_field_id ? address_field_id : '' %>() {
+  var geocoder = new google.maps.Geocoder;
+  var map = new google.maps.Map(document.getElementById('location-map'), {
+    zoom: 11,
+    center: {
+      lat: 40.6179997,
+      lng: -73.9344151
+    }
+  });
+  <% address_field_id = address_field_id || "address" %>
+  var addressField = document.getElementById('<%= address_field_id %>');
+  var latitudeField = document.getElementById('latitude');
+  var longitudeField = document.getElementById('longitude');
+
+  // if the address field is available, it means
+  if (addressField){
+
+    var geocoder = new google.maps.Geocoder;
+
+    var options = {
+      componentRestrictions: { country: 'us' }
+    };
+
+    var autocomplete = new google.maps.places.Autocomplete(
+      addressField, options);
+    autocomplete.bindTo('bounds', map);
+
+    //map.controls[google.maps.ControlPosition.TOP_LEFT].push(addressField);
+
+    var infowindow = new google.maps.InfoWindow();
+    var infowindowContent = document.getElementById('infowindow-content');
+    infowindow.setContent(infowindowContent);
+    var marker = new google.maps.Marker({
+      map: map
+    });
+    marker.addListener('click', function () {
+      infowindow.open(map, marker);
+    });
+
+    //add autocomplete listener
+    autocomplete.addListener('place_changed', function () {
+      infowindow.close();
+      var place = autocomplete.getPlace();
+
+      if (!place.place_id) {
+        return;
+      }
+      geocoder.geocode({
+        'placeId': place.place_id
+      }, function (results, status) {
+
+        if (status !== 'OK') {
+          window.alert('Geocoder failed due to: ' + status);
+          return;
+        }
+        map.setZoom(11);
+        map.setCenter(results[0].geometry.location);
+        // Set the position of the marker using the place ID and location.
+        marker.setPlace({
+          placeId: place.place_id,
+          location: results[0].geometry.location
+        });
+        marker.setVisible(true);
+        infowindowContent.children['place-title'].textContent = place.name;
+        infowindowContent.children['place-subtitle'].textContent = place.place_id;
+        infowindowContent.children['place-detail'].textContent =
+          results[0].formatted_address;
+
+        addressField.value = results[0].formatted_address;
+        if (latitudeField && longitudeField){
+          latitudeField.value = marker.place.location.lat();
+          longitudeField.value = marker.place.location.lng();
+        }
+        infowindow.open(map, marker);
+      });
+    });
+
+  }
+
+  // Loop through our array of markers & place each one on the map
+  var markers = <%=raw @markers.to_json || '{}' %>;
+  var iconBase = '/assets/mapicons/';
+  var icons = {
+    job: {
+      icon: iconBase + 'job.png'
+    },
+    task: {
+      icon: iconBase + 'task.png'
+    },
+    confirmed_appointment: {
+      icon: iconBase + 'confirmed_appointment.png'
+    }
+  };
+
+  if(markers && markers.length > 0) {
+    var infoWindowTask = new google.maps.InfoWindow();
+    for( var i = 0; i < markers.length; i++ ) {
+      var marker_data = markers[i];
+      var content = marker_data.marker_title || '';
+      var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
+      var marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        icon: icons[marker_data.type].icon,
+        title: content
+      });
+      google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
+          return function() {
+              infoWindow.setContent(marker.getTitle());
+              infoWindow.open(map, marker);
+          }
+      })(marker, i, infoWindowTask));
+      map.setZoom(14);
+      map.setCenter(position);
+      marker.setVisible(true);
+    }
+  }
+}
+
+function geocodeAddress(geocoder, map) {
+  geocoder.geocode({
+    componentRestrictions: {
+      country: 'US',
+      postalCode: '11234'
+    }
+  }, function (results, status) {
+    if (status === 'OK') {
+      map.setCenter(results[0].geometry.location);
+      new google.maps.Marker({
+        map: map,
+        position: results[0].geometry.location
+      });
+
+    } else {
+      window.alert('We were not able to geocode the address: ' +
+        status);
+    }
+  });
+}
+
+var BRAVURA = BRAVURA || {};
+
+BRAVURA.showLocationMap = function showLocationMap() {
+  $('#location_map, #address').toggleClass('hide');
+  $('#address').val('');
+  $('#latitude').val('');
+  $('#longitude').val('');
+};
+
+</script>

@@ -1,0 +1,51 @@
+<h3>Rooms
+   <small>List of existing rooms</small>
+</h3>
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <small></small>
+            </div>
+            <div class="panel-body">
+               <table class="datatable table table-striped table-hover responsive">
+                  <thead>
+                    <tr>
+                                            <th class="sort-alpha">Name</th>
+                                            <th class="sort-alpha">Description</th>
+                                            <th class="sort-alpha">Fabrication order</th>
+                                            <th class="no-sort">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <% @rooms.each do |room| %>
+                        <tr>
+                                                    <td><%= room.name %></td>
+                                                    <td><%= room.description %></td>
+                                                    <td><%= room.fabrication_order %></td>
+                                                    <td>
+                            <%= link_to 'Show',
+                                        room_path(room), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Edit',
+                                        edit_room_path(room), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Delete',
+                                        room_path(room),
+                                        :method => :delete,
+                                        :data => { :confirm => 'Are you sure you want to delete the room?' },
+                                        :class => 'btn btn-xs btn-danger' %>
+                          </td>
+                        </tr>
+                      <% end %>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<%= link_to 'New Room',
+            new_room_path,
+            :class => 'btn btn-primary' %>

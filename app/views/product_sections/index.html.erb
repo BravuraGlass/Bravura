@@ -1,0 +1,45 @@
+<h3>Product Sections
+   <small>List of existing product_sections</small>
+</h3>
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <small></small>
+            </div>
+            <div class="panel-body">
+               <table class="datatable table table-striped table-hover responsive">
+                  <thead>
+                    <tr>
+                                            <th class="no-sort">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <% @product_sections.each do |product_section| %>
+                        <tr>
+                                                    <td>
+                            <%= link_to 'Show',
+                                        product_section_path(product_section), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Edit',
+                                        edit_product_section_path(product_section), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Delete',
+                                        product_section_path(product_section),
+                                        :method => :delete,
+                                        :data => { :confirm => 'Are you sure you want to delete the product_section?' },
+                                        :class => 'btn btn-xs btn-danger' %>
+                          </td>
+                        </tr>
+                      <% end %>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<%= link_to 'New Product Section',
+            new_product_section_path,
+            :class => 'btn btn-primary' %>

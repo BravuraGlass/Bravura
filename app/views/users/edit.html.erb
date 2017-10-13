@@ -1,0 +1,11 @@
+<div class="page-header">
+  <% if is_admin(current_user) %>
+  <h1>Edit User</h1>
+</div>
+<h3>User
+   <small>edit user</small>
+</h3>
+<%= render 'form', user: @user %>
+<% else %>
+    <div> You're not allowed to reach this page</div>
+<% end %>

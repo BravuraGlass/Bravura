@@ -1,0 +1,10 @@
+<h1>Editing Customer</h1>
+
+<%= render :partial => 'form', locals: {readonly: false, ajax: false} %>
+
+
+<%= link_to 'Back',  customers_path, :class => 'btn btn-default'  %>
+<%= link_to 'Destroy', customer_path(@customer),
+  :method => 'delete',
+  :data => { :confirm => 'Are you sure you want to delete the Customer' },
+  :class => 'btn btn-danger' %>

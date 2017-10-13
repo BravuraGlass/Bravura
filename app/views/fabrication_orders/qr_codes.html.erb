@@ -1,0 +1,63 @@
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>QRCodes</title>
+</head>
+<body>
+  <style media="screen, print">
+
+  @media print {
+    .row {
+      page-break-after: always;
+      page-break-inside: avoid;
+    }
+    h3 {
+      margin: 0px;
+    }
+  }
+
+  .row {
+    margin-top: 10px;
+    text-align: center;
+  }
+
+  table {
+    margin: auto;
+    border-width: 0;
+    border-style: none;
+    border-color: #0000ff;
+    border-collapse: collapse;
+  }
+  table, tr, td, th, tbody, thead, tfoot {
+    page-break-inside: avoid;
+  }
+
+  td {
+    border-left: solid 5px #000;
+    padding: 0;
+    margin: 0;
+    width: 0px;
+    height: 5px;
+  }
+  td.black { border-color: #000; }
+  td.white { border-color: #fff; }
+  </style>
+
+
+  <div class="container">
+    <% @qrs.each do |qr| %>
+    <div class="row" style="page-break-after: always; page-break-inside: avoid;">
+      <div class="col-md-12">
+        <h1><%= qr[0] %></h1>
+        <div class="tabla">
+          <%= raw qr[1].as_html %>
+        </div>
+      </div>
+    </div>
+    <% end %>
+  </div>
+  <script>
+    print();
+  </script>
+</body>
+</html>

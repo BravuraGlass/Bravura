@@ -1,0 +1,75 @@
+<% %>
+  <div class="page-header">
+    <h1>
+      Product Sections
+    </h1>
+  </div>
+  <h3>
+    <small>View product_section details</small>
+  </h3>
+  <div>
+    <ul class="nav nav-pills">
+      <li role="presentation" class="active"><a data-toggle="pill" href="#general">General Information</a></li>
+      <li role="presentation"><a data-toggle="pill" href="#audit">Audit</a></li>
+    </ul>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="general">
+        <div class="row">
+          <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+              <!-- START panel-->
+              <div class="panel panel-default">
+                <div class="panel-heading"></div>
+                <div class="panel-body">
+                  <%= render :partial => 'form', locals: {readonly: true},  product_section: @product_section %>
+                </div>
+              </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="tab-pane" id="audit">
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <small></small>
+              </div>
+              <div class="panel-body">
+                <table class="datatable table table-striped table-hover responsive">
+                    <thead>
+                      <tr>
+                        <th class="sort-alpha">User name</th>
+                        <th class="sort-alpha">Where</th>
+                        <th class="sort-alpha">Ip</th>
+                        <th class="sort-alpha">User agent</th>
+                        <th class="no-sort">Details</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                        <% @product_section.audit_logs.each do |log| %>
+                          <tr>
+                            <td><%= log.user_name %></td>
+                            <td><%= log.where %></td>
+                            <td><%= log.ip %></td>
+                            <td><%= log.user_agent %></td>
+                            <td><%= log.details %></td>
+                          </tr>
+                        <% end %>
+                    </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="action-buttons">
+    <%= link_to 'Back',  product_sections_path, :class => 'btn btn-default'  %>
+      <%= link_to 'Edit', edit_product_section_path(@product_section), :class => 'btn btn-default' %>
+        <%= link_to 'Destroy', product_section_path(@product_section),
+          :method => 'delete',
+          :data => { :confirm => 'Are you sure you want to delete the Product Section' },
+          :class => 'btn btn-danger' %>
+  </div>

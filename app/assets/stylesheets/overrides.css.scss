@@ -1,0 +1,190 @@
+@import 'variables';
+
+aside {
+  .sidebar {
+    padding-top: 20px;
+  }
+}
+
+.modal {
+  z-index: 4000;
+}
+
+.modal-backdrop {
+  z-index: -10;
+}
+
+
+.action-links {
+  margin-top: 10px;
+}
+
+.alert-color {
+  color: $alert-color;
+}
+
+.hide {
+  display: none;
+}
+
+.pointer {
+  cursor: pointer;
+}
+
+.panel-heading.job {
+  color: $alert-color;
+
+  small {
+    float: right;
+  }
+}
+
+.panel-dark > .panel-heading {
+  background-color: transparent;
+  border-color: white;
+}
+
+.errors_panel {
+  .notice {
+    color: $notice-color;
+  }
+  .alert {
+    color: $alert-color;
+  }
+}
+
+.dataTables_length {
+  @media #{$tablet} {
+    float: left;
+  }
+}
+
+.dataTables_filter {
+  label {
+    @media #{$tablet} {
+      text-align: left !important;
+    }
+  }
+  @media #{$tablet} {
+    text-align: left !important;
+  }
+}
+
+.html5buttons {
+  @media #{$tablet} {
+    text-align: left;
+  }
+}
+
+h1 {
+  margin-top: 2px !important;
+  margin-bottom: 10px !important;
+}
+
+.page-header {
+  margin: 0px !important;
+}
+
+.statusView {
+
+  text-align: center;
+  .btn {
+    &.selected {
+      background-color: #ccc0b9;
+    }
+    margin-bottom: 2px;
+  }
+
+}
+
+
+div#imagesContainer {
+
+  #picture_preview{
+    width: 100%;
+    border: 1px solid $light-gray-color;
+    padding: 2px;
+  }
+
+  div.images-container{
+    display: flex;
+    justify-content: flex-start;
+    div.image-container {
+      position: relative;
+      border: 1px solid $light-gray-color;
+      border-radius: 5px;
+      margin-left: 2px;
+      padding: 2px 12px;
+      margin: 2px;
+
+      &:hover {
+        .btn.trash{
+          display: block;
+        }
+      }
+      .btn.trash{
+        display: none;
+        position: absolute;
+        top: -5px;
+        right: -15px;
+      }
+      img.job-image {
+        padding: 2px;
+        width: 100%;
+      }
+    }
+  }
+}
+
+
+
+div.comments {
+  div.comments-list {
+    .table > tbody > tr > td {
+      padding: 5px !important;
+
+      .btn {
+        padding: 0 !important;
+      }
+    }
+    background-color: $light-gray-color;
+    margin-bottom: 2px;
+  }
+
+  div.row.comment {
+    background-color: #F4F4F4;
+  }
+
+
+  span.comment-author {
+    font-weight: 800;
+  }
+
+  span.comment-date {
+    color: $gray-color;
+    &:after {
+      content: ':';
+    }
+  }
+
+}
+.full-map {
+  #location-map {
+    height: 800px !important;
+    width: 100%;
+  }
+}
+.filter-container {
+  margin: 10px 0;
+}
+
+#location-map {
+  height: 300px;
+  width: 80%;
+}
+
+.table {
+    tr.selected {
+        background-color: $light-gray-color !important;
+    }
+}

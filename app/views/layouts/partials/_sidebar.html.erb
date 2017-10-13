@@ -1,0 +1,100 @@
+<!-- START Sidebar (left)-->
+<% current_controller = controller.params[:controller] %>
+<div class="aside-inner">
+   <nav class="sidebar">
+      <!-- START sidebar nav-->
+      <ul class="nav">
+         <li class="nav-heading">
+            <span>Main Menu</span>
+         </li>
+         <!-- <li>
+            <a href="<%= dashboard_path %>" title="Dashboard">
+               <em class="icon-speedometer"></em>
+               <span>Dashboard</span>
+            </a>
+         </li> -->
+         <li class="<%= 'active' if current_controller == 'jobs' %>">
+            <a href="<%= jobs_path %>" title="Jobs">
+               <em class="icon-energy"></em>
+               <span>Jobs</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'fabrication_orders' %>">
+            <a href="<%= fabrication_orders_path %>" title="Fabrication Orders">
+               <em class="icon-briefcase"></em>
+               <span>Fabrication Orders</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'customers' %>">
+            <a href="<%= customers_path %>" title="Customers">
+               <em class="icon-user"></em>
+               <span>Customers</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'tasks' %>">
+            <a href="<%= tasks_path %>" title="Tasks">
+               <em class="icon-pencil"></em>
+               <span>Tasks</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'maps' %>">
+            <a href="<%= map_index_path %>" title="Map">
+               <em class="icon-map"></em>
+               <span>Map</span>
+            </a>
+         </li>
+
+
+<% if current_user && current_user.type_of_user.eql?("0") %>
+
+         <li class="nav-heading">
+            <span>Admin</span>
+         </li>
+         <li class="<%= 'active' if current_controller == 'users' %>">
+            <a href="<%= users_path %>" title="Users">
+               <em class="icon-people"></em>
+               <span>Users</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'employees' %>">
+            <a href="<%= employees_path %>" title="Employees">
+               <em><i class="fa fa-users"></i></em>
+               <span>Employees</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'statuses' %>">
+            <a href="<%= statuses_path %>" title="Status">
+               <em class="icon-check"></em>
+               <span>Status</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'status_checklist_item' %>">
+            <a href="<%= status_checklist_items_path %>" title="Checklist Items">
+               <em class="icon-list"></em>
+               <span>Checklist Items</span>
+            </a>
+         </li>
+         <li class="<%= 'active' if current_controller == 'product_types' %>">
+            <a href="<%= product_types_path %>" title="Product Types">
+               <em><i class="fa fa-cube"></i></em>
+               <span>Product Types</span>
+            </a>
+         </li>
+
+<% end %>
+
+
+         <li class="nav-heading">
+            <span>Hi <%= current_user.first_name %></span>
+         </li>
+         <li>
+            <a href="/logout" title="Logout">
+               <em class="icon-user"></em>
+               <span>Logout</span>
+            </a>
+         </li>
+      </ul>
+      <!-- END sidebar nav-->
+   </nav>
+</div>
+<!-- END Sidebar (left)-->
