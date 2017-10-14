@@ -11,6 +11,8 @@ gem 'mini_magick', '4.8.0'
 gem 'gmaps4rails'
 gem 'geocoder', '~> 1.4', '>= 1.4.4'
 
+gem "google_url_shortener"
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '5.1.0'
 

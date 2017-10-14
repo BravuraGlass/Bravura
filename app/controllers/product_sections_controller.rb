@@ -42,8 +42,12 @@ class ProductSectionsController < ApplicationController
   end
   
   def barcode
+    Google::UrlShortener::Base.api_key = "AIzaSyCHSbVfDBDr13syJSeZPwjxOXS8kssI0S4"
+    shorturl = Google::UrlShortener.shorten!(url_for(action: 'update_status', controller: 'product_sections', id: @product_section.id))
+    
     respond_to do |format|
-      barcode = Barby::Code128B.new(url_for(action: 'update_status', controller: 'product_sections', id: @product_section.id))
+      
+      barcode = Barby::Code128B.new(shorturl)
       
       format.png { send_data barcode.to_png,type: "image/png", disposition: 'inline' }
       format.html {render :layout => 'clean'}
