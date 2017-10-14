@@ -1,6 +1,10 @@
 Rails.application.routes.draw do
 
-  resources :product_sections
+  resources :product_sections do
+    member do
+      get 'barcode'
+    end  
+  end
   resources :product_types
   resources :status_checklist_items
   resources :statuses
@@ -37,6 +41,10 @@ Rails.application.routes.draw do
   get "login" => "sessions#new", :as => "login"
   get "signup" => "users#new", :as => "signup"
 
+  ["f","r","p","s"].each do |var|
+      get "#{var}_orders_barcode/:id" => "fabrication_orders##{var}_orders_barcode", :as => "#{var}_orders_barcode", :defaults => { :format => 'html' }  
+  end  
+  
   get "f_orders_qr/:id" => "fabrication_orders#f_orders_qr", :as => 'f_orders_qr', :defaults => { :format => 'html' }
   get "r_orders_qr/:id" => "fabrication_orders#r_orders_qr", :as => 'r_orders_qr', :defaults => { :format => 'html' }
   get "p_orders_qr/:id" => "fabrication_orders#p_orders_qr", :as => 'p_orders_qr', :defaults => { :format => 'html' }

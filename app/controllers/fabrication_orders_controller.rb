@@ -72,6 +72,34 @@ class FabricationOrdersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def f_orders_barcode
+    convert_fabrication_orders_to_barcode params[:id]
+    respond_to do |format|
+      format.html  { render template: 'fabrication_orders/barcodes', layout: false }
+    end
+  end
+  
+  def r_orders_barcode
+    convert_room_orders_to_barcode params[:id]
+    respond_to do |format|
+      format.html  { render template: 'fabrication_orders/barcodes', layout: false }
+    end    
+  end  
+  
+  def p_orders_barcode
+    convert_product_orders_to_barcode params[:id]
+    respond_to do |format|
+      format.html  { render template: 'fabrication_orders/barcodes', layout: false }
+    end
+  end
+  
+  def s_orders_barcode
+    convert_section_orders_to_barcode params[:id]
+    respond_to do |format|
+      format.html  { render template: 'fabrication_orders/barcodes', layout: false }
+    end
+  end
 
   def f_orders_qr
     convert_fabrication_orders_to_qr params[:id]
@@ -80,6 +108,7 @@ class FabricationOrdersController < ApplicationController
       format.html  { render template: 'fabrication_orders/qr_codes', layout: false }
     end
   end
+  
   def r_orders_qr
     convert_room_orders_to_qr params[:id]
     respond_to do |format|

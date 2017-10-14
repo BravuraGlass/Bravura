@@ -14,9 +14,9 @@ gem 'geocoder', '~> 1.4', '>= 1.4.4'
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '5.1.0'
 
-gem 'mysql2'
+#gem 'mysql2'
 
-gem 'sqlite3'
+gem 'pg'
 
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
@@ -87,6 +87,9 @@ gem "bower-rails", "~> 0.9.2"
 # Gem for create QRCodes from urls
 # NOTE: doc: https://github.com/whomwah/rqrcode
 gem 'rqrcode'
+
+# Gem for generate barcodes
+gem 'barby'
 
 # Gem for generate PDF from HTML
 # NOTE: doc: https://github.com/mileszs/wicked_pdf

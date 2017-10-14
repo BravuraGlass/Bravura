@@ -25,6 +25,8 @@
                         <td><%= fabrication_order.description %></td>
                         <!-- <td><%= fabrication_order.status %></td> -->
                         <td>
+                          <%= link_to 'Barcode',
+                                        f_orders_barcode_path(fabrication_order), target: "_blank", :class => 'btn btn-default btn-xs' %>
                           <%= link_to 'Print',
                                         f_orders_qr_path(fabrication_order), target: "_blank", :class => 'btn btn-default btn-xs' %>
                             <%= link_to 'Edit',

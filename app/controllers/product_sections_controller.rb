@@ -1,5 +1,9 @@
+require 'barby'
+require 'barby/barcode/code_128'
+require 'barby/outputter/png_outputter'
+
 class ProductSectionsController < ApplicationController
-  before_action :set_product_section, only: [:show, :edit, :update, :destroy,
+  before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
 
   def edit
@@ -36,6 +40,15 @@ class ProductSectionsController < ApplicationController
       redirect_to update_status_path(@product_section), error: 'There was an error updating status'
     end
   end
+  
+  def barcode
+    respond_to do |format|
+      barcode = Barby::Code128B.new(url_for(action: 'update_status', controller: 'product_sections', id: @product_section.id))
+      
+      format.png { send_data barcode.to_png,type: "image/png", disposition: 'inline' }
+      format.html {render :layout => 'clean'}
+    end  
+  end  
 
   def update_status
     respond_to do |format|

@@ -12,7 +12,7 @@ class CreateJobs < ActiveRecord::Migration[5.1]
       t.string :duration
       t.datetime :duedate
       t.boolean :paid
-      t.boolean :active, default: 1
+      t.boolean :active, default: true
 
       t.timestamps
     end

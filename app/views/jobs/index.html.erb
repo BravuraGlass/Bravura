@@ -59,7 +59,7 @@
                             <%= l(job.appointment, format: '%Y/%m/%d') if job.appointment %>
                           </td>
                           <td>
-                            <span>(<%= job.id %>) <%= job.address[0...30] %></span>
+                            <span>(<%= job.id %>) <%= job.address.nil? ? "empty" : job.address[0...30] %></span>
                             <% job.comments[0..1].each do |c| %>
                               <div class="comment">
                                 <span class="comment-date"><%= l(c.created_at, format: :short) %>,</span>
