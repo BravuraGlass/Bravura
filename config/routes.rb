@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   resources :product_sections, only: [:update]
 
   resources :jobs, only: [:index, :new, :create, :update, :destroy] do
+    member do
+      get 'product_detail'
+    end  
     resources :comments
     resources :fabrication_orders, only: [:create, :show]
   end

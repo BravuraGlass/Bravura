@@ -6,6 +6,11 @@ class Product < ApplicationRecord
   belongs_to :product_type
   belongs_to :room
   has_many :product_sections, :dependent => :destroy
+  
+  def name_with_section_count
+    sect_count = self.product_sections.size
+    "#{self.name} (#{sect_count} section#{sect_count > 1 ? 's' : ''})"
+  end  
 
   private
     # set the index

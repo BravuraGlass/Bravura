@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
   include AuditableController
 
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail]
   before_action :load_common_data
   before_action :set_markers, only: [:show, :edit]
 
@@ -173,6 +173,12 @@ class JobsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def product_detail
+    respond_to do |format|
+      format.html {}
+    end  
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.

@@ -3,6 +3,7 @@ class FabricationOrder < ApplicationRecord
 
   belongs_to :job, optional: true
   has_many :rooms, :dependent => :destroy
+  has_many :products, :through => :rooms
 
   accepts_nested_attributes_for :rooms
 

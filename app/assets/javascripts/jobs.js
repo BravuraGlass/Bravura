@@ -266,7 +266,14 @@ $(document).ready(function(){
   $('#closePanelButton').on('click', function () { BRAVURA.closeJobDetailPanel(); });
 
   $('.job-detail-element').on('click', function (element) {
-    BRAVURA.showJobDetails(element);
+    // BRAVURA.showJobDetails(element);
+  
+    event.preventDefault(); 
+    event.stopPropagation(); 
+    
+    var idval = $(this).attr("id").split("job-detail-")[1];
+    window.location.href = "/jobs/"+idval+"/product_detail";
+    
   });
 
   $('.filter-button').on('change', function () {
