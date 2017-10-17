@@ -13,16 +13,15 @@
           <table class="table table-striped table-hover responsive">
             <thead>
               <th>&nbsp;</th>            
-              <% @arr_products = @job.products_group %>
-              <% @arr_products.each do |arr_prod| %>
-                <th colspan="<%= arr_prod[:max_col] %>"><%= "#{arr_prod[:name]}" %></th>
+              <% @job.products_group.each_with_index do |arr_prod,idx| %>          
+                <th colspan="<%= arr_prod[:max_col] %>" class="<%= column_color(idx+1) %>"><%= "#{arr_prod[:name]}" %></th>
               <% end %>  
             </thead>
             <tbody>
-              <% @job.product_detail.each_with_index do |row,idx1| %>
+              <% @job.product_detail.each do |row| %>
                 <tr>
-                  <% row.each_with_index do |val,idx2| %>
-                    <td><%= val %></td>
+                  <% row.each do |val| %>
+                    <td class="<%= column_color(val[:prod_count]) %>"><%= val[:content] %></td>
                   <% end %>  
                 </tr>
               <% end %> 

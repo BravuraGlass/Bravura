@@ -45,16 +45,16 @@ class Job < ApplicationRecord
     end  
     
     self.fabrication_order.rooms.order("name asc").each_with_index do |room, idx|
-      rows = [room.name]
+      rows = [{content: room.name, prod_count: 0}]
 
-      arr_products.each do |arr_prod|
+      arr_products.each_with_index do |arr_prod,idx|
         tru_sect_count = 0
         room.products.each do |prod|
           
           if arr_prod[:name] == prod.name
             prod.product_sections.each do |sect|
               #rows << "#{sect.name} #{prod.name}"
-              rows << sect.status
+              rows << {content: sect.status, prod_count: idx+1}
               tru_sect_count+=1
             end  
             
@@ -63,8 +63,8 @@ class Job < ApplicationRecord
         end
         
         if arr_prod[:max_col] > tru_sect_count
-          1.upto(arr_prod[:max_col] - tru_sect_count) do |idx|
-            rows << nil
+          1.upto(arr_prod[:max_col] - tru_sect_count) do
+            rows << {content: nil, prod_count: idx+1}
           end
         end
       end    
