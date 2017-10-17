@@ -38,20 +38,36 @@ class Job < ApplicationRecord
     data = []
     total_col = 0
     
-    self.fabrication_order.rooms.each_with_index do |room, idx|
+    arr_products = self.products_group
+    
+    arr_products.each do |arr_prod|
+      total_col += arr_prod[:max_col]
+    end  
+    
+    self.fabrication_order.rooms.order("name asc").each_with_index do |room, idx|
       rows = [room.name]
 
-      self.products_group.each do |arr_prod|
+      arr_products.each do |arr_prod|
+        tru_sect_count = 0
         room.products.each do |prod|
+          
           if arr_prod[:name] == prod.name
-            tru_sect_count = prod.product_sections.count 
-            rows += prod.product_sections.collect {|sect| "#{sect.status}-#{sect.product.name}"}
-                  
-          end    
-
-        end  
-             
-      end  
+            prod.product_sections.each do |sect|
+              #rows << "#{sect.name} #{prod.name}"
+              rows << sect.status
+              tru_sect_count+=1
+            end  
+            
+          end
+          
+        end
+        
+        if arr_prod[:max_col] > tru_sect_count
+          1.upto(arr_prod[:max_col] - tru_sect_count) do |idx|
+            rows << nil
+          end
+        end
+      end    
       
       data << rows
     end

@@ -13,21 +13,10 @@
           <table class="table table-striped table-hover responsive">
             <thead>
               <th>&nbsp;</th>            
-              <% @col_count = 0 %>  
-              <% @data = [] %>
-              <% @header_config = [] %>
-              
-              <% @job.fabrication_order.rooms.each_with_index do |room,idx| %>
-                
-                <% room.products.each do |product| %>
-                  <% @header_config << {:column => @col_count, :product_id => product.id} %>
-                  <% @ps_count = product.product_sections.size %>
-                  
-                  <th colspan="<%= @ps_count %>"><%= product.name_with_section_count %></th>
-                  <% @col_count += @ps_count %>
-                <% end %>
-                 
-              <% end %>    
+              <% @arr_products = @job.products_group %>
+              <% @arr_products.each do |arr_prod| %>
+                <th colspan="<%= arr_prod[:max_col] %>"><%= "#{arr_prod[:name]}" %></th>
+              <% end %>  
             </thead>
             <tbody>
               <% @job.product_detail.each_with_index do |row,idx1| %>
