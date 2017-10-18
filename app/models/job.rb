@@ -64,7 +64,7 @@ class Job < ApplicationRecord
         
         if arr_prod[:max_col] > tru_sect_count
           1.upto(arr_prod[:max_col] - tru_sect_count) do
-            rows << {content: nil, prod_count: idx+1}
+            rows << {content: "", prod_count: idx+1}
           end
         end
       end    

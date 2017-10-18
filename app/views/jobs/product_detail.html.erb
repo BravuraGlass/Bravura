@@ -10,12 +10,14 @@
         </div>
         <div class="panel-body">
           <% if @job.fabrication_order %>
-          <table class="table table-striped table-hover responsive">
+          <table class="datatable table table-striped table-hover responsive">
             <thead>
-              <th>&nbsp;</th>            
-              <% @job.products_group.each_with_index do |arr_prod,idx| %>          
-                <th colspan="<%= arr_prod[:max_col] %>" class="<%= column_color(idx+1) %>"><%= "#{arr_prod[:name]}" %></th>
-              <% end %>  
+              <th></th>            
+              <% @job.products_group.each_with_index do |arr_prod,idx| %>  
+                <% 1.upto(arr_prod[:max_col]) do |idx2| %>         
+                  <th class="<%= column_color(idx+1) %>"><%= (idx2 == 1) ? "#{arr_prod[:name]}" : "" %></th>
+                <% end %>  
+              <% end %>    
             </thead>
             <tbody>
               <% @job.product_detail.each do |row| %>
