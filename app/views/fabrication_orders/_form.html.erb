@@ -54,6 +54,7 @@
                       <table class="table table-striped table-hover responsive" id="productsList">
                           <thead>
                             <tr>
+                              <th class="sort-alpha">Master</th>
                               <th class="sort-alpha">Room</th>
                               <th class="sort-alpha">Name</th>
                               <th class="sort-alpha"># Products / Sections</th>
@@ -64,6 +65,7 @@
                           <tbody>
                               <% @fabrication_order.rooms.order("name asc").each do |room| %>
                                 <tr>
+                                  <td><%= room.master %></td>
                                 <% if room.products.count && room.products.count > 0 %>
                                   <td><em class="fa fa-minus pointer" id="room_<%= room.id %>"
                                   onclick="BRAVURA.toggleProductSections(this, 'room_<%= room.id %>')" ></em> <%= room.name %></td>
@@ -83,6 +85,7 @@
                                 </tr>
                                 <% room.products.order("name asc").each do |product| %>
                                   <tr class="" data-parent="room_<%= room.id %>">
+                                    <td></td>
                                     <td></td>
                                     <% if product.product_sections.count && product.product_sections.count  > 0 %>
                                     <td>
@@ -104,6 +107,7 @@
                                   </tr>
                                    <% product.product_sections.order("name asc").each do |section| %>
                                     <tr class="" data-parent="product_<%= product.id %>">
+                                      <td></td>
                                       <td></td>
                                       <td><%= section.name %></td>
                                       <td></td>

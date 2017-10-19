@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170929040136) do
+ActiveRecord::Schema.define(version: 20171019082114) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -144,6 +144,8 @@ ActiveRecord::Schema.define(version: 20170929040136) do
     t.bigint "fabrication_order_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "master"
+    t.integer "room_id"
     t.index ["fabrication_order_id"], name: "index_rooms_on_fabrication_order_id"
   end
 

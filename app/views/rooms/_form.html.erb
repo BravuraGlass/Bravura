@@ -32,10 +32,14 @@
                   <%= f.label :description %>
                   <%= f.text_area :description, :class => 'form-control', id: :room_description, :readonly => readonly %>
                 </div>
+                <div class="form-group">
+                  <%= f.label :master,"Master Name" %>
+                  <%= f.text_field :master, :class => 'form-control', id: :room_master, :readonly => readonly %>
+                </div>
                 <div class="actions <%= 'hide' if readonly %>">
                 <%= f.submit 'Save Room', :class => 'btn btn-primary' %>
                 <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                      fabrication_order_room_path, :class => 'btn btn-default' %>
+                      edit_fabrication_order_path(@room.fabrication_order), :class => 'btn btn-default' %>
             </div>
           <% end %>
          </div>
