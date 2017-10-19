@@ -92,6 +92,8 @@ GEM
       execjs
     coffee-script-source (1.12.2)
     concurrent-ruby (1.0.5)
+    deep_cloneable (2.3.1)
+      activerecord (>= 3.1.0, < 5.2.0)
     domain_name (0.5.20170404)
       unf (>= 0.0.5, < 1.0.0)
     erubi (1.6.1)
@@ -274,6 +276,7 @@ DEPENDENCIES
   capybara (~> 2.13.0)
   carrierwave (= 1.2.0)
   coffee-rails (~> 4.2)
+  deep_cloneable
   geocoder (~> 1.4, >= 1.4.4)
   gmaps4rails
   google_url_shortener

@@ -23,6 +23,8 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 
+gem 'deep_cloneable'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.1'
 # Use Uglifier as compressor for JavaScript assets

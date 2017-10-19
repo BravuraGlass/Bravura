@@ -56,6 +56,33 @@ $(document).ready(function(){
   $('#createEditRoomModalCancelButton').on('click', function() { BRAVURA.closeCreateEditProductModal(); });
   $('#createEditProductModalSaveButton').on('click', function() { BRAVURA.saveCreateEditProductModal(); });
   $('#newProductButton').on('click', function() { BRAVURA.showCreateEditProductModal(); });
-
   $('.edit-product-button').on('click', function() { BRAVURA.showCreateSectionModal(); });
+  
+  $('#cloneMasterButton').on('click', function() {
+    $('#cloneMasterModal').modal({
+        show: true,
+        keyboard: false
+    });
+  });  
+  
+  $('#masterModalCloneButton').on('click', function() {
+    var mroom_id = $('#master_room_id').val();
+    var forder_id = $('#master_fabrication_order_id').val();
+
+    $.ajax({
+      method: "POST",
+      url: "/fabrication_orders/"+forder_id+"/rooms/clone.json",
+      data: {id: mroom_id}
+    })
+    .done(function(response){
+      $('#cloneMasterModal').modal('hide');
+      window.location.reload();
+    })
+    .fail(function(response){
+      alert('There was an error saving the product');
+    });
+  
+  });  
+  
+  
 });

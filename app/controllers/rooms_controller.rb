@@ -28,6 +28,7 @@ class RoomsController < ApplicationController
   # PATCH/PUT /rooms/1.json
   def update
     respond_to do |format|
+
       if @room.update(room_params)
         format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Room was successfully updated.' }
         format.json { render :show, status: :ok, location: @room }
@@ -47,6 +48,27 @@ class RoomsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def clone
+    @room = Room.where("id = ? AND fabrication_order_id = ?", params[:id], params[:fabrication_order_id])[0]
+    
+    respond_to do |format|
+      if @room
+        if @room.master_clone
+          format.json { render json: Room.last, status: :created } 
+        else
+          respond_to do |format|
+            format.json { render json: "errors", status: :unprocessable_entity }
+          end  
+        end    
+      else
+        respond_to do |format|
+          format.json { render json: "errors", status: :unprocessable_entity }
+        end
+      end
+    end      
+    
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.
@@ -56,6 +78,6 @@ class RoomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
-      params.require(:room).permit(:name, :description, :master)
+      params.require(:room).permit(:name, :description, :master, :room_id)
     end
 end

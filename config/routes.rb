@@ -14,7 +14,10 @@ Rails.application.routes.draw do
   resources :customers
 
   resources :fabrication_orders, only: [:index, :new, :edit, :update, :destroy] do
-    resources :rooms, only: [:new, :edit, :update, :destroy] do
+    resources :rooms, only: [:new, :edit, :update, :destroy, :clone] do
+      collection do
+        post 'clone'
+      end  
       resources :products, only: [:new, :edit, :update, :destroy] do
         resources :product_sections, only: [:new, :edit, :update, :destroy]
       end
