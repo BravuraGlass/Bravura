@@ -13,7 +13,7 @@
               <label for="room">Select or Create Room</label>
               <div class="row">
                 <div class="col-md-6">
-                  <%= collection_select :product, :room_id, @fabrication_order.rooms, :id, :name, { include_blank: true } , { class: 'form-control select-bootstrap' } %>
+                  <%= collection_select :product, :room_id, @fabrication_order.rooms, :id, :name_with_master, { include_blank: true } , { class: 'form-control select-bootstrap' } %>
                 </div>
                 <div class="col-md-6">
                   <%= text_field :product, :room_name, class: 'form-control' %>

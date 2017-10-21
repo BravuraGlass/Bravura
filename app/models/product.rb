@@ -11,6 +11,28 @@ class Product < ApplicationRecord
     sect_count = self.product_sections.size
     "#{self.name} (#{sect_count} section#{sect_count > 1 ? 's' : ''})"
   end  
+  
+  def room_master?
+    if self.room
+      if self.room.master?
+        return true
+      else
+        return false
+      end
+    else
+      return false
+    end
+  end    
+  
+  def clone_child_data 
+    if room_master?     
+      self.room.rooms.each do |theroom|
+        new_prod = self.deep_clone include: :product_sections
+        new_prod.room_id = theroom.id
+        new_prod.save
+      end
+    end  
+  end 
 
   private
     # set the index

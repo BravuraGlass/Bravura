@@ -50,6 +50,8 @@ class ProductsController < ApplicationController
           first_status = Status.where(:category => Status.categories[:products]).order(:order).first || ''
           ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)
         end
+        
+        @product.clone_child_data
         # format.html { redirect_to fabrication_order_path(fabrication_order), notice: 'Product was successfully added to the Fabrication Order.' }
         format.json { render json: @product, status: :created, location: fabrication_order }
       else
