@@ -1,0 +1,44 @@
+Bravura API Documentation
+
+test server : bravura-crm.herokuapp.com
+
+1. LOGIN
+
+Request
+
+/sessions/create.json
+
+params
+
+- email 
+- password
+
+Response
+
+success
+
+{
+    "status": "success",
+    "data": {
+        "id": 2,
+        "access_token": "ca6e3ab7-cb6c-494a-bff8-c91d1b018f8b",
+        "email": "admin@admin.com",
+        "first_name": "admin",
+        "last_name": "admin",
+        "phonenumber": "555 555 5555",
+        "address": "admin address"
+    },
+    "message": null
+}
+
+failed
+
+{
+    "status": "failed",
+    "data": null,
+    "message": "Email, password was invalid or access token has expired"
+}
+
+Note :
+1.ID and access_token will be used on every API request
+2. valid data email and password for test server are “admin@admin.com” with password “admin”

@@ -42,7 +42,7 @@ Rails.application.routes.draw do
 
   get "jobs/:id" => "jobs#index", :as => 'select_job'
   get 'map/index', :as => 'map_index'
-  post 'sessions/create'
+  post 'sessions/create',  :defaults => { :format => 'html' }
   get "logout" => "sessions#destroy", :as => "logout"
   get "login" => "sessions#new", :as => "login"
   get "signup" => "users#new", :as => "signup"
