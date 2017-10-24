@@ -20,9 +20,6 @@ gem 'rails', '5.1.0'
 
 gem 'pg'
 
-# Use Puma as the app server
-gem 'puma', '~> 3.7'
-
 gem 'thin'
 
 gem 'deep_cloneable'
@@ -77,12 +74,14 @@ end
 group :development do
   # Access an IRB console on exception pages or by using <%= console %> anywhere in the code.
   gem 'web-console', '>= 3.3.0'
+=begin  
   gem 'capistrano'
   gem 'capistrano3-puma'
   gem 'capistrano-rails', require: false
   gem 'capistrano-bundler', require: false
   gem 'capistrano-rvm'
   gem 'capistrano-bower'
+=end  
 end
 
 # Windows does not include zoneinfo files, so bundle the tzinfo-data gem

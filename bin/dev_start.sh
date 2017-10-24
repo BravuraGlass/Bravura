@@ -1,1 +1,1 @@
-puma -p 3171
+thin start -p 3171
