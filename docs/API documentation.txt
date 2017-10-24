@@ -4,7 +4,7 @@ test server : bravura-crm.herokuapp.com
 
 1. LOGIN
 
-Request
+Request POST
 
 /sessions/create.json
 

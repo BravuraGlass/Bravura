@@ -23,6 +23,8 @@ gem 'pg'
 # Use Puma as the app server
 gem 'puma', '~> 3.7'
 
+gem 'thin'
+
 gem 'deep_cloneable'
 
 # Use SCSS for stylesheets
