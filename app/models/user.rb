@@ -10,8 +10,15 @@ class User < ApplicationRecord
   
   def generate_token
     self.access_token = SecureRandom.uuid
-    self.token_expired = Date.today.next_week
+    self.token_expired = (Rails.env.to_s == "production" ? Date.today.next_day : Date.today.next_month)
     return self.save
+  end  
+  
+  def self.api_login_status(params)
+    rs = User.where("access_token =? AND id=? AND token_expired >= ?", params[:access_token], params[:access_id], Date.today)
+    
+    rs.size > 0 ? true : false
+          
   end  
 
 end

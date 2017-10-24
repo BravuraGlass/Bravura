@@ -1,9 +1,9 @@
-<% statuses = Status.where(:category => Status.categories[:products]).order(:order) %>
+
 <div class="statusView">
   <h1><%= @product_section.name %></h1>
   <div class="form-group">
     <%= render :partial => 'shared/flash_messages' %>
-    <% statuses.each  do |status| %>
+    <% @statuses.each  do |status| %>
       <% selected = @product_section.status == status.name ? 'selected' : '' %>
       <%= link_to status.name.titleize, edit_section_status_path(@product_section.id, status.name, format: "html"), { class: "btn btn-primary #{selected}" } %>
     <% end %>

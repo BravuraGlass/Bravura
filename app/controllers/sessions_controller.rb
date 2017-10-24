@@ -29,7 +29,7 @@ class SessionsController < ApplicationController
           result =  {
             status: :success,
             data: {
-              id: user.id,
+              access_id: user.id,
               access_token: user.access_token,
               email: user.email,
               first_name: user.first_name,
@@ -43,7 +43,7 @@ class SessionsController < ApplicationController
           result = {
             status: :failed,
             data: nil,
-            message: "Email, password was invalid or access token has expired"
+            message: "Email or password was invalid"
           }
         end    
         render json: result

@@ -3,6 +3,20 @@ class ApplicationController < ActionController::Base
   before_action :require_login
   before_action :late_access
   before_action :restrict_delete, only: [:destroy]
+  
+  protected
+  
+  def api_login_status
+    
+    if User.api_login_status(params) == false
+       result = {
+         status: :failed,
+         message: "access denied, please login first",
+         data: nil,
+       }
+       render json: result
+    end  
+  end  
 
   private
 
