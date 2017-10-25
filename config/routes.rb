@@ -57,6 +57,7 @@ Rails.application.routes.draw do
   get "s_orders_qr/:id" => "fabrication_orders#s_orders_qr", :as => 's_orders_qr', :defaults => { :format => 'html' }
   get "update_status/:id" => "product_sections#update_status", :as => 'update_status'
   get "edit_section_status/:id/:new_status(.:format)" => "product_sections#edit_section_status", :as => 'edit_section_status'
+  post "edit_section_status/:id(.:format)" => "product_sections#edit_section_status", :as => 'post_edit_section_status'
   get 'search' => 'searches#search'
 
 

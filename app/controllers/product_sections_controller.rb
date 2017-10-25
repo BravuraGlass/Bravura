@@ -5,7 +5,7 @@ require 'barby/outputter/png_outputter'
 class ProductSectionsController < ApplicationController
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
-  before_action :api_login_status, only: :update_status, if: -> { request.format.json? }   
+  before_action :api_login_status, only: [:update_status,:edit_section_status], if: -> { request.format.json? }   
 
   def edit
   end
@@ -35,11 +35,43 @@ class ProductSectionsController < ApplicationController
   end
 
   def edit_section_status
-    if @product_section.update(status: params[:new_status])
-      redirect_to update_status_path(@product_section), notice: 'Section status updated'
-    else
-      redirect_to update_status_path(@product_section), error: 'There was an error updating status'
-    end
+    respond_to do |format|
+      psection = @product_section.update(status: params[:new_status])
+      
+      format.html do
+        if psection
+          redirect_to update_status_path(@product_section), notice: 'Section status updated'
+        else
+          redirect_to update_status_path(@product_section), error: 'There was an error updating status'
+        end
+      end
+      
+      format.json do
+        @product_section.reload
+        
+        if psection    
+          data = {
+            id: @product_section.id,
+            section_name: @product_section.name,
+            status: @product_section.status
+          }  
+          
+          result = {
+            status: :success,
+            message: nil,
+            data: data
+          }
+        else
+          result = {
+            status: :failed,
+            message: "There was an error updating status",
+            data: nil
+          }
+        end  
+        
+        render json: result  
+      end     
+    end  
   end
   
   def barcode
