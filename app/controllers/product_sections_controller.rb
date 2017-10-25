@@ -5,6 +5,7 @@ require 'barby/outputter/png_outputter'
 class ProductSectionsController < ApplicationController
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
+  before_action :api_login_status, only: :update_status, if: -> { request.format.json? }   
 
   def edit
   end
@@ -43,7 +44,7 @@ class ProductSectionsController < ApplicationController
   
   def barcode
     Google::UrlShortener::Base.api_key = "AIzaSyCHSbVfDBDr13syJSeZPwjxOXS8kssI0S4"
-    shorturl = Google::UrlShortener.shorten!(url_for(action: 'update_status', controller: 'product_sections', id: @product_section.id))
+      shorturl = Google::UrlShortener.shorten!(url_for(action: 'update_status', controller: 'product_sections', id: @product_section.id))
     
     respond_to do |format|
       
@@ -55,8 +56,33 @@ class ProductSectionsController < ApplicationController
   end  
 
   def update_status
+    @statuses = Status.where(:category => Status.categories[:products]).order(:order)
+    
     respond_to do |format|
       format.html {render :layout => 'clean'}
+      format.json do 
+        product_statuses = []
+        
+        @statuses.each do |status|
+          product_statuses << {
+            id: status.id,
+            name: status.name
+          }
+        end  
+        
+        data = {
+          section_name: @product_section.name,
+          status: @product_section.status,
+          product_statuses: product_statuses
+        }
+        
+        result = {
+          status: :success,
+          message: nil,
+          data: data,
+        }
+        render json: result
+      end  
     end
   end
 
