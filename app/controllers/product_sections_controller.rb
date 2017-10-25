@@ -5,7 +5,7 @@ require 'barby/outputter/png_outputter'
 class ProductSectionsController < ApplicationController
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
-  before_action :api_login_status, only: [:update_status,:edit_section_status], if: -> { request.format.json? }   
+  before_action :api_login_status, only: [:update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
 
   def edit
   end
@@ -33,6 +33,36 @@ class ProductSectionsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def multiple_edit_section_status
+    respond_to do |format|
+      @statuses = Status.where(:category => Status.categories[:products]).order(:order)
+      
+      format.json do
+        data = []
+        ProductSection.where("id IN (?)", params[:ids]).each do |product_section|
+          psection = product_section.update(status: params[:new_status])
+          product_section.reload
+          
+          data << {
+            id: product_section.id,
+            section_name: product_section.name,
+            status: product_section.status
+          }  
+                  
+        end
+        
+        result = {
+          status: :success,
+          message: nil,
+          data: data,
+        }
+        
+        render json: result
+        
+      end    
+    end  
+  end  
 
   def edit_section_status
     respond_to do |format|
@@ -49,27 +79,7 @@ class ProductSectionsController < ApplicationController
       format.json do
         @product_section.reload
         
-        if psection    
-          data = {
-            id: @product_section.id,
-            section_name: @product_section.name,
-            status: @product_section.status
-          }  
-          
-          result = {
-            status: :success,
-            message: nil,
-            data: data
-          }
-        else
-          result = {
-            status: :failed,
-            message: "There was an error updating status",
-            data: nil
-          }
-        end  
-        
-        render json: result  
+        render json: build_json_product_status(psection,@product_section) 
       end     
     end  
   end
@@ -117,6 +127,32 @@ class ProductSectionsController < ApplicationController
       end  
     end
   end
+  
+  protected
+  
+  def build_json_product_status(psection,product_section)
+    if psection    
+      data = {
+        id: product_section.id,
+        section_name: product_section.name,
+        status: product_section.status
+      }  
+      
+      result = {
+        status: :success,
+        message: nil,
+        data: data
+      }
+    else
+      result = {
+        status: :failed,
+        message: "There was an error updating status",
+        data: nil
+      }
+    end
+    
+    return result
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.
