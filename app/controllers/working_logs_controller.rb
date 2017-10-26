@@ -69,6 +69,16 @@ class WorkingLogsController < ApplicationController
     end 
   end  
   
+  # for testing purpose only
+  def destroy_all
+    if Rails.env.to_s == "development" or request.host.include?("heroku")
+      WorkingLog.destroy_all
+      render plain: "Working logs data has been destroyed"
+    else
+      render plain: "you are not authorized to access this page"
+    end      
+  end  
+  
   protected
   
   def api_params

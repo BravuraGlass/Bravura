@@ -4,6 +4,7 @@ Rails.application.routes.draw do
     collection do
       post 'checkin'
       post 'checkout'
+      get 'destroy_all'
     end
   end
   resources :product_sections do
