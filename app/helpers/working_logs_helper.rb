@@ -1,0 +1,2 @@
+module WorkingLogsHelper
+end

@@ -7,6 +7,7 @@ class User < ApplicationRecord
   validates_presence_of :email
   validates_presence_of :type_of_user
   validates_uniqueness_of :email
+  has_many :working_logs
   
   def generate_token
     self.access_token = SecureRandom.uuid
@@ -17,8 +18,7 @@ class User < ApplicationRecord
   def self.api_login_status(params)
     rs = User.where("access_token =? AND id=? AND token_expired >= ?", params[:access_token], params[:access_id], Date.today)
     
-    rs.size > 0 ? true : false
-          
+    rs.size > 0 ? true : false        
   end  
 
 end

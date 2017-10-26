@@ -1,5 +1,11 @@
 Rails.application.routes.draw do
 
+  resources :working_logs do
+    collection do
+      post 'checkin'
+      post 'checkout'
+    end
+  end
   resources :product_sections do
     member do
       get 'barcode'

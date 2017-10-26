@@ -5,6 +5,7 @@ require 'barby/outputter/png_outputter'
 class ProductSectionsController < ApplicationController
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
+  skip_before_action :require_login, only: [:edit_section_status, :update_status], if: -> { request.format.json? }   
   before_action :api_login_status, only: [:update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
 
   def edit
