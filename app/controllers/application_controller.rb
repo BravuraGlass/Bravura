@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   protect_from_forgery with: :exception, unless: -> { request.format.json? }
   before_action :require_login
-  before_action :late_access
+  #before_action :late_access
   before_action :restrict_delete, only: [:destroy]
   
   protected
@@ -26,7 +26,7 @@ class ApplicationController < ActionController::Base
 
   def late_access
     hour = Time.now.utc.hour
-    if (hour >= 18 || hour <= 7) && !current_user.late_access
+    if (hour >= 18 || hour <= 7) && !current_user.try(:late_access)
       logout
       redirect_back_or_to login_url, :alert => "Your account has no access at night"
     end

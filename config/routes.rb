@@ -1,6 +1,6 @@
 Rails.application.routes.draw do
 
-  resources :working_logs do
+  resources :working_logs, only: :index do
     collection do
       post 'checkin'
       get 'checkin_barcode'
