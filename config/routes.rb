@@ -3,15 +3,19 @@ Rails.application.routes.draw do
   resources :working_logs do
     collection do
       post 'checkin'
+      get 'checkin_barcode'
+      get 'checkout_barcode'
       post 'checkout'
       get 'destroy_all'
     end
   end
+  
   resources :product_sections do
     member do
       get 'barcode'
     end  
   end
+  
   resources :product_types
   resources :status_checklist_items
   resources :statuses

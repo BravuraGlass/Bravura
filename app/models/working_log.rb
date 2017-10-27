@@ -2,18 +2,27 @@ class WorkingLog < ApplicationRecord
   belongs_to :user
   
   def self.submit(data, submit_type = "checkin")
-    if data[:barcode]
-      #automatic checkin
-    else
-      themethod = "manual"
-    end  
-    
     wlog_hash = {
       user_id: data[:user_id],
       "#{submit_type}_time": Time.now,
-      "#{submit_type}_date": Date.today.to_s,
-      "#{submit_type}_method": themethod
+      "#{submit_type}_date": Date.today.to_s
     }
+
+    if data[:barcode]
+      wlog_hash["#{submit_type}_method".to_sym] = "automatic"
+      
+      if data[:barcode] == eval("#{submit_type.upcase}_BARCODE") and data[:longitude] == "-73.932208" and data[:latitude] == "40.618011"
+        ## success
+        
+      else
+
+        wlog = WorkingLog.new(wlog_hash)   
+        wlog.errors.add(:base, "invalid, you didn't scan barcode properly or you do not #{submit_type} from office") 
+        return wlog 
+      end     
+    else
+      wlog_hash["#{submit_type}_method".to_sym] = "manual"
+    end  
     
     if submit_type == "checkin"
       wlog = WorkingLog.where("user_id = ? AND #{submit_type}_date=?", data[:user_id], Date.today.to_s)[0]

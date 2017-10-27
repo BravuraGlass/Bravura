@@ -1,7 +1,25 @@
+require 'barby'
+require 'barby/barcode/code_128'
+require 'barby/outputter/png_outputter'
+
 class WorkingLogsController < ApplicationController
   include AuditableController
   skip_before_action :require_login, only: [:checkin, :checkout], if: -> { request.format.json? }
   before_action :api_login_status, only: [:checkin, :checkout], if: -> { request.format.json? } 
+  
+  def checkin_barcode
+    respond_to do |format|      
+      barcode = Barby::Code128B.new(CHECKIN_BARCODE)
+      format.png { send_data barcode.to_png,type: "image/png", disposition: 'inline' }
+    end  
+  end  
+  
+  def checkout_barcode
+    respond_to do |format|      
+      barcode = Barby::Code128B.new(CHECKOUT_BARCODE)
+      format.png { send_data barcode.to_png,type: "image/png", disposition: 'inline' }
+    end  
+  end  
   
   def checkin
     
