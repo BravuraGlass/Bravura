@@ -18,6 +18,19 @@ class Room < ApplicationRecord
       new_room.master = ""
       new_room.room_id = self.id
       
+      new_room.products.each_with_index do |prod, idx|
+        prod.product_sections.each_with_index do |sect, idx2|
+          splitname = sect.name.split("-") 
+          if splitname.size == 3
+            newname = "#{splitname[0]}-#{new_room.name}-#{splitname[2]}"
+          else
+            newname = sect.name
+          end    
+          new_room.products[idx].product_sections[idx2].name = newname
+          
+        end  
+      end   
+      
       if new_room.save
         return true
       else
