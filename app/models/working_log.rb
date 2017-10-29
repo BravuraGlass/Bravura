@@ -7,6 +7,11 @@ class WorkingLog < ApplicationRecord
       "#{submit_type}_time": Time.now,
       "#{submit_type}_date": Date.today.to_s
     }
+    
+    if submit_type == "checkin"
+      wlog_hash[:latitude] = data[:latitude]
+      wlog_hash[:longitude] = data[:longitude]
+    end  
 
     if data[:barcode]
       wlog_hash["#{submit_type}_method".to_sym] = "automatic"
@@ -15,7 +20,6 @@ class WorkingLog < ApplicationRecord
         ## success
         
       else
-
         wlog = WorkingLog.new(wlog_hash)   
         wlog.errors.add(:base, "invalid, you didn't scan barcode properly or you do not #{submit_type} from office") 
         return wlog 
@@ -28,9 +32,14 @@ class WorkingLog < ApplicationRecord
       wlog = WorkingLog.where("user_id = ? AND #{submit_type}_date=?", data[:user_id], Date.today.to_s)[0]
     
       if wlog.nil?
-        wlog = WorkingLog.create(wlog_hash)
-        wlog.get_location
-        return wlog
+        wlog = WorkingLog.new(wlog_hash)
+        if wlog_hash[:latitude].blank? or wlog_hash[:longitude].blank?
+          wlog.errors.add(:base, "invald, longitude or latitude are empty")
+        else  
+          wlog.save
+          wlog.get_location
+          return wlog
+        end  
       else  
         wlog.errors.add(:base, "invalid, you can't checkin more than once at the same day")
       end 

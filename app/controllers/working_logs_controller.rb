@@ -52,7 +52,8 @@ class WorkingLogsController < ApplicationController
               last_name: @working_log.user.last_name
             },
             checkin_time: @working_log.checkin_time,
-            checkin_method: @working_log.checkin_method
+            checkin_method: @working_log.checkin_method,
+            location: @working_log.location 
           }
 
         }
