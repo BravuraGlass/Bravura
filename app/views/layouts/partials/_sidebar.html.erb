@@ -80,6 +80,14 @@
                <span>Product Types</span>
             </a>
          </li>
+         <% if current_user.type_of_user == "0" %>
+         <li class="<%= 'active' if current_controller == 'working_logs_types' %>">
+            <a href="<%= working_logs_path %>" title="Product Types">
+               <em><i class="icon-check"></i></em>
+               <span>Working Logs</span>
+            </a>
+         </li> 
+         <% end %>
 
 <% end %>
 

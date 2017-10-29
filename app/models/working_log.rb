@@ -11,7 +11,7 @@ class WorkingLog < ApplicationRecord
     if data[:barcode]
       wlog_hash["#{submit_type}_method".to_sym] = "automatic"
       
-      if data[:barcode] == eval("#{submit_type.upcase}_BARCODE") and data[:longitude] == "-73.932208" and data[:latitude] == "40.618011"
+      if data[:barcode] == eval("#{submit_type.upcase}_BARCODE") #and data[:longitude] == "-73.932208" and data[:latitude] == "40.618011"
         ## success
         
       else
@@ -29,6 +29,8 @@ class WorkingLog < ApplicationRecord
     
       if wlog.nil?
         wlog = WorkingLog.create(wlog_hash)
+        wlog.get_location
+        return wlog
       else  
         wlog.errors.add(:base, "invalid, you can't checkin more than once at the same day")
       end 
@@ -49,6 +51,14 @@ class WorkingLog < ApplicationRecord
     
     return wlog    
     
+  end  
+  
+  def get_location
+    if self.location.blank? and self.latitude and self.longitude
+      query = Geocoder.search("#{self.latitude},#{self.longitude}").first
+      self.update_attribute(:location, query.address)
+    end
+    return self.location
   end  
   
   def self.checkin(data)

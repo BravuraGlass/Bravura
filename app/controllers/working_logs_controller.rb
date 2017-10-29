@@ -7,6 +7,14 @@ class WorkingLogsController < ApplicationController
   skip_before_action :require_login, only: [:checkin, :checkout], if: -> { request.format.json? }
   before_action :api_login_status, only: [:checkin, :checkout], if: -> { request.format.json? } 
   
+  def index
+    if current_user.type_of_user == "0"
+      @working_logs = WorkingLog.order("checkin_time")
+    else
+      render plain: "you are not authorized to access this page"
+    end    
+  end  
+  
   def checkin_barcode
     respond_to do |format|      
       barcode = Barby::Code128B.new(CHECKIN_BARCODE)

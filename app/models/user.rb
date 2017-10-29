@@ -20,5 +20,9 @@ class User < ApplicationRecord
     
     rs.size > 0 ? true : false        
   end  
+  
+  def full_name
+    "#{self.first_name} #{self.last_name}"
+  end  
 
 end

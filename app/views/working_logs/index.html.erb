@@ -1,0 +1,41 @@
+<h3>Working Logs
+   <small>List of working logs</small>
+</h3>
+
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+
+            <div class="panel-body">
+               <table class="datatable table table-striped table-hover responsive">
+                  <thead>
+                    <tr>
+                                            <th class="sort-alpha">Name</th>
+                                            <th class="sort-alpha">Clockin</th>
+                                            <th class="sort-alpha">Clockout</th>
+                                            <th class="sort-alpha">Clockin method</th>
+                                            <th class="sort-alpha">Clockout method</th>
+                                            <th class="sort-alpha">Location</th>
+                                            
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <% @working_logs.each do |working_log| %>
+                        <tr>
+                            <td><%= working_log.user.try(:full_name) %></td>
+                            <td><%= working_log.checkin_time %></td>
+                            <td><%= working_log.checkout_time %></td>
+                            <td><%= working_log.checkin_method %></td>
+                            <td><%= working_log.checkout_method %></td>
+                            <td><%= working_log.get_location %></td>
+                        </tr>
+                      <% end %>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
