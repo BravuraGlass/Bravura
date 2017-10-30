@@ -11,7 +11,7 @@ class User < ApplicationRecord
   
   def generate_token(host)
     self.access_token = SecureRandom.uuid
-    self.token_expired = (Rails.env.to_s == "production" and host.include?("heroku") == false ? Date.today.next_day : Date.today.next_month)
+    self.token_expired = Date.today.next_month
     return self.save
   end  
   
