@@ -25,7 +25,7 @@ class SessionsController < ApplicationController
       
       format.json do 
         if user
-          user.generate_token
+          user.generate_token(request.host)
           result =  {
             status: :success,
             data: {
