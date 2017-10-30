@@ -97,3 +97,6 @@ Rails.application.configure do
     ENV[key.to_s] = value
   end if File.exists?(env_file)
 end
+
+CHECKIN_BARCODE = "kap66hs1x"
+CHECKOUT_BARCODE = "pss5a01qg"

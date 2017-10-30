@@ -62,3 +62,6 @@ Rails.application.configure do
 
 
 end
+
+CHECKIN_BARCODE = "4h30pkkv1b"
+CHECKOUT_BARCODE = "6gj6bcc23"
