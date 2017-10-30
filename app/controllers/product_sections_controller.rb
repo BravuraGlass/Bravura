@@ -41,23 +41,31 @@ class ProductSectionsController < ApplicationController
       
       format.json do
         data = []
-        ProductSection.where("id IN (?)", params[:ids]).each do |product_section|
-          psection = product_section.update(status: params[:new_status])
-          product_section.reload
+        if params[:ids].empty?
+          result = {
+            status: :failed,
+            message: "invalid, ids can't be empty",
+            data: nil,
+          }
+        else  
+          ProductSection.where("id IN (?)", params[:ids].split(",")).each do |product_section|
+            psection = product_section.update(status: params[:new_status])
+            product_section.reload
           
-          data << {
-            id: product_section.id,
-            section_name: product_section.name,
-            status: product_section.status
-          }  
+            data << {
+              id: product_section.id,
+              section_name: product_section.name,
+              status: product_section.status
+            }  
                   
-        end
+          end
         
-        result = {
-          status: :success,
-          message: nil,
-          data: data,
-        }
+          result = {
+            status: :success,
+            message: nil,
+            data: data,
+          }
+        end
         
         render json: result
         
