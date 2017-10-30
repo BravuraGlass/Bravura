@@ -64,8 +64,11 @@ class WorkingLog < ApplicationRecord
   
   def get_location
     if self.location.blank? and self.latitude and self.longitude
-      query = Geocoder.search("#{self.latitude},#{self.longitude}").first
-      self.update_attribute(:location, query.address)
+      begin
+        query = Geocoder.search("#{self.latitude},#{self.longitude}").first
+        self.update_attribute(:location, query.try(:address))
+      rescue
+      end  
     end
     return self.location
   end  
