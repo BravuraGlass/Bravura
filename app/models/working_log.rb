@@ -5,7 +5,7 @@ class WorkingLog < ApplicationRecord
     wlog_hash = {
       user_id: data[:user_id],
       "#{submit_type}_time": Time.now,
-      "#{submit_type}_date": Date.today.to_s
+      "#{submit_type}_date": Time.zone.now.to_date.to_s.to_s
     }
     
     if submit_type == "checkin"
