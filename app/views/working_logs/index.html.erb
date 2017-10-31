@@ -24,8 +24,8 @@
                      <% @working_logs.each do |working_log| %>
                         <tr>
                             <td><%= working_log.user.try(:full_name) %></td>
-                            <td><%= working_log.checkin_time %></td>
-                            <td><%= working_log.checkout_time %></td>
+                            <td><%= working_log.api_readable_checkin %></td>
+                            <td><%= working_log.api_readable_checkout %></td>
                             <td><%= working_log.checkin_method %></td>
                             <td><%= working_log.checkout_method %></td>
                             <td><%= working_log.get_location %></td>
