@@ -79,5 +79,38 @@ class WorkingLog < ApplicationRecord
   
   def self.checkout(data)
     self.submit(data, "checkout")
+  end 
+  
+  def date_readable(themethod)
+    unless self.send("#{themethod}_time").blank?
+      self.send("#{themethod}_time").strftime("%A %B %d, %Y")
+    else
+      nil
+    end  
+  end
+  
+  def date_readable_checkin
+    date_readable("checkin")  
+  end    
+  
+  def date_readable_checkout
+    date_readable("checkout")
   end  
+  
+  def api_readable_time(themethod)
+    unless self.send("#{themethod}_time").blank?
+      self.send("#{themethod}_time").strftime("%A %B %d, %Y %H:%M:%S EDT")
+    else
+      nil
+    end 
+  end  
+  
+  def api_readable_checkin
+    self.api_readable_time("checkin")
+  end
+  
+  def api_readable_checkout
+    self.api_readable_time("checkout")
+  end     
+  
 end

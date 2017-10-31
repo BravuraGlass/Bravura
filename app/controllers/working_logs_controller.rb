@@ -51,7 +51,7 @@ class WorkingLogsController < ApplicationController
               first_name: @working_log.user.first_name,
               last_name: @working_log.user.last_name
             },
-            checkin_time: @working_log.checkin_time,
+            checkin_time: @working_log.api_readable_checkin,
             checkin_method: @working_log.checkin_method,
             location: @working_log.location 
           }
@@ -85,7 +85,7 @@ class WorkingLogsController < ApplicationController
               first_name: @working_log.user.first_name,
               last_name: @working_log.user.last_name
             },
-            checkout_time: @working_log.checkout_time,
+            checkout_time: @working_log.api_readable_checkout,
             checkout_method: @working_log.checkout_method
           }
 

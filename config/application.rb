@@ -22,5 +22,7 @@ module Bravuracrm
       g.stylesheets     false
       g.javascripts     false
     end
+    
+    config.time_zone = 'Eastern Time (US & Canada)'
   end
 end
