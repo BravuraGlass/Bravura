@@ -24,5 +24,9 @@ class User < ApplicationRecord
   def full_name
     "#{self.first_name} #{self.last_name}"
   end  
+  
+  def admin?
+    self.type_of_user == "0" ? true : false
+  end  
 
 end

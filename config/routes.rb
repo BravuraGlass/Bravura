@@ -21,7 +21,11 @@ Rails.application.routes.draw do
   resources :statuses
   resources :tasks
   resources :employees
-  resources :users
+  resources :users do
+    member do
+      get "revoke"
+    end  
+  end
   resources :customers
 
   resources :fabrication_orders, only: [:index, :new, :edit, :update, :destroy] do

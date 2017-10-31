@@ -60,6 +60,27 @@ class UsersController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def revoke
+    if current_user.admin?
+      user = User.find(params.permit(:id)[:id])
+      if user.id == current_user.id
+        flash[:alert] = "failed, you can't revoke access yourself"
+        
+      else  
+        user.update_attributes(password: "br4vur4n3w", token_expired: Date.today.prev_day, access_token: nil)
+        
+        if user.errors.size > 0
+          flash[:alert] = user.errors.full_messages.join(",")
+        else
+          flash[:notice] = "Access for #{user.full_name} was successfully revoked"
+        end    
+      end  
+      redirect_to users_url
+    else
+      render plain: "you are not authorized to access this page"
+    end    
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.
