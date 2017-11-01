@@ -1,62 +1,33 @@
 class WorkingLog < ApplicationRecord
   belongs_to :user
   
-  def self.submit(data, submit_type = "checkin")
+  def self.submit(data, checkin_or_checkout = "checkin")
     wlog_hash = {
       user_id: data[:user_id],
-      "#{submit_type}_time": Time.now,
-      "#{submit_type}_date": Time.zone.now.to_date.to_s.to_s
+      submit_time: Time.now,
+      submit_date: Time.zone.now.to_date.to_s,
+      latitude: data[:latitude],
+      longitude: data[:longitude],
+      checkin_or_checkout: checkin_or_checkout
     }
-    
-    if submit_type == "checkin"
-      wlog_hash[:latitude] = data[:latitude]
-      wlog_hash[:longitude] = data[:longitude]
-    end  
 
     if data[:barcode]
-      wlog_hash["#{submit_type}_method".to_sym] = "automatic"
+      wlog_hash[:submit_method] = "automatic"
       
-      if data[:barcode] == eval("#{submit_type.upcase}_BARCODE") #and data[:longitude] == "-73.932208" and data[:latitude] == "40.618011"
+      if data[:barcode] == eval("#{checkin_or_checkout.upcase}_BARCODE") #and data[:longitude] == "-73.932208" and data[:latitude] == "40.618011"
         ## success
         
       else
         wlog = WorkingLog.new(wlog_hash)   
-        wlog.errors.add(:base, "invalid, you didn't scan barcode properly or you do not #{submit_type} from office") 
+        wlog.errors.add(:base, "invalid, you didn't scan barcode properly or you do not #{checkin_or_checkout} from office") 
         return wlog 
       end     
     else
-      wlog_hash["#{submit_type}_method".to_sym] = "manual"
+      wlog_hash[:submit_method] = "manual"
     end  
     
-    if submit_type == "checkin"
-      wlog = WorkingLog.where("user_id = ? AND #{submit_type}_date=?", data[:user_id], Date.today.to_s)[0]
-    
-      if wlog.nil?
-        wlog = WorkingLog.new(wlog_hash)
-        if wlog_hash[:latitude].blank? or wlog_hash[:longitude].blank?
-          wlog.errors.add(:base, "invald, longitude or latitude are empty")
-        else  
-          wlog.save
-          wlog.get_location
-          return wlog
-        end  
-      else  
-        wlog.errors.add(:base, "invalid, you can't checkin more than once at the same day")
-      end 
-    elsif submit_type == "checkout"
-      wlog = WorkingLog.where("user_id = ? AND checkin_date=?", data[:user_id], Date.today.to_s)[0]
-      
-      unless wlog.nil?
-        if wlog.checkout_date.blank?
-          wlog.update(wlog_hash)
-        else
-          wlog.errors.add(:base, "invalid, you can't checkout more than once at the same day")
-        end
-      else
-        wlog = WorkingLog.new(wlog_hash)   
-        wlog.errors.add(:base, "invalid, you can't checkout without checkin first")
-      end      
-    end   
+    wlog = WorkingLog.create(wlog_hash)
+    wlog.get_location
     
     return wlog    
     
@@ -81,36 +52,21 @@ class WorkingLog < ApplicationRecord
     self.submit(data, "checkout")
   end 
   
-  def date_readable(themethod)
-    unless self.send("#{themethod}_time").blank?
-      self.send("#{themethod}_time").strftime("%A %B %d, %Y")
+  def readable_date
+    unless self.submit_time.blank?
+      self.submit_time.strftime("%A %B %d, %Y")
     else
       nil
     end  
   end
   
-  def date_readable_checkin
-    date_readable("checkin")  
-  end    
-  
-  def date_readable_checkout
-    date_readable("checkout")
-  end  
-  
-  def api_readable_time(themethod)
-    unless self.send("#{themethod}_time").blank?
-      self.send("#{themethod}_time").strftime("%A %B %d, %Y %H:%M:%S EDT")
+  def readable_time
+    unless self.submit_time.blank?
+      self.submit_time.strftime("%A %B %d, %Y %H:%M:%S EDT")
     else
       nil
     end 
   end  
-  
-  def api_readable_checkin
-    self.api_readable_time("checkin")
-  end
-  
-  def api_readable_checkout
-    self.api_readable_time("checkout")
-  end     
+      
   
 end

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171029000449) do
+ActiveRecord::Schema.define(version: 20171101025807) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -192,12 +192,10 @@ ActiveRecord::Schema.define(version: 20171029000449) do
   end
 
   create_table "working_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.datetime "checkin_time"
-    t.datetime "checkout_time"
-    t.string "checkin_method"
-    t.string "checkout_method"
-    t.string "checkin_date"
-    t.string "checkout_date"
+    t.datetime "submit_time"
+    t.string "submit_method"
+    t.string "checkin_or_checkout"
+    t.string "submit_date"
     t.string "latitude"
     t.string "longitude"
     t.integer "user_id"

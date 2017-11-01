@@ -9,7 +9,7 @@ class WorkingLogsController < ApplicationController
   
   def index
     if current_user.type_of_user == "0"
-      @working_logs = WorkingLog.order("checkin_time")
+      @working_logs = WorkingLog.order("submit_time")
     else
       render plain: "you are not authorized to access this page"
     end    
@@ -51,8 +51,8 @@ class WorkingLogsController < ApplicationController
               first_name: @working_log.user.first_name,
               last_name: @working_log.user.last_name
             },
-            checkin_time: @working_log.api_readable_checkin,
-            checkin_method: @working_log.checkin_method,
+            checkin_time: @working_log.readable_time,
+            checkin_method: @working_log.submit_method,
             location: @working_log.location 
           }
 
@@ -85,8 +85,9 @@ class WorkingLogsController < ApplicationController
               first_name: @working_log.user.first_name,
               last_name: @working_log.user.last_name
             },
-            checkout_time: @working_log.api_readable_checkout,
-            checkout_method: @working_log.checkout_method
+            checkout_time: @working_log.readable_time,
+            checkout_method: @working_log.submit_method,
+            location: @working_log.location 
           }
 
         }

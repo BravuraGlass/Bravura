@@ -12,10 +12,10 @@
                   <thead>
                     <tr>
                                             <th class="sort-alpha">Name</th>
-                                            <th class="sort-alpha">Clockin</th>
-                                            <th class="sort-alpha">Clockout</th>
-                                            <th class="sort-alpha">Clockin method</th>
-                                            <th class="sort-alpha">Clockout method</th>
+                                            <th class="sort-alpha">Time</th>
+                                            <th class="sort-alpha">Method</th>
+                                            <th class="sort-alpha">Checkin/Checkout</th>
+                                            <th class="sort-alpha">Long/Lat</th>
                                             <th class="sort-alpha">Location</th>
                                             
                     </tr>
@@ -24,10 +24,10 @@
                      <% @working_logs.each do |working_log| %>
                         <tr>
                             <td><%= working_log.user.try(:full_name) %></td>
-                            <td><%= working_log.api_readable_checkin %></td>
-                            <td><%= working_log.api_readable_checkout %></td>
-                            <td><%= working_log.checkin_method %></td>
-                            <td><%= working_log.checkout_method %></td>
+                            <td><%= working_log.readable_time %></td>
+                            <td><%= working_log.submit_method %></td>
+                            <td><%= working_log.checkin_or_checkout %></td>
+                            <td><%= working_log.longitude %>,<%= working_log.latitude %></td>
                             <td><%= working_log.get_location %></td>
                         </tr>
                       <% end %>
