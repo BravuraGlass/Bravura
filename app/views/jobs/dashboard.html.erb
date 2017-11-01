@@ -75,7 +75,7 @@
                             <%= job.fabrication_order ?
                                 link_to("View FO", edit_fabrication_order_path(job.fabrication_order), :class => 'btn btn-default btn-xs') :
                                 link_to('Create FO', job_fabrication_orders_path(job), method: :post, class: 'btn btn-default btn-xs') %>
-                            <%= link_to 'Print FO', f_orders_qr_path(job.fabrication_order), target: "_blank", :class => 'btn btn-default btn-xs' if job.fabrication_order %>
+                            <%= link_to 'Print FO', f_orders_barcode_path(job.fabrication_order), target: "_blank", :class => 'btn btn-default btn-xs' if job.fabrication_order %>
                             <%= link_to 'Edit Job', select_job_path(job), :class => 'btn btn-default btn-xs' %>
 
                             </td>
