@@ -102,6 +102,8 @@ class FabricationOrdersController < ApplicationController
   end
 
   def f_orders_qr
+    render plain: "QR feature lo longer be used" and return
+    
     convert_fabrication_orders_to_qr params[:id]
     respond_to do |format|
       format.pdf  { render template: 'fabrication_orders/qr_codes', pdf: 'QRCODES'}
@@ -110,6 +112,8 @@ class FabricationOrdersController < ApplicationController
   end
   
   def r_orders_qr
+    render plain: "QR feature lo longer be used" and return
+    
     convert_room_orders_to_qr params[:id]
     respond_to do |format|
       format.pdf  { render template: 'fabrication_orders/qr_codes', pdf: 'QRCODES'}
@@ -118,6 +122,8 @@ class FabricationOrdersController < ApplicationController
   end
 
   def p_orders_qr
+    render plain: "QR feature lo longer be used" and return
+    
     convert_product_orders_to_qr params[:id]
     respond_to do |format|
       format.pdf  { render template: 'fabrication_orders/qr_codes', pdf: 'QRCODES'}
@@ -126,6 +132,8 @@ class FabricationOrdersController < ApplicationController
   end
 
   def s_orders_qr
+    render plain: "QR feature lo longer be used" and return
+    
     convert_section_orders_to_qr params[:id]
     respond_to do |format|
       format.pdf  { render template: 'fabrication_orders/qr_codes', pdf: 'QRCODES'}
