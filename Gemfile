@@ -18,8 +18,6 @@ gem 'rails', '5.1.0'
 
 gem 'mysql2'
 
-gem 'pg'
-
 gem 'thin'
 
 gem 'deep_cloneable'
