@@ -16,12 +16,12 @@ gem "google_url_shortener"
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '5.1.0'
 
-if ENV['THE_SERVER'] == "heroku"
+unless ENV['HOME'] == "/home/ubuntu"
   gem 'pg'
-else
-  gem 'mysql2'
-end     
+end
 
+gem 'mysql2'
+    
 gem 'thin'
 
 gem 'deep_cloneable'
