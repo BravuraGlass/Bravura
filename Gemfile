@@ -18,6 +18,8 @@ gem 'rails', '5.1.0'
 
 gem 'mysql2'
 
+gem 'pg' if ENV['THE_SERVER'] == "heroku"
+
 gem 'thin'
 
 gem 'deep_cloneable'
