@@ -1,0 +1,8 @@
+<div class="btn-group">
+  <div class="btn btn-default <%= 'active' if params[:action] == 'report' %>">
+    <%= link_to "Report",report_working_logs_url(week: @week) %>
+  </div>
+  <div class="btn btn-default <%= 'active' if params[:action] == 'index' %>">
+    <%= link_to "Raw Data",working_logs_url %>
+  </div>     
+</div>

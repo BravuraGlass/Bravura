@@ -76,6 +76,40 @@ class WorkingLog < ApplicationRecord
     end   
   end  
   
+  def self.report_detail(user_id,wstart,wend)
+    data =  WorkingLog.where("user_id =? AND submit_date >= ? AND submit_date <= ?", user_id, wstart, wend).order("submit_date ASC")
+    rs = []
+    
+    row = 0
+    duration = 0
+    
+    data.each_with_index do |wlog,idx|
+      if idx > 0
+        if data[idx].submit_date == data[idx-1].submit_date 
+          if data[idx].checkin_or_checkout == "checkout" and data[idx-1].checkin_or_checkout == "checkin"
+            duration = data[idx].submit_time - data[idx-1].submit_time
+              
+            rs[row] = {
+              user_id: wlog.user_id, 
+              name: wlog.user.full_name, 
+              duration: duration, 
+              date: wlog.readable_date, 
+              checkin: data[idx-1].submit_time.strftime("%H:%M:%S"), 
+              checkout: data[idx].submit_time.strftime("%H:%M:%S"),
+              checkin_method: data[idx-1].submit_method,
+              checkout_method: data[idx].submit_method
+            }
+               
+            row+=1  
+          end  
+        end  
+      end        
+    end  
+    
+    return rs
+      
+  end  
+  
   def self.report(wstart,wend)
     
     data = self.report_raw(wstart,wend)
@@ -84,6 +118,7 @@ class WorkingLog < ApplicationRecord
     row = 0
     duration = 0
     newrow = true
+    status = "automatic"
     
     data.each_with_index do |wlog,idx|
       if idx > 0
@@ -92,13 +127,15 @@ class WorkingLog < ApplicationRecord
             if data[idx].checkin_or_checkout == "checkout" and data[idx-1].checkin_or_checkout == "checkin"
               subs = data[idx].submit_time - data[idx-1].submit_time
               duration += subs
+              status = "manual" if data[idx].submit_method == "manual" or data[idx-1].submit_method == "manual"
             end  
           end  
         end  
         
-        rs[row] = {name: wlog.user.full_name, duration: duration} 
+        rs[row] = {user_id: wlog.user_id, name: wlog.user.full_name, duration: duration, status: status} 
         
         if data[idx].user_id != data[idx+1].try(:user_id)      
+          status = "automatic"
           duration = 0
           row+=1
           newrow = true
@@ -106,9 +143,9 @@ class WorkingLog < ApplicationRecord
           newrow = false   
         end
       else
-        rs[row] = {name: wlog.user.full_name, duration: duration}     
+        rs[row] = {user_id: wlog.user_id, name: wlog.user.full_name, duration: duration, status: status}     
         newrow = false
-      end      
+      end          
     end  
     
     return rs

@@ -17,6 +17,13 @@ class ApplicationController < ActionController::Base
        render json: result
     end  
   end  
+  
+  def require_admin
+    if current_user.type_of_user == "0"
+    else
+      render plain: "you are not authorized to access this page" and return
+    end    
+  end  
 
   private
 

@@ -1,0 +1,45 @@
+<h3><%= @working_log_arr[0][:name] %>'s Working Logs 
+   <small><%= @week.titleize %> Detail Report</small>
+</h3>
+
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <%= render partial: "report_menu" %>
+      <div class="panel panel-default">
+        <div class="panel-body">
+            <table class="datatable table table-striped table-hover responsive">
+              <thead>
+                <tr>
+                  <th class="sort-alpha">Date</th>
+                  <th class="sort-alpha">Start</th>
+                  <th class="sort-alpha">Finish</th>
+                  <th class="sort-alpha">Duration</th>
+                </tr>
+              </thead>
+              <tbody>
+                <% if @working_log_arr.size > 0 %>
+                  <% @total_time = 0 %>
+                  <% @working_log_arr.each do |wlog| %>
+                    <tr <%= raw " class='manual-color'" if wlog[:status] == "manual" %>>
+                      <td><%= wlog[:date] %></td>
+                      <td class="<%= wlog[:checkin_method] %>-color"><%= wlog[:checkin] %></td>
+                      <td class="<%= wlog[:checkout_method] %>-color"><%= wlog[:checkout] %></td>
+                      <td><%= time_diff wlog[:duration] %></td> 
+                    </tr>  
+                    <% @total_time += wlog[:duration] %>
+                  <% end %>
+                  <tr>
+                    <td colspan="3">Total :</td>
+                    <td><%= time_diff @total_time %></td>
+                  </tr>     
+                <% else %>
+                  <td colspan="4" align="center">Data is empty</center>
+                <% end %>  
+              </tbody>
+            </table>  
+        </div>     
+      </div>
+    </div>
+  </div>
+</div>        

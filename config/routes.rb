@@ -8,6 +8,7 @@ Rails.application.routes.draw do
       post 'checkout'
       get 'destroy_all'
       get 'report'
+      get 'report_detail'
     end
   end
   

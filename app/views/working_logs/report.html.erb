@@ -5,14 +5,7 @@
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-12">
-      <div class="btn-group">
-        <div class="btn btn-default <%= 'active' if params[:action] == 'report' %>">
-          <%= link_to "Report",report_working_logs_url %>
-        </div>
-        <div class="btn btn-default<%= 'active' if params[:action] == 'index' %>">
-          <%= link_to "Raw Data",working_logs_url %>
-        </div>  
-      </div>
+      <%= render partial: "report_menu" %>
       <div class="panel panel-default">
         <div class="panel-body">
             <table class="datatable table table-striped table-hover responsive">
@@ -31,10 +24,11 @@
               <tbody>
                 <% if @working_log_arr.size > 0 %>
                 <% @working_log_arr.each do |wlog| %>
-                  <tr>
+                  <tr class="<%= wlog[:status] %>-color">
                     <td><%= wlog[:name] %></td>
                     <td><%= time_diff wlog[:duration] %></td>
-                    <td>Detail</td>  
+                    <td><%= link_to "Detail", report_detail_working_logs_path(user_id: wlog[:user_id], week: @week) %></td>  
+                  </tr>  
                 <% end %>
                 <% else %>
                   <td colspan="3" align="center">Data is empty</center>

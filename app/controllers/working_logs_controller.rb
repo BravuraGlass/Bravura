@@ -5,14 +5,11 @@ require 'barby/outputter/png_outputter'
 class WorkingLogsController < ApplicationController
   include AuditableController
   skip_before_action :require_login, only: [:checkin, :checkout], if: -> { request.format.json? }
-  before_action :api_login_status, only: [:checkin, :checkout], if: -> { request.format.json? } 
+  before_action :api_login_status, only: [:checkin, :checkout], if: -> { request.format.json? }
+  before_action :require_admin, only: [:report, :report_detail, :index] 
   
   def index
-    if current_user.type_of_user == "0"
-      @working_logs = WorkingLog.order("submit_time DESC")
-    else
-      render plain: "you are not authorized to access this page"
-    end    
+    @working_logs = WorkingLog.order("submit_time DESC") 
   end  
   
   def report
@@ -20,17 +17,32 @@ class WorkingLogsController < ApplicationController
     @years = (2017..(Time.now.year)).to_a
     @weeks = [["Current Week","current_week"],["Last Week","last_week"]]
     
-    if @week == "current_week"
-      wstart = Date.today.beginning_of_week.to_s.gsub("-","").to_i
-      wend = Date.today.end_of_week.to_s.gsub("-","").to_i
-    elsif @week == "last_week"
-      wstart = Date.today.prev_week.beginning_of_week.to_s.gsub("-","").to_i
-      wend = Date.today.prev_week.end_of_week.to_s.gsub("-","").to_i
-    end    
+    start_end_week
     
-    @working_log_arr = WorkingLog.report(wstart, wend)
+    @working_log_arr = WorkingLog.report(@wstart, @wend)
     
   end  
+  
+  def report_detail
+    @week = report_params[:week]
+    start_end_week
+    
+    @working_log_arr = WorkingLog.report_detail(report_params[:user_id],@wstart, @wend)  
+  end
+  
+  protected
+  
+  def start_end_week
+    if @week == "current_week"
+      @wstart = Date.today.beginning_of_week.to_s.gsub("-","").to_i
+      @wend = Date.today.end_of_week.to_s.gsub("-","").to_i
+    elsif @week == "last_week"
+      @wstart = Date.today.prev_week.beginning_of_week.to_s.gsub("-","").to_i
+      @wend = Date.today.prev_week.end_of_week.to_s.gsub("-","").to_i
+    end  
+  end
+  
+  public   
   
   def checkin_barcode
     respond_to do |format|      
@@ -131,7 +143,7 @@ class WorkingLogsController < ApplicationController
   end 
   
   def report_params
-    params.permit(:week)
+    params.permit(:week, :user_id)
   end  
     
 end
