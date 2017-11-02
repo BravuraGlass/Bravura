@@ -7,6 +7,7 @@ Rails.application.routes.draw do
       get 'checkout_barcode'
       post 'checkout'
       get 'destroy_all'
+      get 'report'
     end
   end
   

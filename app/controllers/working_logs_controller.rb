@@ -9,10 +9,27 @@ class WorkingLogsController < ApplicationController
   
   def index
     if current_user.type_of_user == "0"
-      @working_logs = WorkingLog.order("submit_time")
+      @working_logs = WorkingLog.order("submit_time DESC")
     else
       render plain: "you are not authorized to access this page"
     end    
+  end  
+  
+  def report
+    @week = report_params[:week].nil? ? "last_week" : report_params[:week] 
+    @years = (2017..(Time.now.year)).to_a
+    @weeks = [["Current Week","current_week"],["Last Week","last_week"]]
+    
+    if @week == "current_week"
+      wstart = Date.today.beginning_of_week.to_s.gsub("-","").to_i
+      wend = Date.today.end_of_week.to_s.gsub("-","").to_i
+    elsif @week == "last_week"
+      wstart = Date.today.prev_week.beginning_of_week.to_s.gsub("-","").to_i
+      wend = Date.today.prev_week.end_of_week.to_s.gsub("-","").to_i
+    end    
+    
+    @working_log_arr = WorkingLog.report(wstart, wend)
+    
   end  
   
   def checkin_barcode
@@ -112,5 +129,9 @@ class WorkingLogsController < ApplicationController
   def api_params
     params.permit(:access_id,:longitude,:latitude,:barcode, :format, :access_token)
   end 
+  
+  def report_params
+    params.permit(:week)
+  end  
     
 end

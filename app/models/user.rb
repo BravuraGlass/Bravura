@@ -9,7 +9,7 @@ class User < ApplicationRecord
   validates_uniqueness_of :email
   has_many :working_logs
   
-  def generate_token(host)
+  def generate_token(host="")
     self.access_token = SecureRandom.uuid
     self.token_expired = Date.today.next_month
     return self.save

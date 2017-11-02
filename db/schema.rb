@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101025807) do
+ActiveRecord::Schema.define(version: 20171101095900) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -195,13 +195,13 @@ ActiveRecord::Schema.define(version: 20171101025807) do
     t.datetime "submit_time"
     t.string "submit_method"
     t.string "checkin_or_checkout"
-    t.string "submit_date"
     t.string "latitude"
     t.string "longitude"
     t.integer "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "location"
+    t.integer "submit_date"
   end
 
   add_foreign_key "comments", "jobs"

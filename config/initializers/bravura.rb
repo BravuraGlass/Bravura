@@ -3,3 +3,5 @@ class String
     /\A[-+]?\d+\z/ === self
   end
 end
+
+Date.beginning_of_week = :sunday
