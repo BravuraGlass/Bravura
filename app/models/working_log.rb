@@ -1,3 +1,15 @@
+class SpecialArray < Array
+
+  def [](i)
+    if i >= 0
+      return super(i)
+    else   
+      return nil
+    end  
+  end  
+
+end
+
 class WorkingLog < ApplicationRecord
   belongs_to :user
   
@@ -77,33 +89,64 @@ class WorkingLog < ApplicationRecord
   end  
   
   def self.report_detail(user_id,wstart,wend)
-    data =  WorkingLog.where("user_id =? AND submit_date >= ? AND submit_date <= ?", user_id, wstart, wend).order("submit_date ASC")
-    rs = []
+    tempdata =  WorkingLog.where("user_id =? AND submit_date >= ? AND submit_date <= ?", user_id, wstart, wend).order("submit_date ASC")
+    
+    data = SpecialArray.new
+    
+    tempdata.each do |tdata|
+      data << tdata
+    end  
+      
+    rs = SpecialArray.new
     
     row = 0
     duration = 0
     
     data.each_with_index do |wlog,idx|
-      if idx > 0
-        if data[idx].submit_date == data[idx-1].submit_date 
-          if data[idx].checkin_or_checkout == "checkout" and data[idx-1].checkin_or_checkout == "checkin"
-            duration = data[idx].submit_time - data[idx-1].submit_time
+      if data[idx].checkin_or_checkout == "checkout" and data[idx-1].try(:checkin_or_checkout) == "checkin" and data[idx].submit_date == data[idx-1].try(:submit_date) and idx > 0
+        
+        duration = data[idx].submit_time - data[idx-1].submit_time
               
-            rs[row] = {
-              user_id: wlog.user_id, 
-              name: wlog.user.full_name, 
-              duration: duration, 
-              date: wlog.readable_date, 
-              checkin: data[idx-1].submit_time.strftime("%H:%M:%S"), 
-              checkout: data[idx].submit_time.strftime("%H:%M:%S"),
-              checkin_method: data[idx-1].submit_method,
-              checkout_method: data[idx].submit_method
-            }
+        rs[row] = {
+          user_id: wlog.user_id, 
+          name: wlog.user.full_name, 
+          duration: duration, 
+          date: wlog.readable_date, 
+          checkin: data[idx-1].submit_time.strftime("%H:%M:%S"), 
+          checkout: data[idx].submit_time.strftime("%H:%M:%S"),
+          checkin_method: data[idx-1].submit_method,
+          checkout_method: data[idx].submit_method
+        }
                
-            row+=1  
-          end  
-        end  
-      end        
+        row+=1  
+      elsif (data[idx].checkin_or_checkout == "checkin" and data[idx+1].try(:checkin_or_checkout) != "checkout") or (data[idx].checkin_or_checkout == "checkin" and data[idx].submit_date != data[idx+1].submit_date)
+          
+        rs[row] = {
+          user_id: wlog.user_id, 
+          name: wlog.user.full_name, 
+          duration: 0, 
+          date: wlog.readable_date, 
+          checkin: data[idx].submit_time.strftime("%H:%M:%S"), 
+          checkout: nil,
+          checkin_method: data[idx].submit_method,
+          checkout_method: nil
+        }
+          
+        row+=1    
+      elsif (data[idx].checkin_or_checkout == "checkout" and data[idx-1].try(:checkin_or_checkout) != "checkin") or (data[idx].checkin_or_checkout == "checkout" and data[idx].submit_date != data[idx-1].submit_date)       
+        rs[row] = {
+          user_id: wlog.user_id, 
+          name: wlog.user.full_name, 
+          duration: 0, 
+          date: wlog.readable_date, 
+          checkin: nil, 
+          checkout: data[idx].submit_time.strftime("%H:%M:%S"),
+          checkin_method: nil,
+          checkout_method: data[idx].submit_method
+        }
+          
+        row+=1          
+      end       
     end  
     
     return rs
