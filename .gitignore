@@ -8,7 +8,6 @@
 /.bundle
 /keys
 .byebug_history
-routes.txt
 
 # Ignore all logfiles and tempfiles.
 /log/*
