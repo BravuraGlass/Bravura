@@ -23,6 +23,14 @@ class WorkingLogsController < ApplicationController
     
   end  
   
+  def destroy_report
+    @working_logs = WorkingLog.where("user_id=? AND id IN (?)", report_params[:user_id], report_params[:ids].split(",") )
+    @working_logs.destroy_all
+    
+    flash[:notice] = "Working Log was sucessfully deleted"
+    redirect_to report_detail_working_logs_path(user_id: report_params[:user_id], week: report_params[:week])
+  end  
+  
   def report_detail
     @week = report_params[:week]
     start_end_week
@@ -33,16 +41,8 @@ class WorkingLogsController < ApplicationController
   def edit_report_detail
     @working_logs = WorkingLog.where("id IN (?) AND user_id=?", report_params[:ids].split(","), report_params[:user_id]).order("checkin_or_checkout ASC")
     
-    if @working_logs.size == 1
-      prevs = WorkingLog.where("user_id=? AND submit_date=? AND submit_time < ?",report_params[:user_id], @working_logs[0].submit_date, @working_logs[0].submit_time).order("submit_time DESC")
-      
-      nexts = WorkingLog.where("user_id=? AND submit_date=? AND submit_time > ?",report_params[:user_id], @working_logs[0].submit_date, @working_logs[0].submit_time).order("submit_time ASC")
-      
+    if @working_logs.size == 1      
       ### vars
-      
-      @prev_time =  prevs.size > 0 ? prevs[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s)-1.second
-      
-      @next_time =  nexts.size > 0 ? nexts[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s).next_day 
       
       @start_hour =  @working_logs[0].start_hour
       @start_minute =  @working_logs[0].start_minute
@@ -56,13 +56,6 @@ class WorkingLogsController < ApplicationController
       @finish_method = @working_logs[0].checkin_or_checkout == "checkout" ? @working_logs[0].submit_method : "manual"
       
     elsif @working_logs.size == 2
-      prevs = WorkingLog.where("user_id=? AND submit_date=? AND submit_time < ?",report_params[:user_id], @working_logs[0].submit_date, @working_logs[0].submit_time).order("submit_time DESC")
-            
-      nexts = WorkingLog.where("user_id=? AND submit_date=? AND submit_time > ?",report_params[:user_id], @working_logs[1].submit_date, @working_logs[1].submit_time).order("submit_time ASC")
-      
-      @prev_time =  prevs.size > 0 ? prevs[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s)-1.second
-      
-      @next_time =  nexts.size > 0 ? nexts[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s).next_day
       
       @start_hour =  @working_logs[0].start_hour
       @start_minute =  @working_logs[0].start_minute
@@ -83,11 +76,11 @@ class WorkingLogsController < ApplicationController
     rs = WorkingLog.update_report_detail(params)
     
     if rs[:errors].size > 0
-      flash[:alert] = rs[:errors].collect {|err| err.join(",")}
-      redirect_to edit_report_detail_path(ids: params[:ids], user_id: params[:user_id], week: params[:week])
+      flash[:alert] = "Invalid, #{rs[:errors].join(' & ')}"
+      redirect_to edit_report_detail_working_logs_path(ids: report_params[:ids], user_id: report_params[:user_id], week: report_params[:week])
     else
       flash[:notice] = "Working Log was sucessfully updated"
-      redirect_to report_detail_path(user_id: params[:user_id], week: params[:week])
+      redirect_to report_detail_working_logs_path(user_id: report_params[:user_id], week: report_params[:week])
     end    
   end  
   

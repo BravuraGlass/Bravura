@@ -81,18 +81,99 @@ class WorkingLog < ApplicationRecord
   end
   
   def self.update_report_detail(params)
+    @working_logs = WorkingLog.where("id IN (?) AND user_id = ?",params[:ids].split(","), params[:user_id])
     
-    Hi. I checked some of the screenshots that you are working on. It seems to me that you're making more complicated than it needs to be. Can it be made easier where I go to that person's time and just edited
-    byebug
+    start_time = Time.zone.parse(@working_logs[0].submit_date.to_s) + params[:start_hour].to_i.hours + params[:start_minute].to_i.minutes + params[:start_second].to_i
+    finish_time = Time.zone.parse(@working_logs[0].submit_date.to_s) + params[:finish_hour].to_i.hours + params[:finish_minute].to_i.minutes + params[:finish_second].to_i
+    
+    errors = WorkingLog.overlapping_time(@working_logs, start_time, finish_time)[:errors]
+    
+    if finish_time == start_time
+      errors << "Start and Finish time can't be same"
+    end  
+    
+    if start_time > finish_time
+      errors << "Start time should be less than Finish time"
+    end  
+    
+    rs = []
+    
+    unless errors.size > 0
+      if @working_logs.size == 2
+        @working_logs[0].update_attribute(:submit_time, start_time)
+        @working_logs[1].update_attribute(:submit_time, finish_time)
+      elsif @working_logs.size == 1
+        if @working_logs[0].checkin_or_checkout == "checkin"
+          @working_logs[0].update_attribute(:submit_time, start_time)
+          WorkingLog.create(
+            submit_time: finish_time,
+            submit_method: "manual",
+            user_id: params[:user_id],
+            submit_date: @working_logs[0].submit_date,
+            checkin_or_checkout: "checkout"
+          )  
+        elsif @working_logs[0].checkin_or_checkout == "checkout"
+          @working_logs[0].update_attribute(:submit_time, finish_time)
+          WorkingLog.create(
+            submit_time: start_time,
+            submit_method: "manual",
+            user_id: params[:user_id],
+            submit_date: @working_logs[0].submit_date,
+            checkin_or_checkout: "checkin"
+          )    
+        end    
+      end            
+    end
+    
+    return {errors: errors}  
+      
   end
   
+  def self.overlapping_time(working_logs, start_time, finish_time)
+    user_id = working_logs[0].user_id
+    
+    if working_logs.size == 1
+      prevs = WorkingLog.where("user_id=? AND submit_date=? AND submit_time < ?",user_id, working_logs[0].submit_date, working_logs[0].submit_time).order("submit_time DESC")
+    
+      nexts = WorkingLog.where("user_id=? AND submit_date=? AND submit_time > ?",user_id, working_logs[0].submit_date, working_logs[0].submit_time).order("submit_time ASC")
+    
+      prev_time =  prevs.size > 0 ? prevs[0].submit_time : Time.zone.parse(working_logs[0].submit_date.to_s)-1.second
+    
+      next_time =  nexts.size > 0 ? nexts[0].submit_time : Time.zone.parse(working_logs[0].submit_date.to_s).next_day
+    
+    elsif working_logs.size == 2
+    
+      prevs = WorkingLog.where("user_id=? AND submit_date=? AND submit_time < ?",user_id, working_logs[0].submit_date, working_logs[0].submit_time).order("submit_time DESC")
+          
+      nexts = WorkingLog.where("user_id=? AND submit_date=? AND submit_time > ?",user_id, working_logs[1].submit_date, working_logs[1].submit_time).order("submit_time ASC")
+    
+      prev_time =  prevs.size > 0 ? prevs[0].submit_time : Time.zone.parse(working_logs[0].submit_date.to_s)-1.second
+    
+      next_time =  nexts.size > 0 ? nexts[0].submit_time : Time.zone.parse(working_logs[0].submit_date.to_s).next_day
+
+    end
+    
+    errors = []  
+  
+
+    if start_time < prev_time or start_time > next_time
+      errors << "start time is overlapping with another time on this day"
+    end
+    
+    if finish_time < prev_time or finish_time > next_time
+      errors << "finish time is overlapping with another time on this day"
+    end  
+      
+    return {errors: errors}
+  end
+    
   protected
   def start_time  
-    self.checkin_or_checkout == "checkin" ? self.submit_time : Time.parse(self.submit_date.to_s)
+    self.checkin_or_checkout == "checkin" ? self.submit_time : Time.zone.parse(self.submit_date.to_s)
   end
   
   def finish_time  
-    self.checkin_or_checkout == "checkout" ? self.submit_time : Time.parse(self.submit_date.to_s)
+    self.checkin_or_checkout == "checkout" ? self.submit_time : Time.zone.parse(self.submit_date.to_s)
   end
   
   public
@@ -129,7 +210,7 @@ class WorkingLog < ApplicationRecord
   end  
   
   def self.report_detail(user_id,wstart,wend)
-    tempdata =  WorkingLog.where("user_id =? AND submit_date >= ? AND submit_date <= ?", user_id, wstart, wend).order("submit_date ASC")
+    tempdata =  WorkingLog.where("user_id =? AND submit_date >= ? AND submit_date <= ?", user_id, wstart, wend).order("submit_time ASC")
     
     data = SpecialArray.new
     
@@ -238,7 +319,7 @@ class WorkingLog < ApplicationRecord
   end 
   
   def self.report_raw(wstart,wend)
-    return WorkingLog.where("submit_date >= ? AND submit_date <= ?", wstart, wend).order("user_id ASC, submit_date ASC")
+    return WorkingLog.where("submit_date >= ? AND submit_date <= ?", wstart, wend).order("user_id ASC, submit_time ASC")
   end   
         
 end
