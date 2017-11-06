@@ -15,6 +15,7 @@
                   <th class="sort-alpha">Start</th>
                   <th class="sort-alpha">Finish</th>
                   <th class="sort-alpha">Duration</th>
+                  <th>Actions</th>
                 </tr>
               </thead>
               <tbody>
@@ -26,6 +27,8 @@
                       <td class="<%= wlog[:checkin_method] %>-color"><%= wlog[:checkin] %></td>
                       <td class="<%= wlog[:checkout_method] %>-color"><%= wlog[:checkout] %></td>
                       <td><%= time_diff wlog[:duration] %></td> 
+                      <td><%= link_to "Edit",edit_report_detail_working_logs_path(ids: wlog[:ids], user_id: wlog[:user_id], week: @week) %></td>
+                      
                     </tr>  
                     <% @total_time += wlog[:duration] %>
                   <% end %>

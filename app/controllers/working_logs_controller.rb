@@ -30,6 +30,67 @@ class WorkingLogsController < ApplicationController
     @working_log_arr = WorkingLog.report_detail(report_params[:user_id],@wstart, @wend)  
   end
   
+  def edit_report_detail
+    @working_logs = WorkingLog.where("id IN (?) AND user_id=?", report_params[:ids].split(","), report_params[:user_id]).order("checkin_or_checkout ASC")
+    
+    if @working_logs.size == 1
+      prevs = WorkingLog.where("user_id=? AND submit_date=? AND submit_time < ?",report_params[:user_id], @working_logs[0].submit_date, @working_logs[0].submit_time).order("submit_time DESC")
+      
+      nexts = WorkingLog.where("user_id=? AND submit_date=? AND submit_time > ?",report_params[:user_id], @working_logs[0].submit_date, @working_logs[0].submit_time).order("submit_time ASC")
+      
+      ### vars
+      
+      @prev_time =  prevs.size > 0 ? prevs[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s)-1.second
+      
+      @next_time =  nexts.size > 0 ? nexts[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s).next_day 
+      
+      @start_hour =  @working_logs[0].start_hour
+      @start_minute =  @working_logs[0].start_minute
+      @start_second =  @working_logs[0].start_second
+      
+      @finish_hour =  @working_logs[0].finish_hour
+      @finish_minute =  @working_logs[0].finish_minute
+      @finish_second =  @working_logs[0].finish_second
+      
+      @start_method = @working_logs[0].checkin_or_checkout == "checkin" ? @working_logs[0].submit_method : "manual"
+      @finish_method = @working_logs[0].checkin_or_checkout == "checkout" ? @working_logs[0].submit_method : "manual"
+      
+    elsif @working_logs.size == 2
+      prevs = WorkingLog.where("user_id=? AND submit_date=? AND submit_time < ?",report_params[:user_id], @working_logs[0].submit_date, @working_logs[0].submit_time).order("submit_time DESC")
+            
+      nexts = WorkingLog.where("user_id=? AND submit_date=? AND submit_time > ?",report_params[:user_id], @working_logs[1].submit_date, @working_logs[1].submit_time).order("submit_time ASC")
+      
+      @prev_time =  prevs.size > 0 ? prevs[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s)-1.second
+      
+      @next_time =  nexts.size > 0 ? nexts[0].submit_time : Time.parse(@working_logs[0].submit_date.to_s).next_day
+      
+      @start_hour =  @working_logs[0].start_hour
+      @start_minute =  @working_logs[0].start_minute
+      @start_second =  @working_logs[0].start_second
+      
+      @finish_hour =  @working_logs[1].finish_hour
+      @finish_minute =  @working_logs[1].finish_minute
+      @finish_second =  @working_logs[1].finish_second
+      
+      @start_method = @working_logs[0].submit_method
+      @finish_method = @working_logs[1].submit_method
+    end
+    
+    
+  end  
+  
+  def update_report_detail
+    rs = WorkingLog.update_report_detail(params)
+    
+    if rs[:errors].size > 0
+      flash[:alert] = rs[:errors].collect {|err| err.join(",")}
+      redirect_to edit_report_detail_path(ids: params[:ids], user_id: params[:user_id], week: params[:week])
+    else
+      flash[:notice] = "Working Log was sucessfully updated"
+      redirect_to report_detail_path(user_id: params[:user_id], week: params[:week])
+    end    
+  end  
+  
   protected
   
   def start_end_week
@@ -143,7 +204,7 @@ class WorkingLogsController < ApplicationController
   end 
   
   def report_params
-    params.permit(:week, :user_id)
+    params.permit(:week, :user_id, :ids, :start_hour, :start_minute, :start_second, :finish_hour, :finish_minute, :finish_second, :start_method, :finish_method)
   end  
     
 end

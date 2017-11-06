@@ -1,0 +1,61 @@
+<h3>Edit Working Logs
+   <small><%= @working_logs[0].user.full_name %>'s Logs</small>
+</h3>
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading"></div>
+         <div class="panel-body">
+            <%= form_tag update_report_detail_working_logs_path, :html => { :class => "user", :role => 'form' }, method: :post do |f| %>
+              <%= render :partial => 'shared/flash_messages' %>
+              <div class="row">
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <%= label_tag :name %>
+                    <%= text_field_tag :name, @working_logs[0].user.full_name, :class => 'form-control', readonly: true %>
+                  </div>
+                  <div class="form-group">
+                    <%= label_tag :start %>
+                    <div class ='form-control'>
+                      <%= select_tag :start_hour,options_for_select(0..23, @start_hour) %>
+                      <%= select_tag :start_minute,options_for_select(0..59, @start_minute) %>
+                      <%= select_tag :start_second,options_for_select(0..59, @start_second) %>
+                    </div>  
+                  </div>
+                </div>
+                <div class="col-md-4">
+                  <div class="form-group">
+                    <%= label_tag :date %>
+                    <%= text_field_tag :date, @working_logs[0].readable_date, :class => 'form-control', readonly: true %>
+                  </div>
+                  <%= label_tag :finish %>
+                  <div class ='form-control'>
+                    <%= select_tag :finish_hour,options_for_select(0..23, @finish_hour)  %>
+                    <%= select_tag :finish_minute,options_for_select(0..59, @finish_minute) %>
+                    <%= select_tag :finish_second,options_for_select(0..59, @finish_second) %>
+                  </div>  
+                </div>
+              </div>
+              <%= hidden_field_tag "start_method", @start_method %>
+              <%= hidden_field_tag "end_method", @start_method %>
+              
+              
+              
+              <%= hidden_field_tag "ids", params[:ids] %>
+              <%= hidden_field_tag "user_id", params[:user_id] %>
+              <%= hidden_field_tag "week", params[:week] %>
+
+                <div class="actions">
+                  <%= submit_tag nil, :class => 'btn btn-primary' %>
+                  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                      "#", :class => 'btn btn-default' %>
+                      
+                </div>
+          <% end %>
+         </div>
+      </div>
+   </div>
+</div>
+

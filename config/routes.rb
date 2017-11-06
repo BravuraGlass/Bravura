@@ -9,6 +9,8 @@ Rails.application.routes.draw do
       get 'destroy_all'
       get 'report'
       get 'report_detail'
+      get 'edit_report_detail'
+      post 'update_report_detail'
     end
   end
   

@@ -78,7 +78,47 @@ class WorkingLog < ApplicationRecord
     else
       nil
     end 
-  end  
+  end
+  
+  def self.update_report_detail(params)
+    
+    Hi. I checked some of the screenshots that you are working on. It seems to me that you're making more complicated than it needs to be. Can it be made easier where I go to that person's time and just edited
+    byebug
+  end
+  
+  protected
+  def start_time  
+    self.checkin_or_checkout == "checkin" ? self.submit_time : Time.parse(self.submit_date.to_s)
+  end
+  
+  def finish_time  
+    self.checkin_or_checkout == "checkout" ? self.submit_time : Time.parse(self.submit_date.to_s)
+  end
+  
+  public
+  def start_hour
+    self.start_time.strftime("%H").to_i
+  end
+  
+  def start_minute
+    self.start_time.strftime("%M").to_i
+  end
+  
+  def start_second
+    self.start_time.strftime("%S").to_i
+  end      
+  
+  def finish_hour
+    self.finish_time.strftime("%H").to_i
+  end
+  
+  def finish_minute
+    self.finish_time.strftime("%M").to_i
+  end
+  
+  def finish_second
+    self.finish_time.strftime("%S").to_i
+  end   
   
   def self.generate_submit_date
     self.all.each do |wlog|
@@ -108,6 +148,7 @@ class WorkingLog < ApplicationRecord
         duration = data[idx].submit_time - data[idx-1].submit_time
               
         rs[row] = {
+          ids: "#{wlog.id},#{data[idx-1].id}",
           user_id: wlog.user_id, 
           name: wlog.user.full_name, 
           duration: duration, 
@@ -122,8 +163,9 @@ class WorkingLog < ApplicationRecord
       elsif (data[idx].checkin_or_checkout == "checkin" and data[idx+1].try(:checkin_or_checkout) != "checkout") or (data[idx].checkin_or_checkout == "checkin" and data[idx].submit_date != data[idx+1].submit_date)
           
         rs[row] = {
+          ids: wlog.id.to_s, 
           user_id: wlog.user_id, 
-          name: wlog.user.full_name, 
+          name: wlog.user.full_name,
           duration: 0, 
           date: wlog.readable_date, 
           checkin: data[idx].submit_time.strftime("%H:%M:%S"), 
@@ -135,6 +177,7 @@ class WorkingLog < ApplicationRecord
         row+=1    
       elsif (data[idx].checkin_or_checkout == "checkout" and data[idx-1].try(:checkin_or_checkout) != "checkin") or (data[idx].checkin_or_checkout == "checkout" and data[idx].submit_date != data[idx-1].submit_date)       
         rs[row] = {
+          ids: wlog.id.to_s,
           user_id: wlog.user_id, 
           name: wlog.user.full_name, 
           duration: 0, 
