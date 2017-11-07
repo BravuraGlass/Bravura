@@ -9,7 +9,8 @@ class ProductSectionsController < ApplicationController
   before_action :api_login_status, only: [:update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
   
   def prints
-    @product_sections = ProductSection.where("id IN (?)", params.permit(:ids)[:ids].split(","))
+    @product_sections = ProductSection.where("product_sections.id IN (?)", params.permit(:ids)[:ids].split(",")).includes(:product => :room).order("rooms.name ASC, products.name ASC, product_sections.name ASC")
+
     render layout: false
   end  
 
