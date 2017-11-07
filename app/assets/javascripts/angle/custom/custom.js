@@ -17,7 +17,7 @@
         // Text translation options
         // Note the required keywords between underscores (e.g _MENU_)
         oLanguage: {
-            sSearch:      'Search all columns:',
+            sSearch:      'Search :',
             sLengthMenu:  '_MENU_ records per page',
             info:         'Showing page _PAGE_ of _PAGES_',
             zeroRecords:  'Nothing found - sorry',

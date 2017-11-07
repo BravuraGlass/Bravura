@@ -45,7 +45,11 @@ Rails.application.routes.draw do
     resources :products, only: [:create]
   end
 
-  resources :product_sections, only: [:update]
+  resources :product_sections, only: [:update] do
+    collection do
+      post 'prints'
+    end
+  end   
 
   resources :jobs, only: [:index, :new, :create, :update, :destroy] do
     member do

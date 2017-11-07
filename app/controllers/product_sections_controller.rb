@@ -162,6 +162,10 @@ class ProductSectionsController < ApplicationController
     
     return result
   end  
+  
+  def prints
+    @product_sections = ProductSection.where("id IN (?)", params.permit(:ids)[:ids].split(","))
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.

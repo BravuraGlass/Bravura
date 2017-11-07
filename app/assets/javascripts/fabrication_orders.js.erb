@@ -84,5 +84,25 @@ $(document).ready(function(){
   
   });  
   
+  $('.master-room').on('click', function() {
+    var theid = $(this).attr("id").split("-")[1]
+    
+    if($(this).is(':checked')){
+      $('.cb-room-'+theid).prop('checked', true); 
+    } else {
+      $('.cb-room-'+theid).prop('checked', false);
+    }  
+  });   
+  
+  $('.master-product').on('click', function() {
+    var theid = $(this).attr("id").split("-")[1]
+    
+    if($(this).is(':checked')){
+      $('.cb-product-'+theid).prop('checked', true); 
+    } else {
+      $('.cb-product-'+theid).prop('checked', false);
+    }  
+  });  
+  
   
 });
