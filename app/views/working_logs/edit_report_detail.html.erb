@@ -19,9 +19,9 @@
                   <div class="form-group">
                     <%= label_tag :start %>
                     <div class ='form-control'>
-                      <%= select_tag :start_hour,options_for_select(0..23, @start_hour) %>
-                      <%= select_tag :start_minute,options_for_select(0..59, @start_minute) %>
-                      <%= select_tag :start_second,options_for_select(0..59, @start_second) %>
+                      <%= select_tag :start_hour,options_for_select(bhours, @start_hour) %>
+                      <%= select_tag :start_minute,options_for_select(bminutes, @start_minute) %>
+                      <%= select_tag :start_second,options_for_select(bseconds, @start_second) %>
                     </div>  
                   </div>
                 </div>
@@ -32,9 +32,9 @@
                   </div>
                   <%= label_tag :finish %>
                   <div class ='form-control'>
-                    <%= select_tag :finish_hour,options_for_select(0..23, @finish_hour)  %>
-                    <%= select_tag :finish_minute,options_for_select(0..59, @finish_minute) %>
-                    <%= select_tag :finish_second,options_for_select(0..59, @finish_second) %>
+                    <%= select_tag :finish_hour,options_for_select(bhours, @finish_hour)  %>
+                    <%= select_tag :finish_minute,options_for_select(bminutes, @finish_minute) %>
+                    <%= select_tag :finish_second,options_for_select(bseconds, @finish_second) %>
                   </div>  
                 </div>
               </div>
