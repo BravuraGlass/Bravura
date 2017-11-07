@@ -7,6 +7,11 @@ class ProductSectionsController < ApplicationController
      :update_status, :edit_section_status]
   skip_before_action :require_login, only: [:edit_section_status, :update_status], if: -> { request.format.json? }   
   before_action :api_login_status, only: [:update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
+  
+  def prints
+    @product_sections = ProductSection.where("id IN (?)", params.permit(:ids)[:ids].split(","))
+    render layout: false
+  end  
 
   def edit
   end
@@ -161,10 +166,6 @@ class ProductSectionsController < ApplicationController
     end
     
     return result
-  end  
-  
-  def prints
-    @product_sections = ProductSection.where("id IN (?)", params.permit(:ids)[:ids].split(","))
   end  
 
   private

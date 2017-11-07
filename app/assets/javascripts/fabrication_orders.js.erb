@@ -104,5 +104,32 @@ $(document).ready(function(){
     }  
   });  
   
+  $('#cb_product_all').on('click', function() {
+    
+    if($(this).is(':checked')){
+      $('.master-room').prop('checked', true); 
+      $('.master-product').prop('checked', true); 
+      $('.master-section').prop('checked', true); 
+    } else {
+      $('.master-room').prop('checked', false); 
+      $('.master-product').prop('checked', false); 
+      $('.master-section').prop('checked', false); 
+    }  
+  });  
+  
+  
+  $('#printProduct').on('click', function() {
+    var ids = []
+    $('.master-section').each(function() {
+      if($(this).is(':checked')) {
+        ids.push($(this).attr("id").split("-")[1])
+      } 
+    });
+    
+    $('input#ids').val(ids)
+    
+    $("#form_prints_product").submit();
+  });  
+  
   
 });

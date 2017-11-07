@@ -62,7 +62,7 @@
                               <th class="sort-alpha"># Products / Sections</th>
                               <th class="no-sort">Status</th>
                               <th class="no-sort">Actions</th>
-                              <th class="no-sort"><%= check_box_tag "product_all" %></th>
+                              <th class="no-sort"><%= check_box_tag "cb_product_all" %></th>
                             </tr>
                           </thead>
                           <tbody>
@@ -127,7 +127,7 @@
                                         <a href="<%= fabrication_order_room_product_product_section_path(@fabrication_order, room, product, section) %>" class="btn btn-default btn-xs"
                                           data-confirm="Are you sure you want to delete this Product Section?" data-method="delete">Delete</a>
                                       </td>
-                                      <td><%= check_box_tag "section-#{section.id}","1", false, class: "cb-room-#{room.id} cb-product-#{product.id}" %></td>
+                                      <td><%= check_box_tag "section-#{section.id}","1", false, class: "master-section cb-room-#{room.id} cb-product-#{product.id}" %></td>
                                     </tr>
                                   <% end %>
                                 <% end %>
@@ -155,3 +155,7 @@
 </div>
 <%= render :partial => 'createEditProductModal' %>
 <%= render :partial => 'cloneMasterModal' %>
+
+<%= form_tag prints_product_sections_path, method: :post, id: "form_prints_product", target: "_blank" do -%>
+  <%= hidden_field_tag "ids" %>
+<% end -%>

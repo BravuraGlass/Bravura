@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Bravura Glass Company NY - CRM</title>
+	<link href="//assets/base.css" media="screen" rel="stylesheet">
+	<link href="/assets/apple-touch-icon-144x144" rel="apple-touch-icon-precomposed" sizes="144x144" type="image/png">
+	<link href="/assets/apple-touch-icon-114x114" rel="apple-touch-icon-precomposed" sizes="114x114" type="image/png">
+	<link href="/assets/apple-touch-icon-72x72" rel="apple-touch-icon-precomposed" sizes="72x72" type="image/png">
+	<link href="/assets/apple-touch-icon" rel="apple-touch-icon-precomposed" type="image/png">
+	<link href="/assets/favicon.ico" rel="shortcut icon" type="image/x-icon">
+	<link href="/assets/application.css" id="maincss" media="all" rel="stylesheet">
+	<style type="text/css">
+	.jqstooltip { position: absolute;left: 0px;top: 0px;visibility: hidden;background: rgb(0, 0, 0) transparent;background-color: rgba(0,0,0,0.6);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000);-ms-filter: "progid:DXImageTransform.Microsoft.gradient(startColorstr=#99000000, endColorstr=#99000000)";color: white;font: 10px arial, san serif;text-align: left;white-space: nowrap;padding: 5px;border: 1px solid white;z-index: 10000;}.jqsfield { color: white;font: 10px arial, san serif;text-align: left;}
+	</style>
+</head>
+<body class="dt-print-view">
+	<h1>Bravura Glass Company NY - CRM</h1>
+	<div></div>
+	<table class="datatable table table-striped table-hover responsive dataTable no-footer dtr-inline">
+		<thead>
+			<tr>
+				<th>Room</th>
+				<th>Product</th>
+				<th>Section</th>
+				<th>Status</th>
+			</tr>
+		</thead>
+		<tbody>
+      <% @product_sections.each do |section| %>
+        <tr>
+          <td><%= section.product.room.name %></td>
+          <td><%= section.product.name %> (<%= section.product.product_type.name %>)</td>
+          <td><%= section.name %></td>
+          <td><%= section.status %></td>
+        </tr>  
+      <% end %>
+		</tbody>
+	</table>
+</body>
+<SCRIPT LANGUAGE="JavaScript"> 
+  window.print();
+</script>
+</html>
