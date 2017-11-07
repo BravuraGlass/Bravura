@@ -39,11 +39,12 @@ BRAVURA.saveCreateEditProductModal = function saveStatusChange(){
   $.ajax({
     method: "POST",
     url: "/fabrication_orders/"+fabrication_order_id+"/products.json",
-    data: { "product": product }
+    data: { "product": product },
+    dataType: "json"
   })
-  .done(function(response){
+  .done(function(data){
     $('#createEditRoomModal').modal('hide');
-    window.location.reload();
+    location.href =  "/fabrication_orders/"+fabrication_order_id+"/edit?new_product_id="+data.id;
   })
   .fail(function(response){
     alert('There was an error saving the product');
@@ -72,11 +73,12 @@ $(document).ready(function(){
     $.ajax({
       method: "POST",
       url: "/fabrication_orders/"+forder_id+"/rooms/clone.json",
-      data: {id: mroom_id}
+      data: {id: mroom_id},
+      dataType: "json"
     })
-    .done(function(response){
+    .done(function(data){
       $('#cloneMasterModal').modal('hide');
-      window.location.reload();
+      location.href =  "/fabrication_orders/"+forder_id+"/edit?new_room_id="+data.id;
     })
     .fail(function(response){
       alert('There was an error saving the product');
