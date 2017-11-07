@@ -3,6 +3,8 @@ require 'barby/barcode/code_128'
 require 'barby/outputter/png_outputter'
 
 class ProductSectionsController < ApplicationController
+  include Printable
+  
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
   skip_before_action :require_login, only: [:edit_section_status, :update_status], if: -> { request.format.json? }   
@@ -12,6 +14,13 @@ class ProductSectionsController < ApplicationController
     @product_sections = ProductSection.where("product_sections.id IN (?)", params.permit(:ids)[:ids].split(",")).includes(:product => :room).order("rooms.name ASC, products.name ASC, product_sections.name ASC")
 
     render layout: false
+  end  
+  
+  def barcodes_print
+    convert_choosen_sections_to_barcode params.permit(:ids)[:ids]
+    respond_to do |format|
+      format.html  { render template: 'fabrication_orders/barcodes', layout: false }
+    end
   end  
 
   def edit

@@ -159,6 +159,6 @@
 <%= render :partial => 'createEditProductModal' %>
 <%= render :partial => 'cloneMasterModal' %>
 
-<%= form_tag prints_product_sections_path, method: :post, id: "form_prints_product", target: "_blank" do -%>
+<%= form_tag barcodes_print_product_sections_path, method: :post, id: "form_prints_product", target: "_blank" do -%>
   <%= hidden_field_tag "ids" %>
 <% end -%>

@@ -5,7 +5,7 @@ module Printable
     @qrs = []
     @default_size = 20
   end
-  
+    
   def convert_fabrication_orders_to_barcode id
     FabricationOrder.find(id).rooms.each do |room|
       room.products.each do |product|
@@ -92,4 +92,13 @@ module Printable
       :level => :m )
     ]
   end
+  
+  def convert_choosen_sections_to_barcode ids
+    
+    sections = ProductSection.where("product_sections.id IN (?)", ids.split(",")).includes(:product => :room).order("rooms.name ASC, products.name ASC, product_sections.name ASC")
+    
+    sections.each do |sect|
+      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png")]  
+    end  
+  end  
 end

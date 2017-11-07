@@ -15,12 +15,6 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :product_sections do
-    member do
-      get 'barcode'
-    end  
-  end
-  
   resources :product_types
   resources :status_checklist_items
   resources :statuses
@@ -47,8 +41,12 @@ Rails.application.routes.draw do
 
   resources :product_sections, only: [:update] do
     collection do
-      post 'prints'
+      post 'barcodes_print'
     end
+    
+    member do
+      get 'barcode'
+    end  
   end   
 
   resources :jobs, only: [:index, :new, :create, :update, :destroy] do
