@@ -15,6 +15,10 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :dashboard, only: :index do
+    
+  end
+  
   resources :product_types
   resources :status_checklist_items
   resources :statuses
