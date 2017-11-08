@@ -16,8 +16,10 @@ Rails.application.routes.draw do
   end
   
   resources :dashboard, only: :index do
-    member do
-      get "detail"
+    collection do
+      ["forders_detail","sections_detail", "jobs_detail"].each do |act|
+        get act
+      end  
     end
   end
   
