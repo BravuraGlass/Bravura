@@ -16,7 +16,9 @@ Rails.application.routes.draw do
   end
   
   resources :dashboard, only: :index do
-    
+    member do
+      get "detail"
+    end
   end
   
   resources :product_types
