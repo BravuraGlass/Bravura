@@ -12,6 +12,8 @@ Rails.application.routes.draw do
       get 'report_detail'
       get 'edit_report_detail'
       post 'update_report_detail'
+      get 'new_report_detail'
+      post 'create_report_detail'
     end
   end
   

@@ -74,19 +74,18 @@ class WorkingLog < ApplicationRecord
   
   def readable_time
     unless self.submit_time.blank?
-      self.submit_time.strftime("%A %B %d, %Y %H:%M:%S EDT")
+      self.submit_time.strftime("%A %B %d, %Y %H:%M:%S")
     else
       nil
     end 
   end
   
-  def self.update_report_detail(params)
-    @working_logs = WorkingLog.where("id IN (?) AND user_id = ?",params[:ids].split(","), params[:user_id])
+  def self.create_report_detail(params)
     
-    start_time = Time.zone.parse(@working_logs[0].submit_date.to_s) + params[:start_hour].to_i.hours + params[:start_minute].to_i.minutes + params[:start_second].to_i
-    finish_time = Time.zone.parse(@working_logs[0].submit_date.to_s) + params[:finish_hour].to_i.hours + params[:finish_minute].to_i.minutes + params[:finish_second].to_i
+    errors = []
     
-    errors = WorkingLog.overlapping_time(@working_logs, start_time, finish_time)[:errors]
+    start_time = Time.zone.parse(params[:date].to_s) + params[:start_hour].to_i.hours + params[:start_minute].to_i.minutes + params[:start_second].to_i
+    finish_time = Time.zone.parse(params[:date].to_s) + params[:finish_hour].to_i.hours + params[:finish_minute].to_i.minutes + params[:finish_second].to_i  
     
     if finish_time == start_time
       errors << "Start and Finish time can't be same"
@@ -96,6 +95,58 @@ class WorkingLog < ApplicationRecord
       errors << "Start time should be less than Finish time"
     end  
     
+    unless errors.size > 0
+      @existing_wlogs = WorkingLog.where("user_id = ? AND submit_date = ?", params[:user_id], params[:date].to_i)
+    
+      @existing_wlogs.each do |wlog|
+        if wlog.submit_time >= start_time and wlog.submit_time <= finish_time
+          errors << "start time and finish time is overlapping with another time on this day"
+          break
+        end
+      end
+    end    
+
+    unless errors.size > 0
+      WorkingLog.create(
+        submit_time: start_time,
+        submit_method: "manual",
+        user_id: params[:user_id],
+        submit_date: params[:date].to_i,
+        checkin_or_checkout: "checkin"
+      )  
+      
+      WorkingLog.create(
+        submit_time: finish_time,
+        submit_method: "manual",
+        user_id: params[:user_id],
+        submit_date: params[:date].to_i,
+        checkin_or_checkout: "checkout"
+      )  
+    end  
+        
+    return {errors: errors} 
+  end  
+  
+  def self.update_report_detail(params)
+    errors = []
+    
+    @working_logs = WorkingLog.where("id IN (?) AND user_id = ?",params[:ids].split(","), params[:user_id])
+    
+    start_time = Time.zone.parse(@working_logs[0].submit_date.to_s) + params[:start_hour].to_i.hours + params[:start_minute].to_i.minutes + params[:start_second].to_i
+    finish_time = Time.zone.parse(@working_logs[0].submit_date.to_s) + params[:finish_hour].to_i.hours + params[:finish_minute].to_i.minutes + params[:finish_second].to_i
+    
+    if finish_time == start_time
+      errors << "Start and Finish time can't be same"
+    end  
+    
+    if start_time > finish_time
+      errors << "Start time should be less than Finish time"
+    end 
+    
+    unless errors.size > 0
+      errors = WorkingLog.overlapping_time(@working_logs, start_time, finish_time)[:errors]
+    end  
+        
     rs = []
     
     unless errors.size > 0
@@ -313,6 +364,16 @@ class WorkingLog < ApplicationRecord
         rs[row] = {user_id: wlog.user_id, name: wlog.user.full_name, duration: duration, status: status}     
         newrow = false
       end          
+    end  
+    
+    if rs.size > 0
+      users = User.where("id NOT IN (?)", rs.collect {|data| data[:user_id]})
+    else
+      users = User.all
+    end    
+
+    users.each do |user|
+      rs << {user_id: user.id, name: user.full_name, duration: 0, status: "manual"}
     end  
     
     return rs

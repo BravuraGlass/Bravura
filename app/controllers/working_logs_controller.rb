@@ -35,8 +35,20 @@ class WorkingLogsController < ApplicationController
     @week = report_params[:week]
     start_end_week
     
+    @user = User.find(report_params[:user_id])
     @working_log_arr = WorkingLog.report_detail(report_params[:user_id],@wstart, @wend)  
   end
+  
+  def new_report_detail
+    @user = User.find(params[:user_id])
+    if params[:week] == "current_week"
+      arr_dates = (Date.today.beginning_of_week..Date.today.end_of_week).to_a
+    elsif params[:week] == "last_week"
+      arr_dates = (Date.today.prev_week.beginning_of_week..Date.today.prev_week.end_of_week).to_a
+    end     
+    
+    @dates = arr_dates.collect {|thedate| [thedate.strftime("%A %B %d, %Y"),thedate.to_s.gsub("-","")]}
+  end  
   
   def edit_report_detail
     @working_logs = WorkingLog.where("id IN (?) AND user_id=?", report_params[:ids].split(","), report_params[:user_id]).order("checkin_or_checkout ASC")
@@ -71,6 +83,18 @@ class WorkingLogsController < ApplicationController
     
     
   end  
+  
+  def create_report_detail
+    rs = WorkingLog.create_report_detail(params)
+    
+    if rs[:errors].size > 0
+      flash[:alert] = "Invalid, #{rs[:errors].join(' & ')}"
+      redirect_to new_report_detail_working_logs_path(user_id: report_params[:user_id], week: report_params[:week], date: params[:date])
+    else
+      flash[:notice] = "Working Log was sucessfully updated"
+      redirect_to report_detail_working_logs_path(user_id: report_params[:user_id], week: report_params[:week])
+    end    
+  end 
   
   def update_report_detail
     rs = WorkingLog.update_report_detail(params)

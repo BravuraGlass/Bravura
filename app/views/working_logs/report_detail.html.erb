@@ -1,4 +1,4 @@
-<h3><%= @working_log_arr[0][:name] %>'s Working Logs 
+<h3><%= @user.full_name %>'s Working Logs 
    <small><%= @week.titleize %> Detail Report</small>
 </h3>
 
@@ -49,3 +49,5 @@
     </div>
   </div>
 </div>        
+
+<%= link_to 'Add Working Log',new_report_detail_working_logs_path(week: @week, user_id: @user.id),:class => 'btn btn-primary' %>
