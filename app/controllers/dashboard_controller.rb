@@ -10,14 +10,14 @@ class DashboardController < ApplicationController
   end  
   
   def sections_detail
-    @sections = ProductSection.where("status = ?", params[:status]).order("id desc") 
+    @sections = ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active = ? AND product_sections.status = ?", true, params[:status]).order("id desc") 
   end  
   
-  def forder_detail
-    
+  def forders_detail
+    @forders = FabricationOrder.joins(:job).where("jobs.active =? AND fabrication_orders.status = ?", true, params[:status]).order("id desc") 
   end
   
-  def job_detail
-    
+  def jobs_detail
+    @jobs = Job.where("active = ? AND status = ?", true, params[:status]).order("id desc")  
   end    
 end

@@ -1,5 +1,5 @@
 <h3>Dashboard
-  <small>Product statuses</small>
+  <small>Job statuses</small>
 </h3>
 <div class="container-fluid">
   <div class="row">
@@ -10,18 +10,16 @@
             <thead>
               <tr>
                 <th class="sort-alpha">Status</th>
-                <th class="sort-alpha">Section</th>
-                <th class="sort-alpha">Fabrication Order</th>
-                <th>Action</th>
+                <th class="sort-alpha">Customer</th>
+                <th class="sort-alpha">Address</th>
               </tr>
             </thead>
             <tbody>
-              <% @sections.each do |sect| %>
+              <% @jobs.each do |job| %>
               <tr>
-                <td><%= sect.status %></td>
-                <td><%= sect.name %></td>
-                <td><%= sect.product.room.fabrication_order.title %></td>
-                <td><%= link_to "detail", detail_dashboard_path(id: sect.id) %></td>
+                <td><%= job.status %></td>
+                <td><%= job.customer.contact_info %></td>
+                <td><%= job.address %></td>
               </tr>
               <% end %>
             </tbody>
