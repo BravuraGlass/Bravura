@@ -8,7 +8,7 @@
 /.bundle
 /keys
 .byebug_history
-
+/node_modules/
 # Ignore all logfiles and tempfiles.
 /log/*
 !/log/.keep

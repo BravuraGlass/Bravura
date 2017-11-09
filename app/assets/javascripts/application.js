@@ -42,3 +42,8 @@
 // --- Input Mask
 
 //= require jquery.inputmask/dist/jquery.inputmask.bundle.js
+
+//= require react
+//= require react_ujs
+
+//= require_tree ./react_components

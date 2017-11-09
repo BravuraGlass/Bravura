@@ -26,6 +26,9 @@ gem 'thin'
 
 gem 'deep_cloneable'
 
+gem 'webpacker'
+gem 'react-rails'
+
 # Use SCSS for stylesheets
 gem 'sass-rails', '~> 5.0.1'
 # Use Uglifier as compressor for JavaScript assets
