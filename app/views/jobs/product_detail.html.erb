@@ -23,7 +23,7 @@
               <% @job.product_detail.each do |row| %>
                 <tr>
                   <% row.each do |val| %>
-                    <td class="<%= column_color(val[:prod_count]) %>"><%= val[:content] %></td>
+                    <td class="<%= column_color(val[:prod_count]) %>"><%= select_tag "Section",options_for_select([val[:content]) %></td>
                   <% end %>  
                 </tr>
               <% end %> 
@@ -36,3 +36,5 @@
     </div>
   </div>
 </div>
+
+<%= render partial: "product_detail_modal" %>
