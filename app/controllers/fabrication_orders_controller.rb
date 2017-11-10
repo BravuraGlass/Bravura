@@ -146,6 +146,8 @@ class FabricationOrdersController < ApplicationController
     def load_common_data
       @statuses ||= Status.where(:category => Status.categories[:fabrication_orders]).order(:order)
       @product_statuses ||= Status.where(:category => Status.categories[:products]).order(:order)
+      @room_statuses ||= Status.where(:category => Status.categories[:rooms]).order(:order)
+      @task_statuses ||= Status.where(:category => Status.categories[:tasks]).order(:order)
       @product_types = ProductType.all
     end
 

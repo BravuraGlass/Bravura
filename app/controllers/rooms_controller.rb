@@ -27,6 +27,7 @@ class RoomsController < ApplicationController
   # PATCH/PUT /rooms/1
   # PATCH/PUT /rooms/1.json
   def update
+    
     respond_to do |format|
 
       if @room.update(room_params)
@@ -78,6 +79,6 @@ class RoomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
-      params.require(:room).permit(:name, :description, :master, :room_id)
+      params.require(:room).permit(:name, :description, :master, :room_id, :status)
     end
 end

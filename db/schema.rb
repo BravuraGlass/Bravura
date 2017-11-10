@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171101095900) do
+ActiveRecord::Schema.define(version: 20171110051256) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -107,7 +107,7 @@ ActiveRecord::Schema.define(version: 20171101095900) do
 
   create_table "product_sections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.bigint "product_id"
-    t.string "status"
+    t.string "status", default: "In Fabrication"
     t.string "name"
     t.integer "section_index"
     t.index ["product_id"], name: "index_product_sections_on_product_id"
@@ -124,13 +124,13 @@ ActiveRecord::Schema.define(version: 20171101095900) do
     t.bigint "product_type_id"
     t.string "name"
     t.text "description"
-    t.string "status"
     t.string "sku"
     t.integer "price"
     t.bigint "room_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.integer "product_index"
+    t.string "status", default: "Measured"
     t.index ["product_type_id"], name: "index_products_on_product_type_id"
     t.index ["room_id"], name: "index_products_on_room_id"
   end
@@ -143,6 +143,7 @@ ActiveRecord::Schema.define(version: 20171101095900) do
     t.datetime "updated_at", null: false
     t.string "master"
     t.integer "room_id"
+    t.string "status", default: "Active"
     t.index ["fabrication_order_id"], name: "index_rooms_on_fabrication_order_id"
   end
 

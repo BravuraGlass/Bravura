@@ -48,6 +48,9 @@ Rails.application.routes.draw do
     end
     resources :products, only: [:create]
   end
+  
+  resources :rooms, only: [:update]
+  resources :products, only: [:update]
 
   resources :product_sections, only: [:update] do
     collection do

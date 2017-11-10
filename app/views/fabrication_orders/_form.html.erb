@@ -78,7 +78,10 @@
                                 <% end %>
                                 <td></td>
                                 <td><%= room.products.count %></td>
-                                <td></td>
+                                <td>
+                                  <%= collection_select :room, :status, @room_statuses, :name, :name,
+                                  { selected: room.status } , { class: 'form-control', :data => { :remote => true, :url => room_path(room, format: :json), method: :put} }%>
+                                </td>
                                 <td>
                                   <%= link_to 'Barcode', r_orders_barcode_path(room), target: "_blank", :class => 'btn btn-default btn-xs' %> 
                                   <%# link_to 'Print', r_orders_qr_path(room), target: "_blank", :class => 'btn btn-default btn-xs' %>
@@ -103,7 +106,10 @@
                                     <td><%= product.name %> (<%= product.product_type.name %>)</td>
                                     <% end %>
                                     <td><%= product.product_sections.count %></td>
-                                    <td></td>
+                                    <td>
+                                      <%= collection_select :product, :status, @task_statuses, :name, :name,
+                                      { selected: product.status } , { class: 'form-control', :data => { :remote => true, :url => product_path(product, format: :json), method: :put} }%>
+                                    </td>
                                     <td>
                                       <%= link_to 'Barcode', p_orders_barcode_path(product), target: "_blank", :class => 'btn btn-default btn-xs' %> 
                                       <%# link_to 'Print', p_orders_qr_path(product), target: "_blank", :class => 'btn btn-default btn-xs' %>

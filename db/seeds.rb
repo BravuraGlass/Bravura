@@ -17,7 +17,13 @@ Status.create(category: "products",name: "Ordered", order: 9)
 Status.create(category: "products",name: "Installed", order: 19)
 
 Status.create(category: "fabrication_orders",name: "In Progress", order: 1)
-Status.create(category: "fabrication_orders",name: "GO AHEAD", order: 1)
+Status.create(category: "fabrication_orders",name: "GO AHEAD", order: 2)
+
+Status.create(category: "tasks",name: "Prepared", order: 1)
+Status.create(category: "tasks",name: "Measured", order: 2)
+
+Status.create(category: "rooms",name: "Inactive", order: 1)
+Status.create(category: "rooms",name: "Active", order: 2)
 
 Customer.create(contact_firstname: "Satya", contact_lastname: "Nadella", email: "satya@microsoft.com", company_name: "Microsoft")
 Customer.create(contact_firstname: "Yukihiro", contact_lastname: "Mastsumoto", email: "matz@ruby.org", company_name: "Ruby")
