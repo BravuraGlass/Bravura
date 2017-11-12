@@ -1,7 +1,11 @@
 include Printable
 class FabricationOrdersController < ApplicationController
   before_action :set_fabrication_order, only: [:show, :edit, :update, :destroy]
-  before_action :load_common_data
+  before_action :load_common_data, except: [:addresses]
+  
+  skip_before_action :require_login, only: [:addresses], if: -> { request.format.json? }
+  before_action :api_login_status, only: [:addresses], if: -> { request.format.json? }
+  
   require 'rqrcode'
 
   # GET /fabrication_orders
@@ -140,6 +144,15 @@ class FabricationOrdersController < ApplicationController
       format.html  { render template: 'fabrication_orders/qr_codes', layout: false }
     end
   end
+  
+  def addresses
+    @fabrication_orders = FabricationOrder.joins(:job).where("jobs.active = ?", true)
+    
+    respond_to do |format|
+      result = @fabrication_orders.collect {|fo| {id: fo.id, address: fo.title}}
+      format.json {render json: result}
+    end  
+  end  
 
   private
     # Loads the common required data for all forms

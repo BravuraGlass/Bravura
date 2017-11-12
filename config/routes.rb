@@ -38,6 +38,10 @@ Rails.application.routes.draw do
   resources :customers
 
   resources :fabrication_orders, only: [:index, :new, :edit, :update, :destroy] do
+    collection do
+      get 'addresses'
+    end
+    
     resources :rooms, only: [:new, :edit, :update, :destroy, :clone] do
       collection do
         post 'clone'
