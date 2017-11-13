@@ -69,7 +69,16 @@ Rails.application.routes.draw do
       end  
     end   
   end
-  resources :products, only: [:update]
+  
+  resources :products, only: [:update] do
+    collection do
+      get 'available_task_statuses'
+    end
+    
+    member do
+      post 'update_task_status'
+    end
+  end
 
   resources :product_sections, only: [:update] do
     collection do

@@ -1,8 +1,8 @@
 class ProductsController < ApplicationController
-  before_action :set_product, only: [:show, :edit, :update, :destroy]
+  before_action :set_product, only: [:show, :edit, :update, :destroy, :update_task_status]
   
-  skip_before_action :require_login,:verify_authenticity_token, only: [:tasks, :available_statuses, :update_status], if: -> { request.format.json? }
-  before_action :api_login_status, only: [:tasks, :available_statuses, :update_status], if: -> { request.format.json? }
+  skip_before_action :require_login,:verify_authenticity_token, only: [:tasks, :available_task_statuses, :update_task_status], if: -> { request.format.json? }
+  before_action :api_login_status, only: [:tasks, :available_task_statuses, :update_task_status], if: -> { request.format.json? }
 
   # GET /products
   # GET /products.json
@@ -70,6 +70,31 @@ class ProductsController < ApplicationController
       result = @products.collect {|prod| {id: prod.id, name: prod.name, status: prod.status}}
       
       format.json {render json: api_response(:success, nil, result)}
+    end  
+  end  
+  
+  def available_task_statuses
+    @statuses = Status.where(:category => Status.categories[:tasks]).order(:order).collect {|sta| sta.name}
+    
+    respond_to do |format|
+      format.json { render json: api_response(:success, nil, @statuses)}
+    end
+  end  
+  
+  def update_task_status
+    @statuses = Status.where(:category => Status.categories[:tasks]).order(:order).collect {|sta| sta.name}
+    
+    respond_to do |format|
+      if params[:status].blank?
+        format.json { render json: api_response(:failed,"status can't empty",nil)}
+      elsif @statuses.include?(params[:status]) == false  
+        format.json { render json: api_response(:failed,"status name is invalid",nil)}
+      elsif @product.update_attribute(:status, params[:status])
+        result = {id: @product.id, name: @product.name, status: @product.status}
+        format.json { render json: api_response(:success,nil,result)}
+      else
+        format.json { render json: api_response(:failed, @product.errors.full_messages.join(","),nil) }
+      end  
     end  
   end  
 
