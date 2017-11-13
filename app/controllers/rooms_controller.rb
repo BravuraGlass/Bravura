@@ -1,8 +1,8 @@
 class RoomsController < ApplicationController
-  before_action :set_room, only: [:show, :edit, :update, :destroy]
+  before_action :set_room, only: [:show, :edit, :update, :destroy, :update_status]
   
-  skip_before_action :require_login, only: [:statuses, :available_statuses], if: -> { request.format.json? }
-  before_action :api_login_status, only: [:statuses, :available_statuses], if: -> { request.format.json? }
+  skip_before_action :require_login, only: [:statuses, :available_statuses, :update_status], if: -> { request.format.json? }
+  before_action :api_login_status, only: [:statuses, :available_statuses, :update_status], if: -> { request.format.json? }
 
   # GET /rooms
   # GET /rooms.json
@@ -42,6 +42,17 @@ class RoomsController < ApplicationController
       end
     end
   end
+  
+  def update_status
+    
+    respond_to do |format|
+      if @room.update_attribute(:status, params[:status])
+        format.json { render json: @room}
+      else
+        format.json { render json: @room.errors, status: :unprocessable_entity }
+      end  
+    end  
+  end  
 
   # DELETE /rooms/1
   # DELETE /rooms/1.json
@@ -75,10 +86,10 @@ class RoomsController < ApplicationController
   end  
   
   def available_statuses
-    @statuses = Status.where(:category => Status.categories[:rooms]).order(:order)
+    @statuses = Status.where(:category => Status.categories[:rooms]).order(:order).collect {|sta| sta.name}
     
     respond_to do |format|
-      format.json { render json: @statuses.collect {|sta| sta.name}}
+      format.json { render json: api_response(:success, nil, @statuses)}
     end
   end  
   
@@ -91,7 +102,7 @@ class RoomsController < ApplicationController
         name: room.name,
         status: room.status  
       }}
-      format.json { render json: result}
+      format.json { render json: api_response(:success, nil, result)}
     end
   end  
 

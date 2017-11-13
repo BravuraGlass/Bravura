@@ -18,6 +18,14 @@ class ApplicationController < ActionController::Base
     end  
   end  
   
+  def api_response(status, message, data)
+    return {
+      status: status,
+      message: message,
+      data: data
+    }
+  end  
+  
   def require_admin
     if current_user.type_of_user == "0"
     else

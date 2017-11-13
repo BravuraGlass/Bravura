@@ -150,7 +150,7 @@ class FabricationOrdersController < ApplicationController
     
     respond_to do |format|
       result = @fabrication_orders.collect {|fo| {id: fo.id, address: fo.title}}
-      format.json {render json: result}
+      format.json {render json: api_response(:success, nil, result)}
     end  
   end  
 
