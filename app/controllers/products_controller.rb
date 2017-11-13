@@ -1,5 +1,8 @@
 class ProductsController < ApplicationController
   before_action :set_product, only: [:show, :edit, :update, :destroy]
+  
+  skip_before_action :require_login,:verify_authenticity_token, only: [:tasks, :available_statuses, :update_status], if: -> { request.format.json? }
+  before_action :api_login_status, only: [:tasks, :available_statuses, :update_status], if: -> { request.format.json? }
 
   # GET /products
   # GET /products.json
@@ -59,6 +62,16 @@ class ProductsController < ApplicationController
       end
     end
   end
+  
+  def tasks
+    @products = Product.where("room_id=?", params[:room_id])
+    
+    respond_to do |format|
+      result = @products.collect {|prod| {id: prod.id, name: prod.name, status: prod.status}}
+      
+      format.json {render json: api_response(:success, nil, result)}
+    end  
+  end  
 
   # PATCH/PUT /products/1
   # PATCH/PUT /products/1.json
