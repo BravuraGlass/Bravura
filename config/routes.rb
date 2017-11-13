@@ -89,6 +89,7 @@ Rails.application.routes.draw do
   resources :product_sections, only: [:update] do
     collection do
       post 'barcodes_print'
+      get 'available_material_statuses'
     end
     
     member do

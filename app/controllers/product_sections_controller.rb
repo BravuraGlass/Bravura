@@ -7,8 +7,8 @@ class ProductSectionsController < ApplicationController
   
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
-  skip_before_action :require_login, only: [:materials, :edit_section_status, :update_status], if: -> { request.format.json? }   
-  before_action :api_login_status, only: [:materials, :update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
+  skip_before_action :require_login, only: [:materials, :available_material_statuses, :edit_section_status, :update_status], if: -> { request.format.json? }   
+  before_action :api_login_status, only: [:materials, :available_material_statuses, :update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
   
   def materials
     @sections = ProductSection.where("product_id = ?", params[:product_id])
@@ -16,6 +16,14 @@ class ProductSectionsController < ApplicationController
     respond_to do |format|
       result = @sections.collect {|sect| {id: sect.id, name: sect.name, status: sect.status}}
       format.json {render json: api_response(:success, nil, result)}
+    end  
+  end  
+  
+  def available_material_statuses
+    @statuses = Status.where(:category => Status.categories[:products]).order(:order).collect {|sta| sta.name}
+    
+    respond_to do |format|
+      format.json {render json: api_response(:success, nil, @statuses)}
     end  
   end  
   
@@ -160,6 +168,8 @@ class ProductSectionsController < ApplicationController
       end  
     end
   end
+  
+  
   
   protected
   
