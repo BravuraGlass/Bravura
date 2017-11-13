@@ -58,6 +58,10 @@ Rails.application.routes.draw do
     collection do 
       get 'available_statuses'
     end  
+    
+    member do
+      post 'update_status'
+    end
   end
   resources :products, only: [:update]
 

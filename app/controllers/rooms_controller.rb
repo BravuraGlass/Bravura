@@ -1,7 +1,7 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update, :destroy, :update_status]
   
-  skip_before_action :require_login, only: [:statuses, :available_statuses, :update_status], if: -> { request.format.json? }
+  skip_before_action :require_login,:verify_authenticity_token, only: [:statuses, :available_statuses, :update_status], if: -> { request.format.json? }
   before_action :api_login_status, only: [:statuses, :available_statuses, :update_status], if: -> { request.format.json? }
 
   # GET /rooms
@@ -44,12 +44,18 @@ class RoomsController < ApplicationController
   end
   
   def update_status
+    @statuses = Status.where(:category => Status.categories[:rooms]).order(:order).collect {|sta| sta.name}
     
     respond_to do |format|
-      if @room.update_attribute(:status, params[:status])
-        format.json { render json: @room}
+      if params[:status].blank?
+        format.json { render json: api_response(:failed,"status can't empty",nil)}
+      elsif @statuses.include?(params[:status]) == false  
+        format.json { render json: api_response(:failed,"status name is invalid",nil)}
+      elsif @room.update_attribute(:status, params[:status])
+        result = {id: @room.id, name: @room.name, status: @room.status}
+        format.json { render json: api_response(:success,nil,result)}
       else
-        format.json { render json: @room.errors, status: :unprocessable_entity }
+        format.json { render json: api_response(:failed, @room.errors.full_messages.join(","),nil) }
       end  
     end  
   end  
