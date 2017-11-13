@@ -45,6 +45,7 @@ Rails.application.routes.draw do
     resources :rooms, only: [:new, :edit, :update, :destroy, :clone] do
       collection do
         post 'clone'
+        get 'list'
       end  
       resources :products, only: [:new, :edit, :update, :destroy] do
         resources :product_sections, only: [:new, :edit, :update, :destroy]
@@ -53,7 +54,11 @@ Rails.application.routes.draw do
     resources :products, only: [:create]
   end
   
-  resources :rooms, only: [:update]
+  resources :rooms, only: [:update] do
+    collection do 
+      get 'available_statuses'
+    end  
+  end
   resources :products, only: [:update]
 
   resources :product_sections, only: [:update] do

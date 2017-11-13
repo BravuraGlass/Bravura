@@ -1,5 +1,8 @@
 class RoomsController < ApplicationController
   before_action :set_room, only: [:show, :edit, :update, :destroy]
+  
+  skip_before_action :require_login, only: [:statuses, :available_statuses], if: -> { request.format.json? }
+  before_action :api_login_status, only: [:statuses, :available_statuses], if: -> { request.format.json? }
 
   # GET /rooms
   # GET /rooms.json
@@ -69,6 +72,27 @@ class RoomsController < ApplicationController
       end
     end      
     
+  end  
+  
+  def available_statuses
+    @statuses = Status.where(:category => Status.categories[:rooms]).order(:order)
+    
+    respond_to do |format|
+      format.json { render json: @statuses.collect {|sta| sta.name}}
+    end
+  end  
+  
+  def list
+    @rooms = Room.where("fabrication_order_id=?", params[:fabrication_order_id])
+    
+    respond_to do |format|
+      result = @rooms.collect {|room| {
+        id: room.id,
+        name: room.name,
+        status: room.status  
+      }}
+      format.json { render json: result}
+    end
   end  
 
   private
