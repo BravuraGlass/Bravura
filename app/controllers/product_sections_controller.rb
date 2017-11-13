@@ -7,8 +7,17 @@ class ProductSectionsController < ApplicationController
   
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
-  skip_before_action :require_login, only: [:edit_section_status, :update_status], if: -> { request.format.json? }   
-  before_action :api_login_status, only: [:update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
+  skip_before_action :require_login, only: [:materials, :edit_section_status, :update_status], if: -> { request.format.json? }   
+  before_action :api_login_status, only: [:materials, :update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
+  
+  def materials
+    @sections = ProductSection.where("product_id = ?", params[:product_id])
+    
+    respond_to do |format|
+      result = @sections.collect {|sect| {id: sect.id, name: sect.name, status: sect.status}}
+      format.json {render json: api_response(:success, nil, result)}
+    end  
+  end  
   
   def prints
     @product_sections = ProductSection.where("product_sections.id IN (?)", params.permit(:ids)[:ids].split(",")).includes(:product => :room).order("rooms.name ASC, products.name ASC, product_sections.name ASC")

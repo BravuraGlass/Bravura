@@ -78,6 +78,12 @@ Rails.application.routes.draw do
     member do
       post 'update_task_status'
     end
+    
+    resources :product_sections, only: [:update] do
+      collection do
+        get 'materials'
+      end  
+    end 
   end
 
   resources :product_sections, only: [:update] do
