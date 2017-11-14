@@ -19,6 +19,20 @@ class FabricationOrder < ApplicationRecord
     end
     sections
   end
+  
+  def sorting_rooms
+    rooms_num = []
+    rooms_str = []
+    self.rooms.each do |room|
+      if room.name.to_i == 0
+        rooms_str << room
+      elsif
+        rooms_num << room
+      end    
+    end  
+    
+    return (rooms_num.sort_by {|room| room.name.to_i}) + (rooms_str.sort_by {|room| room.name.to_s})
+  end  
 
   def sections_to_json
     sections.to_json
