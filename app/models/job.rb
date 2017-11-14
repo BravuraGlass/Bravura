@@ -8,6 +8,64 @@ class Job < ApplicationRecord
   belongs_to :customer
   belongs_to :salesman, foreign_key: 'salesman_id', class_name: 'Employee', optional: true
   belongs_to :installer, foreign_key: 'installer_id', class_name: 'Employee', optional: true
+  
+  def self.all_active_data
+    result = []
+    product_ids = []
+    room_ids = []
+    fo_ids = []
+    
+    materials = []
+    tasks = []
+    rooms = []
+    forders = []
+    
+    select_syntax = "product_sections.*,products.name AS product_name, products.status AS product_status, products.room_id AS room_id, rooms.name AS room_name, rooms.status AS room_status, rooms.fabrication_order_id AS fo_id, fabrication_orders.title AS fo_title, fabrication_orders.status AS fo_status"
+    
+    ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active=?",true).select(select_syntax).each do |section|
+      materials << {
+        category: "material",
+        id: section.id,
+        name: section.name,
+        status: section.status
+      } 
+      
+      if product_ids.include?(section.product_id) == false
+        tasks << {
+          category: "task",
+          id: section.product_id,
+          name: section.product_name,
+          status: section.product_status
+        }
+        product_ids << section.product_id
+      end  
+  
+      if room_ids.include?(section.room_id) == false
+        rooms << {
+          category: "room",
+          id: section.room_id,
+          name: section.room_name,
+          status: section.room_status,
+        }  
+        
+        room_ids << section.room_id
+      end  
+      
+      if fo_ids.include?(section.fo_id) == false
+        forders << {
+          category: "address",
+          id: section.fo_id,
+          name: section.fo_title,
+          status: section.fo_status
+        }  
+        
+        fo_ids << section.fo_id
+      end  
+      
+    end   
+   
+    return materials + tasks + rooms + forders
+  end  
 
 
   def balance

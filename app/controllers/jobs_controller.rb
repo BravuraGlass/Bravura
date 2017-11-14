@@ -4,6 +4,15 @@ class JobsController < ApplicationController
   before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail]
   before_action :load_common_data
   before_action :set_markers, only: [:show, :edit]
+  
+  skip_before_action :require_login, :verify_authenticity_token, only: [:all_active_data], if: -> { request.format.json? }   
+  before_action :api_login_status, only: [:all_active_data], if: -> { request.format.json? }  
+  
+  def all_active_data
+    respond_to do |format|
+      format.json {render json: api_response(:success, nil, Job.all_active_data)}
+    end  
+  end  
 
   # GET /jobs
   # GET /jobs.json

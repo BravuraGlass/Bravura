@@ -101,6 +101,9 @@ Rails.application.routes.draw do
     member do
       get 'product_detail'
     end  
+    collection do
+      get 'all_active_data'
+    end
     resources :comments
     resources :fabrication_orders, only: [:create, :show]
   end
