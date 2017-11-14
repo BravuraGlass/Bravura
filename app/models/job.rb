@@ -20,9 +20,9 @@ class Job < ApplicationRecord
     rooms = []
     forders = []
     
-    select_syntax = "product_sections.*,products.name AS product_name, products.status AS product_status, products.room_id AS room_id, rooms.name AS room_name, rooms.status AS room_status, rooms.fabrication_order_id AS fo_id, fabrication_orders.title AS fo_title, fabrication_orders.status AS fo_status"
+    select_syntax = "product_sections.*,product_types.name as ptype_name, products.name AS product_name, products.status AS product_status, products.room_id AS room_id, rooms.name AS room_name, rooms.status AS room_status, rooms.fabrication_order_id AS fo_id, fabrication_orders.title AS fo_title, fabrication_orders.status AS fo_status"
     
-    ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active=?",true).select(select_syntax).each do |section|
+    ProductSection.joins(:product => [{:room => {:fabrication_order => :job}}, :product_type]).where("jobs.active=?",true).select(select_syntax).each do |section|
       materials << {
         category: "material",
         id: section.id,
@@ -34,7 +34,7 @@ class Job < ApplicationRecord
         tasks << {
           category: "task",
           id: section.product_id,
-          name: section.product_name,
+          name: "#{section.product_name} (#{section.ptype_name})",
           status: section.product_status
         }
         product_ids << section.product_id
