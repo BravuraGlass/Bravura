@@ -22,6 +22,7 @@ Rails.application.routes.draw do
       ["forders_detail","sections_detail", "jobs_detail"].each do |act|
         get act
       end  
+      put 'status_multiple_update'
     end
   end
   

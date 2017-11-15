@@ -4,7 +4,9 @@
     <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-body">
-          <%= render :partial => 'shared/flash_messages' %>
+          <div>Change All : <%= select_tag "change_all_section", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, params[:status]) %></div>
+          <br />
+          <%= form_tag status_multiple_update_dashboard_index_path, method: :put do -%>
           <table class="datatable table table-striped table-hover responsive">
             <thead>
               <tr>
@@ -16,13 +18,17 @@
             <tbody>
               <% @sections.each do |sect| %>
               <tr>
-                <td><%= select_tag "section_detail_#{sect.id}", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, sect.status), class: "section_detail_select"  %></td>
+                <td><%= select_tag "section_detail[#{sect.id}]", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, sect.status), class: "section_detail_select"  %></td>
                 <td><%= sect.name %></td>
                 <td><%= sect.product.room.fabrication_order.title %></td>
               </tr>
               <% end %>
             </tbody>
           </table>
+          <%= hidden_field_tag "orig_action", params[:action] %>
+          <%= hidden_field_tag "orig_status", params[:status] %>
+          <%= submit_tag "Update Statuses", :class => 'btn btn-primary' %>
+          <% end -%>
         </div>
       </div>
     </div>

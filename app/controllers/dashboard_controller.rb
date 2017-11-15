@@ -23,4 +23,26 @@ class DashboardController < ApplicationController
     @jobs = Job.where("active = ? AND status = ?", true, params[:status]).order("id desc")  
     @statuses = Status.where(category: Status.categories[:jobs])
   end    
+  
+  def status_multiple_update
+    if params[:orig_action] == "sections_detail"
+      params[:section_detail].each do |key,value|
+        ProductSection.find(key.to_i).update_attribute(:status,value) if value != params[:orig_status]
+      end  
+      msg = "Material statuses were successfully updated"
+    elsif params[:orig_action] == "forders_detail"
+      params[:forder_detail].each do |key,value|
+        FabricationOrder.find(key.to_i).update_attribute(:status,value) if value != params[:orig_status]
+      end  
+      msg = "Fabrication Order statuses were successfully updated"
+    elsif params[:orig_action] == "jobs_detail"
+      params[:job_detail].each do |key,value|
+        Job.find(key.to_i).update_attribute(:status,value) if value != params[:orig_status]
+      end  
+      msg = "Job statuses were successfully updated"  
+    end
+    
+    flash[:notice] = msg
+    redirect_to dashboard_path
+  end  
 end

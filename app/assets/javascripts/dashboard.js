@@ -1,5 +1,5 @@
 $(document).ready(function(){
-  $('.section_detail_select').on('change', function() {
+  $('.section_detail_select_none').on('change', function() {
     var theid = $(this).attr("id").split("_")[2]
     
     $.ajax({
@@ -16,7 +16,7 @@ $(document).ready(function(){
     });
   })  
   
-  $('.forder_detail_select').on('change', function() {
+  $('.forder_detail_select_none').on('change', function() {
     var theid = $(this).attr("id").split("_")[2]
     
     $.ajax({
@@ -33,7 +33,7 @@ $(document).ready(function(){
     });
   })  
   
-  $('.job_detail_select').on('change', function() {
+  $('.job_detail_select_none').on('change', function() {
     var theid = $(this).attr("id").split("_")[2]
     
     $.ajax({
@@ -49,4 +49,16 @@ $(document).ready(function(){
       alert('There was an error saving the product');
     });
   })  
+  
+  $('#change_all_section').on('change', function() {
+    $(".section_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 
+  })
+  
+  $('#change_all_job').on('change', function() {
+    $(".job_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 
+  })
+  
+  $('#change_all_forder').on('change', function() {
+    $(".forder_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 
+  })
 });
