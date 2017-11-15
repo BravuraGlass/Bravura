@@ -49,7 +49,10 @@ class ProductSectionsController < ApplicationController
     respond_to do |format|
       if @product_section.update(product_section_params)
         format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Section was successfully updated.' }
-        format.json { render json: @product_section, status: :ok, location: @product_section }
+        format.json do
+          flash[:notice] = "status for #{@product_section.name} was successfully updated"
+          render json: @product_section, status: :ok, location: @product_section
+        end  
       else
         format.html { render :edit }
         format.json { render json: @product_section.errors, status: :unprocessable_entity }
