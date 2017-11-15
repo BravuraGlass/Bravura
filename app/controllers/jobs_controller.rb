@@ -145,6 +145,10 @@ class JobsController < ApplicationController
           @job.save!
         end
         format.html { redirect_to select_job_path(@job), notice: 'Job was successfully updated.' }
+        format.json do
+          flash[:notice] = "status for #{@job.customer.contact_info} was successfully updated" 
+          render json: @job, status: :ok, location: @job
+        end  
       else
         format.html { redirect_to select_job_path(@job) }
       end

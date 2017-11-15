@@ -1,11 +1,10 @@
-<h3>Dashboard
-  <small>Fabrication order statuses</small>
-</h3>
+<%= render partial: "title" %>
 <div class="container-fluid">
   <div class="row">
     <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-body">
+          <%= render :partial => 'shared/flash_messages' %>
           <table class="datatable table table-striped table-hover responsive">
             <thead>
               <tr>
@@ -16,7 +15,7 @@
             <tbody>
               <% @forders.each do |forder| %>
               <tr>
-                <td><%= forder.status %></td>
+                <td><%= select_tag "forder_detail_#{forder.id}", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, forder.status), class: "forder_detail_select"  %></td>
                 <td><%= forder.title %></td>
               </tr>
               <% end %>

@@ -59,7 +59,10 @@ class FabricationOrdersController < ApplicationController
     respond_to do |format|
       if @fabrication_order.update(fabrication_order_params)
         format.html { redirect_to edit_fabrication_order_path(@fabrication_order), notice: 'Fabrication order was successfully updated.' }
-        format.json { render :show, status: :ok, location: @fabrication_order }
+        format.json do
+          flash[:notice] = "status for #{@fabrication_order.title} was successfully updated" 
+          render :show, status: :ok, location: @fabrication_order
+        end  
       else
         format.html { render :edit }
         format.json { render json: @fabrication_order.errors, status: :unprocessable_entity }
