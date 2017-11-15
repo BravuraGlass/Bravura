@@ -19,7 +19,19 @@ class DashboardController < ApplicationController
     @statuses = Status.where(category: Status.categories[:products])
     
     respond_to do |format|
-      format.json { render json: api_response(:success,nil, {materials: @sections}) }
+      
+      format.json do
+        result = {
+          material_statuses: @sections.collect {|sect| {
+            id: sect.id,
+            name: sect.name,
+            status: sect.status,
+            address: sect.product.room.fabrication_order.title
+          }},
+          available_statuses: @statuses.collect {|sta| sta.name}
+        } 
+        render json: api_response(:success,nil, result)
+      end  
       format.html
     end
   end  
