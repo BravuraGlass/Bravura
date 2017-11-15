@@ -7,11 +7,21 @@ class DashboardController < ApplicationController
     @jobs = Job.order("status ASC").where("active = ?", true).group("status").count
     
     @forders = FabricationOrder.joins(:job).where("jobs.active = ?", true).order("fabrication_orders.status ASC").group("fabrication_orders.status").count
+    
+    respond_to do |format|
+      format.json { render json: api_response(:success,nil, {materials: @sections, jobs: @jobs, fabrication_orders: @forders})}
+      format.html
+    end
   end  
   
   def sections_detail
     @sections = ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active = ? AND product_sections.status = ?", true, params[:status]).order("id desc") 
     @statuses = Status.where(category: Status.categories[:products])
+    
+    respond_to do |format|
+      format.json { render json: api_response(:success,nil, {materials: @sections}) }
+      format.html
+    end
   end  
   
   def forders_detail
