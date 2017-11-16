@@ -1,8 +1,9 @@
 class DashboardController < ApplicationController
-  #before_action :require_admin
+  before_action :require_admin
   
-  skip_before_action :require_login,:verify_authenticity_token, if: -> { request.format.json? }
+  skip_before_action :require_admin, :require_login,:verify_authenticity_token, if: -> { request.format.json? }
   before_action :api_login_status, if: -> { request.format.json? }  
+  before_action :require_admin_api, if: -> { request.format.json? } 
   
   def index
     @sections = ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active = ?", true).order("product_sections.status ASC").group("product_sections.status").count

@@ -32,6 +32,15 @@ class ApplicationController < ActionController::Base
       render plain: "you are not authorized to access this page" and return
     end    
   end  
+  
+  def require_admin_api
+    user = User.where("access_token =? AND id=? AND token_expired >= ?", params[:access_token], params[:access_id], Date.today)[0]
+    
+    if user.type_of_user == "0"
+    else
+      render json: api_response(:failed, "you are not authorized to access this page", nil) and return
+    end    
+  end  
 
   private
 
