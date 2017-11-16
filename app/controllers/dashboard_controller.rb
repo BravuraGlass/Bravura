@@ -1,5 +1,8 @@
 class DashboardController < ApplicationController
-  before_action :require_admin
+  #before_action :require_admin
+  
+  skip_before_action :require_login,:verify_authenticity_token, if: -> { request.format.json? }
+  before_action :api_login_status, if: -> { request.format.json? }  
   
   def index
     @sections = ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active = ?", true).order("product_sections.status ASC").group("product_sections.status").count
@@ -60,6 +63,23 @@ class DashboardController < ApplicationController
   def jobs_detail
     @jobs = Job.where("active = ? AND status = ?", true, params[:status]).order("id desc")  
     @statuses = Status.where(category: Status.categories[:jobs])
+    
+    respond_to do |format|
+      
+      format.json do
+        result = {
+          job_statuses: @jobs.collect {|job| {
+            id: job.id,
+            customer: job.customer.contact_info,
+            address: job.address,
+            status: job.status
+          }},
+          available_statuses: @statuses.collect {|sta| sta.name}
+        } 
+        render json: api_response(:success,nil, result)
+      end  
+      format.html
+    end
   end    
   
   def status_multiple_update
