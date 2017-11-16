@@ -84,24 +84,66 @@ class DashboardController < ApplicationController
   end    
   
   def status_multiple_update
-    if params[:orig_action] == "sections_detail"
-      params[:section_detail].each do |key,value|
-        ProductSection.find(key.to_i).update_attribute(:status,value) if value != params[:orig_status]
-      end  
-      msg = "Material statuses were successfully updated"
-    elsif params[:orig_action] == "forders_detail"
-      params[:forder_detail].each do |key,value|
-        FabricationOrder.find(key.to_i).update_attribute(:status,value) if value != params[:orig_status]
-      end  
-      msg = "Fabrication Order statuses were successfully updated"
-    elsif params[:orig_action] == "jobs_detail"
-      params[:job_detail].each do |key,value|
-        Job.find(key.to_i).update_attribute(:status,value) if value != params[:orig_status]
-      end  
-      msg = "Job statuses were successfully updated"  
+    result = []
+    if params[:orig_action] == "sections_detail" or params[:category] == "material"
+      data = params[:section_detail].blank? == false ? params[:section_detail] : params[:new_statuses]
+      unless data.blank?
+        data.each do |key,value|
+          if value != params[:orig_status]
+            psection = ProductSection.find(key.to_i)
+            psection.update_attribute(:status,value) 
+            result << {id: psection.id, name: psection.name, status: psection.status}
+          end   
+        end  
+        msg = "Material statuses were successfully updated"
+      else
+        msg = "No single status was updated"
+      end    
+    elsif params[:orig_action] == "forders_detail" or params[:category] == "fabrication_order"
+      data = params[:forder_detail].blank? == false ? params[:forder_detail] : params[:new_statuses] 
+      unless data.blank?
+        data.each do |key,value|
+          if value != params[:orig_status]  
+            thefo = FabricationOrder.find(key.to_i)
+            thefo.update_attribute(:status,value) 
+            result << {id: thefo.id, address: thefo.title, status: thefo.status}
+          end  
+        end
+        msg = "Fabrication Order statuses were successfully updated"
+      else
+        msg = "No single status was updated"
+      end      
+      
+    elsif params[:orig_action] == "jobs_detail" or params[:category] == "job"
+      data = params[:job_detail].blank? == false ? params[:job_detail] : params[:new_statuses] 
+      unless data.blank?
+        data.each do |key,value|
+          if value != params[:orig_status]
+            thejob = Job.find(key.to_i)
+            thejob.update_attribute(:status,value)
+            result << {id: thejob.id, customer: thejob.customer.contact_info, status: thejob.status, address: thejob.address}
+          end   
+        end
+        msg = "Job statuses were successfully updated"  
+      else
+        msg = "No single status was updated"
+      end      
+      
     end
     
-    flash[:notice] = msg
-    redirect_to dashboard_path
+    respond_to do |format|
+      result = {
+        category: params[:category],
+        updated_data: result
+      }
+      format.json do 
+        render json: api_response(:success, msg, result)
+      end  
+    
+      format.html do  
+        flash[:notice] = msg
+        redirect_to dashboard_path
+      end
+    end    
   end  
 end
