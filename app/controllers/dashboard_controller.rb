@@ -39,6 +39,22 @@ class DashboardController < ApplicationController
   def forders_detail
     @forders = FabricationOrder.joins(:job).where("jobs.active =? AND fabrication_orders.status = ?", true, params[:status]).order("id desc") 
     @statuses = Status.where(category: Status.categories[:fabrication_orders])
+    
+    respond_to do |format|
+      
+      format.json do
+        result = {
+          fabrication_order_statuses: @forders.collect {|forder| {
+            id: forder.id,
+            address: forder.title,
+            status: forder.status
+          }},
+          available_statuses: @statuses.collect {|sta| sta.name}
+        } 
+        render json: api_response(:success,nil, result)
+      end  
+      format.html
+    end
   end
   
   def jobs_detail
