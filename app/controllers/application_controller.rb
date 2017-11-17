@@ -50,18 +50,26 @@ class ApplicationController < ActionController::Base
   
   def require_login
     super
-=begin    
-    hour = Time.zone.now
     
-    if (hour >= 8 || hour <= 23) && !current_user.late_access && Rails.env == "production"
+    last_log_today = WorkingLog.where("submit_date=? AND user_id = ?", Time.zone.now.strftime("%Y%m%d"), current_user.id).order("submit_time DESC")[0]
+    
+    if last_log_today.nil?
+      uaccess = false
+    else
+      if last_log_today.checkin_or_checkout == "checkin"
+        uaccess = true
+      else
+        uaccess = false  
+      end
+    end    
+    
+    if uaccess == false && !current_user.always_access #&& Rails.env == "production"
       logout
-      redirect_back_or_to login_url, :alert => "Your account has no access at night"
+      redirect_back_or_to login_url, :alert => "can't access Bravura without clock in first"
     end
-=end
+
   end
   
-
-
   def restrict_delete 
     # if use is not an admin
     unless current_user.type_of_user.eql?("0")
