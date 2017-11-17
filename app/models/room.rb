@@ -7,6 +7,7 @@ class Room < ApplicationRecord
   belongs_to :room, class_name: "Room", optional: true
   has_many :rooms, class_name: "Room"
   
+  
   validates_uniqueness_of :master, uniqueness: true, allow_blank: true
   
   def master_clone
@@ -16,9 +17,11 @@ class Room < ApplicationRecord
       new_room = self.deep_clone include: { products: :product_sections }
       new_room.name = self.nextname
       new_room.master = ""
+      new_room.status = STATUS_DEFAULT[:room]
       new_room.room_id = self.id
       
       new_room.products.each_with_index do |prod, idx|
+        new_room.products[idx].status = STATUS_DEFAULT[:task]
         prod.product_sections.each_with_index do |sect, idx2|
           splitname = sect.name.split("-") 
           if splitname.size == 3
@@ -26,8 +29,8 @@ class Room < ApplicationRecord
           else
             newname = sect.name
           end    
-          new_room.products[idx].product_sections[idx2].name = newname
-          
+          new_room.products[idx].product_sections[idx2].name = newname  
+          new_room.products[idx].product_sections[idx2].status = STATUS_DEFAULT[:material]  
         end  
       end   
       

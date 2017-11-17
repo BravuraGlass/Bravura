@@ -5,3 +5,9 @@ class String
 end
 
 Date.beginning_of_week = :sunday
+
+STATUS_DEFAULT = {
+  :room => "Active",
+  :task => "Measured",
+  :material => "In Fabrication"
+}

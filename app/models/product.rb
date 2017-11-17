@@ -29,6 +29,10 @@ class Product < ApplicationRecord
       self.room.rooms.each do |theroom|
         new_prod = self.deep_clone include: :product_sections
         new_prod.room_id = theroom.id
+        new_prod.status = STATUS_DEFAULT[:task] 
+        new_prod.product_sections.each_with_index do |sect, idx|
+          new_prod.product_sections[idx].status = STATUS_DEFAULT[:material]
+        end  
         new_prod.save
       end
     end  
