@@ -61,8 +61,8 @@
                     <%= f.select :type_of_user, options_for_select([['System Administrator', 0], ['Sales Representative', 1], ['Field Worker', 2] ], selected: @user.type_of_user ), {}, class: "form-control" %>
                   </div>
                   <div class="form-group">
-                    <%= f.label :late_access %>
-                    <%= f.check_box :late_access, :class => 'form-control', id: :late_access, :readonly => readonly %>
+                    <%= f.label :always_access %>
+                    <%= f.check_box :always_access, :class => 'form-control', id: :always_access, :readonly => readonly %>
                   </div>
                 </div>
               </div>

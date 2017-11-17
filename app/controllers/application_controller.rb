@@ -50,14 +50,14 @@ class ApplicationController < ActionController::Base
   
   def require_login
     super
-    
+=begin    
     hour = Time.zone.now
     
     if (hour >= 8 || hour <= 23) && !current_user.late_access && Rails.env == "production"
       logout
       redirect_back_or_to login_url, :alert => "Your account has no access at night"
     end
-
+=end
   end
   
 
