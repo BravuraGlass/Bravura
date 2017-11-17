@@ -11,3 +11,9 @@ STATUS_DEFAULT = {
   :task => "Measured",
   :material => "In Fabrication"
 }
+
+USER_TYPE = {
+  :system_administrator => "0",
+  :sales_representative => "1",
+  :field_worker => "2"
+}
