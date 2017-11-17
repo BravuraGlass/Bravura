@@ -28,5 +28,11 @@ class User < ApplicationRecord
   def admin?
     self.type_of_user == "0" ? true : false
   end  
+  
+  def self.admins_always_access
+    User.where("type_of_user = ?","0").each do |user|
+      user.update_attribute(:always_access, true)
+    end  
+  end  
 
 end
