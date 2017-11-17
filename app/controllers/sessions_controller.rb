@@ -1,6 +1,5 @@
 class SessionsController < ApplicationController
   skip_before_action :require_login, except: [:destroy]
-  skip_before_action :late_access, only: [:create, :new]
   before_action :use_unsafe_params, only: [:create]
 
   def new
