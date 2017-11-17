@@ -27,7 +27,7 @@ class ApplicationController < ActionController::Base
   end  
   
   def require_admin
-    if current_user.type_of_user == "0"
+    if current_user.admin?
     else
       render plain: "you are not authorized to access this page" and return
     end    
@@ -36,7 +36,7 @@ class ApplicationController < ActionController::Base
   def require_admin_api
     user = User.where("access_token =? AND id=? AND token_expired >= ?", params[:access_token], params[:access_id], Date.today)[0]
     
-    if user.type_of_user == "0"
+    if user.admin?
     else
       render json: api_response(:failed, "you are not authorized to access this page", nil) and return
     end    
@@ -53,7 +53,7 @@ class ApplicationController < ActionController::Base
     
     hour = Time.zone.now
     
-    if (hour >= 8 || hour <= 23) && !current_user.late_access
+    if (hour >= 8 || hour <= 23) && !current_user.late_access && Rails.env == "production"
       logout
       redirect_back_or_to login_url, :alert => "Your account has no access at night"
     end

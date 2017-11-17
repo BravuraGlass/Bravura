@@ -7,14 +7,12 @@
          <li class="nav-heading">
             <span>Main Menu</span>
          </li>
-         <% if current_user.type_of_user == "0" %>
          <li class="<%= 'active' if current_controller == 'dashboard' %>">
             <a href="<%= dashboard_path %>" title="Dashboard">
                <em class="icon-speedometer"></em>
                <span>Dashboard</span>
             </a>
          </li>
-         <% end %>
          <li class="<%= 'active' if current_controller == 'jobs' %>">
             <a href="<%= jobs_path %>" title="Jobs">
                <em class="icon-energy"></em>

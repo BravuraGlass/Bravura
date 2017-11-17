@@ -13,7 +13,9 @@
               <tr>
                 <th style="width:25%" class="sort-alpha">Status</th>
                 <th style="width:25%" class="sort-alpha">Amount</th>
-                <th>Action</th>
+                <% if current_user.admin? %>
+                  <th>Action</th>
+                <% end %>  
               </tr>
             </thead>
             <tbody>
@@ -21,7 +23,9 @@
               <tr>
                 <td style="width:25%"><%= key %></td>
                 <td style="width:25%"><%= value %></td>
-                <td><%= link_to "detail", sections_detail_dashboard_index_path(status: key) %></td>
+                <% if current_user.admin? %>
+                  <td><%= link_to "detail", sections_detail_dashboard_index_path(status: key) %></td>
+                <% end %>  
               </tr>
               <% end %>
             </tbody>
@@ -35,7 +39,9 @@
               <tr>
                 <th style="width:25%" class="sort-alpha">Status</th>
                 <th style="width:25%" class="sort-alpha">Amount</th>
-                <th>Action</th>
+                <% if current_user.admin? %>
+                  <th>Action</th>
+                <% end %>  
               </tr>
             </thead>
             <tbody>
@@ -43,7 +49,9 @@
               <tr>
                 <td style="width:25%"><%= key %></td>
                 <td style="width:25%"><%= value %></td>
-                <td><%= link_to "detail", forders_detail_dashboard_index_path(status: key) %></td>
+                <% if current_user.admin? %>
+                  <td><%= link_to "detail", forders_detail_dashboard_index_path(status: key) %></td>
+                <% end %>  
               </tr>
               <% end %>
             </tbody>
@@ -57,7 +65,9 @@
               <tr>
                 <th style="width:25%" class="sort-alpha">Status</th>
                 <th style="width:25%" class="sort-alpha">Amount</th>
-                <th>Action</th>
+                <% if current_user.admin? %>
+                  <th>Action</th>
+                <% end %>  
               </tr>
             </thead>
             <tbody>
@@ -65,7 +75,9 @@
               <tr>
                 <td style="width:25%"><%= key %></td>
                 <td style="width:25%"><%= value %></td>
-                <td><%= link_to "detail", jobs_detail_dashboard_index_path(status: key) %></td>
+                <% if current_user.admin? %>
+                  <td><%= link_to "detail", jobs_detail_dashboard_index_path(status: key) %></td>
+                <% end %>  
               </tr>
               <% end %>
             </tbody>
