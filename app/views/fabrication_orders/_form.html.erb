@@ -50,7 +50,7 @@
                     </div>
                     <div class="panel-body">
                       <%= link_to '+ New Product','#', :class => 'btn btn-primary', :id => 'newProductButton'%>
-                      <%= link_to '+ Clone From Master','#', :class => 'btn btn-primary', :id => 'cloneMasterButton'%>
+                      <%= link_to '+ Clone From Master','#', :class => 'btn btn-primary', :id => 'cloneMasterButton'%> <%= next_room %>
                       <%= link_to 'Print','#', :class => 'btn btn-primary', :id => 'printProduct', style: "float: right;"%>
                       <% if  @fabrication_order.rooms && @fabrication_order.rooms.size > 0 %>
                       <table class="table table-striped table-hover responsive" id="productsList">

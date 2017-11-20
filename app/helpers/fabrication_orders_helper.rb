@@ -12,4 +12,10 @@ module FabricationOrdersHelper
       ""
     end      
   end   
+  
+  def next_room
+    if @fabrication_order.rooms.size > 0
+      "Next Room : #{@fabrication_order.rooms.last.nextname}"
+    end  
+  end  
 end
