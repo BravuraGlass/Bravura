@@ -133,5 +133,40 @@ $(document).ready(function(){
     $("#form_prints_product").submit();
   });  
   
+  $('.product-status-select').on('ajax:success', function(data, status, xhr){
+    var product_id = $(this).attr("id").split("product-status-")[1];
+    if ($(this).val() == 'FINISHED') {
+    
+      var section_id
+      $('.section-status-parent-id-'+product_id).each(function(i,el) {
+        section_id = $(el).attr('id');
+        $("#"+section_id+" option[value='FINISHED']").prop('selected',true);
+      })
+    }
+  }).on('ajax:error',function(e, xhr, status, error){
+    alert("failed");
+  });
+  
+  $('.section-status-select').on('ajax:success', function(data, status, xhr){
+    var section_id = $(this).attr("id").split("section-status-")[1];
+    var product_id = $(this).attr("class").split("section-status-parent-id-")[1];
+    
+    if ($(this).val() == 'FINISHED') {
+      var same_status = true
+      
+      $('.section-status-parent-id-'+product_id).each(function(i,el) {
+        if ($(el).val() != 'FINISHED') {
+          same_status = false
+        }
+      })  
+      
+      if (same_status == true) {
+        $("#product-status-"+product_id+" option[value='FINISHED']").prop('selected',true);
+      }
+      
+    }
+  }).on('ajax:error',function(e, xhr, status, error){
+    alert("failed");
+  });
   
 });

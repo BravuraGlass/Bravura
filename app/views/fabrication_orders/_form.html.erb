@@ -108,7 +108,7 @@
                                     <td><%= product.product_sections.count %></td>
                                     <td>
                                       <%= collection_select :product, :status, @task_statuses, :name, :name,
-                                      { selected: product.status } , { class: 'form-control', :data => { :remote => true, :url => product_path(product, format: :json), method: :put} }%>
+                                      { selected: product.status } , { class: "form-control product-status-select", id: "product-status-#{product.id}" , :data => { :remote => true, :url => product_path(product, format: :json), method: :put} }%>
                                     </td>
                                     <td>
                                       <%= link_to 'Barcode', p_orders_barcode_path(product), target: "_blank", :class => 'btn btn-default btn-xs' %> 
@@ -127,7 +127,7 @@
                                       <td></td>
                                       <td>
                                         <%= collection_select :product_section, :status, @product_statuses, :name, :name,
-                                        { selected: section.status } , { class: 'form-control', :data => { :remote => true, :url => product_section_path(section.id, format: :json), :method => :put } }%>
+                                        { selected: section.status } , { class: "form-control section-status-select section-status-parent-id-#{product.id}", id: "section-status-#{section.id}",:data => { :remote => true, :url => product_section_path(section.id, format: :json), :method => :put } }%>
                                       </td>
                                       <td>
                                         <%= link_to 'Barcode', s_orders_barcode_path(section), target: "_blank", :class => 'btn btn-default btn-xs' %>
