@@ -19,8 +19,6 @@ class JobsController < ApplicationController
   def index
     @show_active = params[:active].eql?('false') ? false : true
     @selected_date = Date.today
-    
-    params[:id] = params[:id].blank? ? 0 : params[:id]
 
     if params['filter']
       case params['filter']
