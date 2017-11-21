@@ -152,7 +152,7 @@ class FabricationOrdersController < ApplicationController
     @fabrication_orders = FabricationOrder.joins(:job).where("jobs.active = ?", true).order(:id)
     
     respond_to do |format|
-      result = @fabrication_orders.collect {|fo| {id: fo.id, address: fo.title}}
+      result = @fabrication_orders.collect {|forder| {id: forder.id,po: forder.job_id,address: forder.title}}
       format.json {render json: api_response(:success, nil, result)}
     end  
   end  
