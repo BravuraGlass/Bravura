@@ -7,6 +7,8 @@ class Product < ApplicationRecord
   belongs_to :room
   has_many :product_sections, :dependent => :destroy
   
+  after_update :sync_status
+  
   def name_with_section_count
     sect_count = self.product_sections.size
     "#{self.name} (#{sect_count} section#{sect_count > 1 ? 's' : ''})"
@@ -37,7 +39,8 @@ class Product < ApplicationRecord
       end
     end  
   end 
-  
+
+=begin  
   def self.fix_finished_status
     ids = Product.joins(:product_sections).where("product_sections.status=?","FINISHED").select("products.id").distinct.collect {|prod| prod.id}
     rs = []
@@ -50,8 +53,15 @@ class Product < ApplicationRecord
     return rs
     
   end  
+=end  
 
   private
+    def sync_status
+      if self.status == "FINISHED"
+        ProductSection.where("product_id=?", self.id).update_all("status='FINISHED'")
+      end  
+    end  
+  
     # set the index
     def set_product_index
       last_index = Product.where(room: self.room).maximum(:product_index)
