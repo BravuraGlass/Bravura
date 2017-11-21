@@ -100,7 +100,7 @@ class RoomsController < ApplicationController
   end  
   
   def list
-    @rooms = Room.where("fabrication_order_id=?", params[:fabrication_order_id])
+    @rooms = FabricationOrder.find(params[:fabrication_order_id]).sorting_rooms
     
     respond_to do |format|
       result = @rooms.collect {|room| {

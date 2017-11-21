@@ -149,7 +149,7 @@ class FabricationOrdersController < ApplicationController
   end
   
   def addresses
-    @fabrication_orders = FabricationOrder.joins(:job).where("jobs.active = ?", true)
+    @fabrication_orders = FabricationOrder.joins(:job).where("jobs.active = ?", true).order(:id)
     
     respond_to do |format|
       result = @fabrication_orders.collect {|fo| {id: fo.id, address: fo.title}}
