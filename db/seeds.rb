@@ -6,6 +6,7 @@
 #   movies = Movie.create([{ name: 'Star Wars' }, { name: 'Lord of the Rings' }])
 #   Character.create(name: 'Luke', movie: movies.first)
 User.create(email: 'admin@admin.com',password: 'admin',first_name: 'Admin', last_name: 'Bravura',phonenumber: '555 555 5555',address: 'admin address',type_of_user: '0', always_access: true)
+User.create(email: 'admin3@admin.com',password: 'admin',first_name: 'Admin', last_name: 'Bravura3',phonenumber: '555 555 5555',address: 'admin address',type_of_user: '0', always_access: true)
 User.create(email: 'employee@employee.com',password: 'employee',first_name: 'Employee', last_name: 'Bravura',phonenumber: '555 555 5555',address: 'admin address',type_of_user: '1', always_access: false)
 
 Status.create(category: "jobs",name: "Estimate", order: 1)
@@ -13,7 +14,7 @@ Status.create(category: "jobs",name: "Measure", order: 2)
 Status.create(category: "jobs",name: "To Bill", order: 10)
 
 Status.create(category: "products",name: "In Fabrication", order: 1)
-Status.create(category: "products",name: "Finished", order: 9)
+Status.create(category: "products",name: "FINISHED", order: 9)
 Status.create(category: "products",name: "Installed", order: 19)
 
 Status.create(category: "fabrication_orders",name: "In Progress", order: 1)
