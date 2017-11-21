@@ -37,6 +37,18 @@ class Product < ApplicationRecord
       end
     end  
   end 
+  
+  def self.fix_finished_status
+    ids = Product.joins(:product_sections).where("product_sections.status=?","FINISHED").select("products.id").distinct.collect {|prod| prod.id}
+    rs = []
+    Product.where("id IN (?)", ids).each do |prod|
+      if prod.product_sections.size == prod.product_sections.where("status = 'FINISHED'")
+        rs << prod
+      end  
+    end  
+    return rs
+    
+  end  
 
   private
     # set the index

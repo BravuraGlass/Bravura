@@ -13,4 +13,12 @@ class ProductSection < ApplicationRecord
                         }
                     })
     end
+    
+    def self.fix_finished_status
+      Product.where("status = ?","FINISHED").each do |pro|
+        prod.product_sections.each do |sect|
+          sect.update_attribute(:status,"FINISHED")
+        end  
+      end  
+    end  
 end
