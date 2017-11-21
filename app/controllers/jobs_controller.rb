@@ -19,6 +19,8 @@ class JobsController < ApplicationController
   def index
     @show_active = params[:active].eql?('false') ? false : true
     @selected_date = Date.today
+    
+    params[:id] = params[:id].blank? ? 0 : params[:id]
 
     if params['filter']
       case params['filter']
@@ -53,7 +55,7 @@ class JobsController < ApplicationController
       # default to all if no filter was set
       if params[:id]
         @filter_all = true
-        @jobs = Job.where(active: @show_active)
+        @jobs = Job.where(active: @show_active).order("id=#{params[:id]} DESC")
       else
         @filter_today = true
         @jobs = Job.where(active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day)
