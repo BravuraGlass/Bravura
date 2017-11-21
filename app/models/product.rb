@@ -42,8 +42,9 @@ class Product < ApplicationRecord
     ids = Product.joins(:product_sections).where("product_sections.status=?","FINISHED").select("products.id").distinct.collect {|prod| prod.id}
     rs = []
     Product.where("id IN (?)", ids).each do |prod|
-      if prod.product_sections.size == prod.product_sections.where("status = 'FINISHED'")
+      if prod.product_sections.size == prod.product_sections.where("status = 'FINISHED'").size
         rs << prod
+        #prod.update_attribute(:status,"FINISHED")
       end  
     end  
     return rs
