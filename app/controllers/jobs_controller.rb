@@ -13,12 +13,22 @@ class JobsController < ApplicationController
       format.json {render json: api_response(:success, nil, Job.all_active_data)}
     end  
   end  
+  
+  def active_list    
+    respond_to do |format|
+      format.json do
+        data = Job.where("active = true").collect {|job| {id: job.id, name: "(#{job.id}) #{job.address[0...40]}"}}
+        render json: api_response(:success,nil, data)
+      end  
+    end  
+  end  
 
   # GET /jobs
   # GET /jobs.json
   def index
     @show_active = params[:active].eql?('false') ? false : true
     @selected_date = Date.today
+    @need_libs = ['maps']
 
     if params['filter']
       case params['filter']
@@ -107,15 +117,18 @@ class JobsController < ApplicationController
   # GET /jobs/1
   # GET /jobs/1.json
   def show
+    @need_libs = ['maps']
   end
 
   # GET /jobs/new
   def new
     @job = Job.new
+    @need_libs = ['maps']
   end
 
   # GET /jobs/1/edit
   def edit
+    @need_libs = ['maps']
   end
 
   # POST /jobs
@@ -123,6 +136,10 @@ class JobsController < ApplicationController
   def create
     @job = Job.new(job_params)
     @job.active = 1
+    # set appointmend end date
+    if @job.appointment.present?
+      @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
+    end
     respond_to do |format|
       if @job.save
         format.html { redirect_to select_job_path(@job), notice: 'Job was successfully created.' }
@@ -137,13 +154,17 @@ class JobsController < ApplicationController
   def update
     respond_to do |format|
       if @job.update(job_params)
+        # set appointmend end date
+        if @job.appointment.present?
+          @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
+        end
         # upload images
         if job_params[:images]
           job_params[:images].each do |image|
             @job.images << image
           end
-          @job.save!
         end
+        @job.save!
         format.html { redirect_to select_job_path(@job), notice: 'Job was successfully updated.' }
         format.json do
           flash[:notice] = "status for #{@job.customer.contact_info} was successfully updated" 
@@ -203,6 +224,7 @@ class JobsController < ApplicationController
     def load_common_data
       @customers ||= Customer.all
       @employees ||= Employee.all
+      @server_offset = Time.zone.utc_offset / 3600
       @statuses ||= Status.where(:category => Status.categories[:jobs]).order(:order)
 
       @status_checklist ||= StatusChecklistItem.all.includes(:status).to_json
@@ -212,7 +234,7 @@ class JobsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def job_params
       params.require(:job).permit(:customer_id, :price, :priority, :deposit, :status,
-              :appointment, :salesman_id, :installer_id, :duration, :duedate, :paid,
+              :appointment, :appointment_end, :salesman_id, :installer_id, :duration, :duedate, :paid, :balance,
               :notes, :active, :address, :address2, :latitude, :longitude, :confirmed_appointment)
     end
 

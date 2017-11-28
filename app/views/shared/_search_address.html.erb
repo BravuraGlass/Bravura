@@ -1,0 +1,10 @@
+<%= form_for action_search, html: { id: 'form_on_change_submit', method: "GET" } do %>
+  <div>Job Address : <%= select_tag "job_id", 
+        options_for_select(job_adresses, params[:job_id]), 
+        {include_blank: "All", class: 'on_change_submit'} %>
+  </div>
+  <br />
+  <div>
+    <%= hidden_field_tag "status", params[:status] %>
+  </div>
+<% end %>

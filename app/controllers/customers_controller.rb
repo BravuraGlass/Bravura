@@ -12,15 +12,18 @@ class CustomersController < ApplicationController
   # GET /customers/1
   # GET /customers/1.json
   def show
+    @need_libs = ['maps']
   end
 
   # GET /customers/new
   def new
     @customer = Customer.new
+    @need_libs = ['maps']
   end
 
   # GET /customers/1/edit
   def edit
+    @need_libs = ['maps']
   end
 
   # POST /customers

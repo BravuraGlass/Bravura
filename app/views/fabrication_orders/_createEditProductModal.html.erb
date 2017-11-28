@@ -6,6 +6,7 @@
               <span aria-hidden="true">&times;</span>
             </button>
             <h4 id="myModalLabel" class="modal-title">Create Products</h4>
+            <!-- <span>Room Amount <%# @fabrication_order.rooms.size %></spa> -->
         </div>
         <div class="modal-body">
             <%= hidden_field :product, :fabrication_order_id, value: @fabrication_order.id, id: 'fabrication_order_id' %>
@@ -13,7 +14,7 @@
               <label for="room">Select or Create Room</label>
               <div class="row">
                 <div class="col-md-6">
-                  <%= collection_select :product, :room_id, @fabrication_order.rooms, :id, :name_with_master, { include_blank: true } , { class: 'form-control select-bootstrap' } %>
+                  <%= collection_select :product, :room_id, @fabrication_order.sorting_rooms, :id, :name_with_master, { include_blank: true } , { class: 'form-control select-bootstrap' } %>
                 </div>
                 <div class="col-md-6">
                   <%= text_field :product, :room_name, class: 'form-control' %>

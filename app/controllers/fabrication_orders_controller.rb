@@ -157,13 +157,34 @@ class FabricationOrdersController < ApplicationController
     end  
   end  
 
+  def audit_room
+    @room = Room.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+  
+  def audit_product
+    @product = Product.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+
+  def audit_section
+    @section = ProductSection.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+
   private
     # Loads the common required data for all forms
     def load_common_data
-      @statuses ||= Status.where(:category => Status.categories[:fabrication_orders]).order(:order)
-      @product_statuses ||= Status.where(:category => Status.categories[:products]).order(:order)
-      @room_statuses ||= Status.where(:category => Status.categories[:rooms]).order(:order)
-      @task_statuses ||= Status.where(:category => Status.categories[:tasks]).order(:order)
+      @statuses ||= FabricationOrder.statuses
+      @product_statuses ||= Product.statuses
+      @room_statuses ||= Room.statuses
+      @task_statuses ||= Task.statuses
       @product_types = ProductType.all
     end
 

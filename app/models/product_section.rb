@@ -20,7 +20,14 @@ class ProductSection < ApplicationRecord
       if self.status == 'FINISHED'
         if self.product.product_sections.collect {|sect| sect.status}.uniq == ["FINISHED"]
           Product.where("id = ?", self.product_id).update_all("status='FINISHED'")
+          
+          if self.product.room.products.collect {|prod| prod.status}.uniq == ["FINISHED"]
+            Room.where("id = ?", self.product.room_id).update_all("status='FINISHED'")
+          end  
         end
+      elsif self.status != 'FINISHED' && attribute_before_last_save("status") == "FINISHED"
+        Product.where("id = ?", self.product_id).update_all("status='Pending'")
+        Room.where("id = ?", self.product.room_id).update_all("status='Active'")
       end    
     end  
     

@@ -4,6 +4,7 @@ require 'barby/outputter/png_outputter'
 
 class ProductSectionsController < ApplicationController
   include Printable
+  include AuditableController
   
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
@@ -41,6 +42,7 @@ class ProductSectionsController < ApplicationController
   end  
 
   def edit
+    render :layout => "application"
   end
 
   # PATCH/PUT /product_section/1
@@ -210,5 +212,20 @@ class ProductSectionsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_section_params
       params.require(:product_section).permit(:name, :status)
+    end
+
+
+    # Sets the audit log data
+    def set_audit_log_data
+      @audit_log.auditable = @product_section if @audit_log
+    end
+
+    # Saves the previous state of the object that was edited
+    def set_previous_audit_log_data
+      @previous_object = @product_section || ProductSection.find_by_id(params[:id])
+    end
+
+    def auditable_attributes_to_ignore
+      ProductSection.column_names - ["status"]
     end
 end

@@ -11,15 +11,18 @@ class TasksController < ApplicationController
   # GET /tasks/1
   # GET /tasks/1.json
   def show
+    @need_libs = ['maps']
   end
 
   # GET /tasks/new
   def new
     @task = Task.new
+    @need_libs = ['maps']
   end
 
   # GET /tasks/1/edit
   def edit
+    @need_libs = ['maps']
   end
 
   # POST /tasks

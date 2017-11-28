@@ -1,0 +1,41 @@
+<%= render partial: "title" %>
+<div class="container-fluid">
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="panel panel-default">
+        <div class="panel-body">
+          <%= render 'shared/search_address', 
+                      job_adresses: @job_adresses, 
+                      action_search: rooms_detail_dashboard_index_path(status: params[:status]) %>
+          <br/>
+          <div>Change All : <%= select_tag "change_all_room", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, params[:status]) %></div>
+          <br />
+          
+          <%= form_tag status_multiple_update_dashboard_index_path, method: :put do -%>
+          <table class="datatable table table-striped table-hover responsive">
+            <thead>
+              <tr>
+                <th class="sort-alpha">Status</th>
+                <th class="sort-alpha">Room</th>
+                <th class="sort-alpha">Address</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @rooms.each do |room| %>
+              <tr>
+                <td><%= select_tag "room_detail[#{room.id}]", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, room.status), class: "room_detail_select"  %></td>
+                <td><%= room.name %></td>
+                <td><%= room.job_address %></td>
+              </tr>
+              <% end %>
+            </tbody>
+          </table>
+          <%= hidden_field_tag "orig_action", params[:action] %>
+          <%= hidden_field_tag "orig_status", params[:status] %>
+          <%= submit_tag "Update Statuses", :class => 'btn btn-primary' %>
+          <% end -%>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

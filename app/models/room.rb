@@ -7,15 +7,24 @@ class Room < ApplicationRecord
   belongs_to :room, class_name: "Room", optional: true
   has_many :rooms, class_name: "Room"
   
+  after_update :sync_status
+  after_update :update_product_section_names, if: :name_was_updated?
+
   
   validates_uniqueness_of :master, uniqueness: true, allow_blank: true
+  validates_presence_of :name
+  validates_uniqueness_of :name, uniqueness: true, allow_blank: true, scope: :fabrication_order_id
+
+  def self.statuses
+    Status.where(:category => Status.categories[:rooms]).order(:order)
+  end
   
-  def master_clone
+  def master_clone(new_room_name)
     if self.master.blank?
-      return false
+      return {success: false, error_messages: ["Master can't be blank"] }
     else
       new_room = self.deep_clone include: { products: :product_sections }
-      new_room.name = self.nextname
+      new_room.name = new_room_name
       new_room.master = ""
       new_room.status = STATUS_DEFAULT[:room]
       new_room.room_id = self.id
@@ -35,11 +44,11 @@ class Room < ApplicationRecord
       end   
       
       if new_room.save
-        return true
+        return {success: true, room: new_room}
       else
-        return false
-      end    
-    end    
+        return {success: false, error_messages: new_room.errors.full_messages}
+      end
+    end
   end  
   
   def master?
@@ -55,7 +64,7 @@ class Room < ApplicationRecord
   end  
   
   def nextname
-    last_room = self.fabrication_order.rooms.order("name ASC").last
+    last_room = self.fabrication_order.sorting_rooms.last
     name_rev = last_room.name.reverse 
     
     if last_room.name.blank?
@@ -63,7 +72,8 @@ class Room < ApplicationRecord
     elsif last_room.name.is_int?
       last_room.name.to_i + 1
     elsif name_rev.size > 1
-      if name_rev[0].is_int? == false and name_rev[1].is_int?
+      if ((name_rev[0].is_int? == false and name_rev[1].is_int?) || 
+           !!last_room.name.match(/(^.*[^0-9])([\s0-9]*?[\d]$)/) )
         arr_name_rev = name_rev.split("")
         arr_name_rev[0] = arr_name_rev[0].next
         return arr_name_rev.join("").reverse
@@ -75,6 +85,39 @@ class Room < ApplicationRecord
     else
       "copy of #{self.name}"
     end    
+  end
+
+  private
+    def name_was_updated?
+      self.saved_change_to_attribute? :name
+    end
+
+    def update_product_section_names
+      job_id = self.fabrication_order.job_id
+      old_room_name, new_room_name = self.saved_changes["name"][0], self.saved_changes["name"][1]
+
+      sections = ProductSection.where(
+        ["name LIKE (?) AND product_id IN (?)", "#{job_id}-#{old_room_name}-%", self.product_ids]
+      )
+      sections.each do |section|
+        new_name = section.name.gsub("#{job_id}-#{old_room_name}-", "#{job_id}-#{new_room_name}-")
+        section.name = new_name
+        section.save
+      end
+    end
+  
+  
+  def sync_status
+    if self.status == "FINISHED"
+      Product.where("room_id=?", self.id).update_all("status='FINISHED'")
+      ProductSection.where("products.room_id=?", self.id).joins(:product).update_all("product_sections.status='FINISHED'")
+    elsif self.status == "Not Active"
+      Product.where("room_id=?", self.id).update_all("status='N/A'")
+      ProductSection.where("products.room_id=?", self.id).joins(:product).update_all("product_sections.status='N/A'")
+    elsif attribute_before_last_save("status") == "Not Active" && self.status == "Active"
+      Product.where("room_id=?", self.id).update_all("status='In Fabrication'")
+      ProductSection.where("products.room_id=?", self.id).joins(:product).update_all("product_sections.status='Measured'")
+    end  
   end  
   
 end

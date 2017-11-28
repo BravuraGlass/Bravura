@@ -4,7 +4,7 @@ class SessionsController < ApplicationController
 
   def new
     if current_user
-      redirect_back_or_to jobs_url
+      redirect_back_or_to jobs_url(filter: "all")
     else
       render :layout => 'pages'
     end
@@ -16,7 +16,7 @@ class SessionsController < ApplicationController
     respond_to do |format|
       format.html do
         if user
-          redirect_back_or_to jobs_url, :notice => "Welcome back #{user["firstname"]}"
+          redirect_back_or_to jobs_url(filter: "all"), :notice => "Welcome back #{user["firstname"]}"
         else
           redirect_back_or_to login_url, :alert => "Email or password was invalid"
         end

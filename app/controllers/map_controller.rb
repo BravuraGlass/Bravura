@@ -3,6 +3,7 @@ class MapController < ApplicationController
     tasks = []
     jobs = []
     @selected_date = Date.today
+    @need_libs = ['maps']
 
     if params['date']
       begin

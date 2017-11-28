@@ -59,7 +59,14 @@ $(document).ready(function(){
   $('#newProductButton').on('click', function() { BRAVURA.showCreateEditProductModal(); });
   $('.edit-product-button').on('click', function() { BRAVURA.showCreateSectionModal(); });
   
-  $('#cloneMasterButton').on('click', function() {
+  $('.cloneMasterButton').on('click', function() {
+    $('#cloneMasterModal').modal({
+        show: true,
+        keyboard: false
+    });
+  });  
+  
+  $('.cloneMasterButton').on('click', function() {
     $('#cloneMasterModal').modal({
         show: true,
         keyboard: false
@@ -69,21 +76,14 @@ $(document).ready(function(){
   $('#masterModalCloneButton').on('click', function() {
     var mroom_id = $('#master_room_id').val();
     var forder_id = $('#master_fabrication_order_id').val();
+    var next_room = $('#master_next_room').val();
 
     $.ajax({
       method: "POST",
-      url: "/fabrication_orders/"+forder_id+"/rooms/clone.json",
-      data: {id: mroom_id},
-      dataType: "json"
-    })
-    .done(function(data){
-      $('#cloneMasterModal').modal('hide');
-      location.href =  "/fabrication_orders/"+forder_id+"/edit?new_room_id="+data.id;
-    })
-    .fail(function(response){
-      alert('There was an error saving the product');
+      url: "/fabrication_orders/"+forder_id+"/rooms/clone",
+      data: {id: mroom_id, next_room: next_room},
+      dataType: "script"
     });
-  
   });  
   
   $('.master-room').on('click', function() {
@@ -133,38 +133,162 @@ $(document).ready(function(){
     $("#form_prints_product").submit();
   });  
   
+  $(".product-status-select").focus(function () {
+    $(this).data('was', this.value)
+  });
+
   $('.product-status-select').on('ajax:success', function(data, status, xhr){
     var product_id = $(this).attr("id").split("product-status-")[1];
+    var room_id = $(this).attr("class").split("product-status-parent-room-")[1];
     if ($(this).val() == 'FINISHED') {
     
       var section_id
-      $('.section-status-parent-id-'+product_id).each(function(i,el) {
+      $('.section-status-parent-product-'+product_id).each(function(i,el) {
         section_id = $(el).attr('id');
         $("#"+section_id+" option[value='FINISHED']").prop('selected',true);
       })
-    }
-  }).on('ajax:error',function(e, xhr, status, error){
-    alert("failed");
-  });
-  
-  $('.section-status-select').on('ajax:success', function(data, status, xhr){
-    var section_id = $(this).attr("id").split("section-status-")[1];
-    var product_id = $(this).attr("class").split("section-status-parent-id-")[1];
-    
-    if ($(this).val() == 'FINISHED') {
+
       var same_status = true
       
-      $('.section-status-parent-id-'+product_id).each(function(i,el) {
+      $('.product-status-parent-room-'+room_id).each(function(i,el) {
         if ($(el).val() != 'FINISHED') {
           same_status = false
         }
       })  
+  
+      if (same_status == true) {
+        $("#room-status-"+room_id+" option[value='FINISHED']").prop('selected',true);
+      }
+
+    }
+
+    if ($(this).val() == 'Pending') {
+      $("#room-status-"+room_id+" option[value='Active']").prop('selected',true);
+    }
+
+    $(this).data('was', $(this).val());
+
+  }).on('ajax:error',function(e, xhr, status, error){
+    alert("failed");
+  });
+    
+
+  $(".section-status-select").focus(function () {
+    $(this).data('was', this.value)
+  });
+
+  $('.section-status-select').on('ajax:success', function(data, status, xhr){
+    var section_id = $(this).attr("id").split("section-status-")[1];
+    var product_id_temp = $(this).attr("class").split("section-status-parent-product-")[1];
+    var product_id = product_id_temp.split(" ")[0];
+    var room_id = $(this).attr("class").split("section-status-parent-room-")[1];
+    
+    if ($(this).val() == 'FINISHED') {
+      var same_status = true
       
+      $('.section-status-parent-product-'+product_id).each(function(i,el) {
+        if ($(el).val() != 'FINISHED') {
+          same_status = false
+        }
+      })  
+  
       if (same_status == true) {
         $("#product-status-"+product_id+" option[value='FINISHED']").prop('selected',true);
       }
+
+      var same_status2 = true
       
+      $('.section-status-parent-room-'+room_id).each(function(i,el) {
+        if ($(el).val() != 'FINISHED') {
+          same_status2 = false
+        }
+      })  
+  
+      if (same_status2 == true) {
+        $("#room-status-"+room_id+" option[value='FINISHED']").prop('selected',true);
+      } 
     }
+
+    if($(this).data('was') == 'FINISHED' && $(this).val() != 'FINISHED'){
+      $("#product-status-"+product_id+" option[value='Pending']").prop('selected',true);
+      $("#room-status-"+room_id+" option[value='Active']").prop('selected',true);
+    }
+
+    $(this).data('was', $(this).val())
+
+  }).on('ajax:error',function(e, xhr, status, error){
+    alert("failed");
+  });
+
+  $(".room-status-select").focus(function () {
+    $(this).data('was', this.value)
+  });
+
+  $('.room-status-select').on('ajax:success', function(data, status, xhr){
+    var room_id = $(this).attr("id").split("room-status-")[1];
+    if ($(this).val() == 'FINISHED') {
+    
+      var product_id
+      $('.product-status-parent-room-'+room_id).each(function(i,el) {
+        product_id = $(el).attr('id');
+        $("#"+product_id+" option[value='FINISHED']").prop('selected',true);        
+      })
+      var section_id
+      $('.section-status-parent-room-'+room_id).each(function(i,el) {
+        section_id = $(el).attr('id');
+        $("#"+section_id+" option[value='FINISHED']").prop('selected',true);
+      })
+    }
+    
+    if ($(this).val() == 'LOCKED') {
+      $('.product-status-parent-room-'+room_id).each(function(i,el) {
+        product_id = $(el).attr('id');
+        $("#"+product_id).prop('disabled', true);        
+      })
+      
+      $('.section-status-parent-room-'+room_id).each(function(i,el) {
+        section_id = $(el).attr('id');
+        $("#"+section_id).prop('disabled',true);
+      })      
+    } else {
+      $('.product-status-parent-room-'+room_id).each(function(i,el) {
+        product_id = $(el).attr('id');
+        $("#"+product_id).prop('disabled', false);        
+      })
+      
+      $('.section-status-parent-room-'+room_id).each(function(i,el) {
+        section_id = $(el).attr('id');
+        $("#"+section_id).prop('disabled', false);
+      })       
+    }
+    if ($(this).val() == 'Not Active') {
+      var product_id
+      $('.product-status-parent-room-'+room_id).each(function(i,el) {
+        product_id = $(el).attr('id');
+        $("#"+product_id+" option[value='N/A']").prop('selected',true);        
+      })
+      var section_id
+      $('.section-status-parent-room-'+room_id).each(function(i,el) {
+        section_id = $(el).attr('id');
+        $("#"+section_id+" option[value='N/A']").prop('selected',true);
+      })
+    }
+
+    if($(this).val() == 'Active' && $(this).data('was') == 'Not Active'){
+      var product_id
+      $('.product-status-parent-room-'+room_id).each(function(i,el) {
+        product_id = $(el).attr('id');
+        $("#"+product_id+" option[value='Measured']").prop('selected',true);        
+      })
+      var section_id
+      $('.section-status-parent-room-'+room_id).each(function(i,el) {
+        section_id = $(el).attr('id');
+        $("#"+section_id+" option[value='In Fabrication']").prop('selected',true);
+      })
+    }
+
+    $(this).data('was', $(this).val())
+
   }).on('ajax:error',function(e, xhr, status, error){
     alert("failed");
   });

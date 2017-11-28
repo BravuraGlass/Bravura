@@ -26,7 +26,7 @@
   <div class="col-md-1 center">
     Job: <%= image_tag  "/assets/mapicons/job.png" %>
   </div>
-  <div class="col-md-2 center">
+  <div class="col-md-1 center">
     Confirmed: <%= image_tag  "/assets/mapicons/confirmed_appointment.png" %>
   </div>
   <div class="col-md-1 center">
@@ -34,5 +34,5 @@
   </div>
 </div>
 <div id="map" class="full-map">
-  <%= render :partial => 'shared/location_map', :locals => {hidemap: false} %>
+  <%= render :partial => 'shared/location_map', :locals => {hidemap: false, address_field_id: 'address'} %>
 </div>

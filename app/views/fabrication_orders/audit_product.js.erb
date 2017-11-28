@@ -1,0 +1,2 @@
+$('#modal_container').empty().append('<%= escape_javascript(render partial: 'auditModal', locals: {object: @product, name: "Task"}) %>');
+$('#auditModal').modal({show: true, keyboard: false});

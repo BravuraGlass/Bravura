@@ -8,6 +8,10 @@ class Product < ApplicationRecord
   has_many :product_sections, :dependent => :destroy
   
   after_update :sync_status
+
+  def self.statuses
+    Status.where(:category => Status.categories[:products]).order(:order)
+  end
   
   def name_with_section_count
     sect_count = self.product_sections.size
@@ -60,6 +64,14 @@ class Product < ApplicationRecord
       if self.status == "FINISHED"
         ProductSection.where("product_id=?", self.id).update_all("status='FINISHED'")
       end  
+      
+      if self.room.products.collect {|prod| prod.status}.uniq == ["FINISHED"]
+        Room.where("id = ?", self.room_id).update_all("status='FINISHED'")
+      end  
+
+      if self.status == "Pending"
+        Room.where("id = ?", self.room_id).update_all("status='Active'")
+      end
     end  
   
     # set the index

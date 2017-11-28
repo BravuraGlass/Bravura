@@ -1,4 +1,5 @@
 class RoomsController < ApplicationController
+  include AuditableController
   before_action :set_room, only: [:show, :edit, :update, :destroy, :update_status]
   
   skip_before_action :require_login,:verify_authenticity_token, only: [:statuses, :available_statuses, :update_status], if: -> { request.format.json? }
@@ -75,17 +76,30 @@ class RoomsController < ApplicationController
     
     respond_to do |format|
       if @room
-        if @room.master_clone
+        @clone = @room.master_clone(params[:next_room])
+        if @clone[:success]
+          format.js {
+            @fabrication_order = @room.fabrication_order
+
+            @statuses ||= FabricationOrder.statuses
+            @product_statuses ||= Product.statuses
+            @room_statuses ||= Room.statuses
+            @task_statuses ||= Task.statuses
+
+            @next_room_name = @clone[:room].nextname
+            @sorting_rooms = @fabrication_order.sorting_rooms
+            @cloned_room_idx = @sorting_rooms.index(@clone[:room])
+            @prev_cloned_room = @cloned_room_idx == 0 ? nil : @sorting_rooms[@cloned_room_idx - 1]
+            @next_cloned_room = @sorting_rooms[@cloned_room_idx + 1]
+          }
           format.json { render json: Room.last, status: :created } 
         else
-          respond_to do |format|
-            format.json { render json: "errors", status: :unprocessable_entity }
-          end  
+          format.js
+          format.json { render json: {error_messages: @clone[:error_messages]}, status: :unprocessable_entity}
         end    
       else
-        respond_to do |format|
-          format.json { render json: "errors", status: :unprocessable_entity }
-        end
+        format.js
+        format.json { render json: {error_messages: ["Invalid master data"]}, status: :unprocessable_entity }
       end
     end      
     
@@ -121,5 +135,20 @@ class RoomsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
       params.require(:room).permit(:name, :description, :master, :room_id, :status)
+    end
+
+
+    # Sets the audit log data
+    def set_audit_log_data
+      @audit_log.auditable = @room if @audit_log
+    end
+
+    # Saves the previous state of the object that was edited
+    def set_previous_audit_log_data
+      @previous_object = @room || Room.find_by_id(params[:id])
+    end
+
+    def auditable_attributes_to_ignore
+      Room.column_names - ["status"]
     end
 end

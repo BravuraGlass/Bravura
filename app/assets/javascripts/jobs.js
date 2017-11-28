@@ -289,5 +289,53 @@ $(document).ready(function(){
   });
 
   BRAVURA.bindDeleteImagesEvent();
+  
+  $('#appointment_today').on('click', function() { 
+    $('#appointment_date').val(formatDate(todayServer()));
+    setAppointment();
+  });
+
+  $('#appointment_tomorrow').on('click', function() { 
+    $('#appointment_date').val(formatDatePlusOne(todayServer()));
+    setAppointment();
+  });
+
+  $('#appointment_date').on('change', function() { setAppointment(); });
+
+  $('#appointment_time').on('change', function() { setAppointment(); });
+
+  function formatDate(date) {
+    var day = date.getDate();
+    var monthIndex = date.getMonth() + 1;
+    var year = date.getFullYear();
+  
+    return year + '-' + monthIndex + '-' + (day < 10 ? '0' + day : day);
+  }
+
+  function formatDatePlusOne(date) {
+    var day = date.getDate() + 1;
+    var monthIndex = date.getMonth() + 1;
+    var year = date.getFullYear();
+  
+    return year + '-' + monthIndex + '-' + (day < 10 ? '0' + day : day);
+  }
+
+  function todayServer() {
+    var offset = $('#appointment').data('offset');
+    var date = new Date();
+    var n = date.getTimezoneOffset() / 60;
+    var utcDate = new Date(date.toUTCString());
+    utcDate.setHours(utcDate.getHours() + offset + n);
+    var usDate = new Date(utcDate);
+
+    return usDate;
+  }
+
+  function setAppointment() {
+    var time = $('#appointment_time').val();
+    var date = $('#appointment_date').val();
+    datetime = date + 'T' + time;
+    $('#appointment').val(datetime);
+  }
 
 });

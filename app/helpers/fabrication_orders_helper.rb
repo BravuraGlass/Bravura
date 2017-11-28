@@ -15,7 +15,7 @@ module FabricationOrdersHelper
   
   def next_room
     if @fabrication_order.rooms.size > 0
-      "Next Room : #{@fabrication_order.rooms.last.nextname}"
+      "Next Room : " + content_tag(:span, @fabrication_order.rooms.last.nextname, id: "next_room_span")
     end  
   end  
 end

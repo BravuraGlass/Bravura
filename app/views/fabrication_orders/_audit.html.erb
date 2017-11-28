@@ -1,0 +1,22 @@
+<table class="table table-striped table-hover responsive">
+  <thead>
+    <tr>
+      <th>First Name</th>
+      <th>Last Name</th>
+      <th>Date</th>
+      <th>Description</th>
+    </tr>
+    </thead>
+    <tbody id="auditable_log_<%= object.class.to_s.downcase %>_<%= object.id %>">
+      <%
+        logs = object.audit_logs
+      %>
+      <% if logs.size == 0 %>
+        <td colspan=4>Audit info is still empty</td>
+      <% else %>
+        <% logs.order(created_at: :desc).each do |log| %>
+          <%= render partial: "auditable_log", locals: {log: log} %>
+        <% end %>
+      <% end %>
+    </tbody>
+</table>

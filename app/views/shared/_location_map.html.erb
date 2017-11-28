@@ -126,11 +126,11 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
               infoWindow.open(map, marker);
           }
       })(marker, i, infoWindowTask));
-      map.setZoom(14);
-      map.setCenter(position);
       marker.setVisible(true);
     }
   }
+  map.bounds.extendWith(markers);
+  map.fitMapToBounds();
 }
 
 function geocodeAddress(geocoder, map) {

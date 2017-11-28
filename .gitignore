@@ -25,3 +25,9 @@
 .DS_Store
 .keep
 /spring/*
+
+/bin/checkout_*
+/bin/merge_*
+/bin/fetch_*
+/bin/push_*
+/bin/commit_*

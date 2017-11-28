@@ -1,4 +1,5 @@
 class ProductsController < ApplicationController
+  include AuditableController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :update_task_status]
   
   skip_before_action :require_login,:verify_authenticity_token, only: [:tasks, :available_task_statuses, :update_task_status], if: -> { request.format.json? }
@@ -32,7 +33,9 @@ class ProductsController < ApplicationController
     if !product_params[:room_id] || product_params[:room_id].blank?
       room = Room.create(name: product_params[:room_name]|| 'New Room')
       room.fabrication_order = fabrication_order
-      room.save
+      if room.save
+        audit_room = AuditLog.create(ip: request.remote_ip, user_name: (current_user.first_name || current_user.email), where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: room, details: 'Newly created data')
+      end
     else
       room = Room.find(product_params[:room_id])
     end
@@ -51,7 +54,10 @@ class ProductsController < ApplicationController
         sections.each do |i|
           section_name = "#{fabrication_order.job.id}-#{room.name}-#{@product.product_index}#{abc[i]}"
           first_status = Status.where(:category => Status.categories[:products]).order(:order).first || ''
-          ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)
+          ps = ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)
+          if ps
+            audit_ps = AuditLog.create(ip: request.remote_ip, user_name: (current_user.first_name || current_user.email), where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: ps, details: 'Newly created data')
+          end
         end
         
         @product.clone_child_data
@@ -133,5 +139,19 @@ class ProductsController < ApplicationController
     def product_params
       params.require(:product).permit(:product_type_id, :name, :description,
            :status, :sku, :price, :room_name, :room_id, :sections, :fabrication_order_id)
+    end
+
+    # Sets the audit log data
+    def set_audit_log_data
+      @audit_log.auditable = @product if @audit_log
+    end
+
+    # Saves the previous state of the object that was edited
+    def set_previous_audit_log_data
+      @previous_object = @product || Product.find_by_id(params[:id])
+    end
+
+    def auditable_attributes_to_ignore
+      Product.column_names - ["status"]
     end
 end

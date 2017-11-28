@@ -53,10 +53,23 @@ $(document).ready(function(){
   $('#change_all_section').on('change', function() {
     $(".section_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 
   })
+
+  $(document).on('change','.on_change_submit',function(){
+    $('#form_on_change_submit').submit();
+  })
+  
   
   $('#change_all_job').on('change', function() {
     $(".job_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 
   })
+
+  $('#change_all_room').on('change', function() {
+    $(".room_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 
+  })
+
+  $('#change_all_product').on('change', function() {
+    $(".product_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 
+  })  
   
   $('#change_all_forder').on('change', function() {
     $(".forder_detail_select option[value='"+$(this).val()+"'").prop('selected', true) 

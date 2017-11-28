@@ -1,0 +1,7 @@
+<%= render partial: "auditModal", locals: {object: room, name: "Room"} %>
+<% room.products.order("name asc").each do |product| %>
+  <%= render partial: "auditModal", locals: {object: product, name: "Task"} %>
+  <% product.product_sections.order("name asc").each do |product_section| %>
+    <%= render partial: "auditModal", locals: {object: product_section, name: "Material"} %>
+  <% end %>
+<% end %>

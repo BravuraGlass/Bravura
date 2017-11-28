@@ -17,6 +17,11 @@
               <label>Pick Master Data</label>
               <%= select_tag "master_room_id", options_for_master(@fabrication_order)%>
             </div>
+
+            <div class="form-group">
+              <label>Next Room</label>
+              <%= text_field_tag "next_room", @fabrication_order.rooms.last.try(:nextname), id: "master_next_room" %>
+            </div>
   
           </div>
           <div class="modal-footer">

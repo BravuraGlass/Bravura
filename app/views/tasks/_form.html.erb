@@ -48,7 +48,7 @@
                     <%= f.hidden_field :latitude, :class => 'form-control', :id => :latitude, :readonly => readonly %>
                   </div>
                   <div id="location_map">
-                    <%= render :partial => 'shared/location_map',  locals: {readonly: readonly, hidemap: false} %>
+                    <%= render :partial => 'shared/location_map',  locals: {readonly: readonly, hidemap: true, address_field_id: 'address'} %>
                   </div>
                   <div class="actions <%= 'hide' if readonly %>">
                     <%= f.submit nil, :class => 'btn btn-primary' %>

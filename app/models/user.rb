@@ -15,10 +15,10 @@ class User < ApplicationRecord
     return self.save
   end  
   
-  def self.api_login_status(params)
+  def self.api_login(params)
     rs = User.where("access_token =? AND id=? AND token_expired >= ?", params[:access_token], params[:access_id], Date.today)
     
-    rs.size > 0 ? true : false        
+    return {status: (rs.size > 0 ? true : false), user: rs[0]}        
   end  
   
   def full_name

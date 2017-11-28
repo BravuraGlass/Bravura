@@ -10,6 +10,7 @@ class WorkingLogsController < ApplicationController
   
   def index
     @working_logs = WorkingLog.order("submit_time DESC") 
+    @need_libs = ['maps']
   end  
   
   def report

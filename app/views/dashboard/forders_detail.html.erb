@@ -4,6 +4,10 @@
     <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-body">
+          <%= render 'shared/search_address', 
+                      job_adresses: @job_adresses, 
+                      action_search: forders_detail_dashboard_index_path(status: params[:status]) %>
+          <br/>
           <div>Change All : <%= select_tag "change_all_forder", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, params[:status]) %></div>
           <br />
           <%= form_tag status_multiple_update_dashboard_index_path, method: :put do -%>
@@ -11,14 +15,16 @@
             <thead>
               <tr>
                 <th class="sort-alpha">Status</th>
-                <th class="sort-alpha">Title</th>
+                <th class="sort-alpha">Fabrication Order</th>
+                <th class="sort-alpha">Address</th>
               </tr>
             </thead>
             <tbody>
               <% @forders.each do |forder| %>
               <tr>
                 <td><%= select_tag "forder_detail[#{forder.id}]", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, forder.status), class: "forder_detail_select"  %></td>
-                <td><%= forder.title %></td>
+                <td><%= forder.job_id %></td>
+                <td><%= forder.address %></td>
               </tr>
               <% end %>
             </tbody>

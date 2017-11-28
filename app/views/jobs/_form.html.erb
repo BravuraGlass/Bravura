@@ -83,6 +83,20 @@
                   <%= f.label "Apt#" %>
                     <%= f.text_field :address2, :class => 'form-control', :id => :address2, :readonly => readonly %>
                 </div>
+                
+                <div class="form-group">
+                  <%= f.label :appointment %>
+                  <br/>
+                  <a class="btn btn-default" id="appointment_today">Today</a>
+                  <a class="btn btn-default" id="appointment_tomorrow">Tomorrow</a>
+                  <br/>
+                  <%= f.date_field :appointment, class: 'form-control', id: :appointment_date, :readonly => readonly %>
+                  <%= f.time_field :appointment, class: 'form-control', :style => 'display:inline !important; width: 45%;float:left;', id: :appointment_time, :readonly => readonly %>
+                  <%= f.label " to", :style => 'font-weight: normal; display: inline-table; text-align: center; margin: 5px auto;width: 10%;' %>
+                  <%= f.time_field :appointment_end, class: 'form-control', :style => 'display:inline !important;width:45%;float:right;', id: :appointment_end_hour, :readonly => readonly %>
+                  <%= f.hidden_field :appointment, class: 'form-control', data: {offset: @server_offset},  id: :appointment, :readonly => readonly %>
+                  Confirmed : <%= f.check_box :confirmed_appointment %>
+                </div>
               </div>
             </div>
 
@@ -111,19 +125,8 @@
                     </div>
                 </div>
 
-                <div class="form-group">
-                  <%= f.label :salesman %>
-                    <%= f.collection_select :salesman_id, @employees, :id, :first_name, { include_blank: true }, class: 'form-control select-bootstrap'  %>
-                </div>
-
               </div>
-              <div class="col-md-6 col-xs-6">
-                <div class="form-group">
-                  <%= f.label :appointment %>
-                  <%= f.datetime_field :appointment, class: 'form-control' , id: :appointment, :readonly => readonly %>
-                  Confirmed: <%= f.check_box :confirmed_appointment %>
-                </div>
-
+              <div class="col-md-6 col-xs-6">                                  
                 <div class="form-group">
                   <%= f.label :due_date %>
                   <%= date_field("job", "duedate", { class: 'form-control' } ) %>
@@ -137,7 +140,12 @@
                     Active <%= f.check_box :active, { class: 'form-control' } %>
                   </div>
                 </div>
-
+                
+                <div class="form-group">
+                  <%= f.label :salesman %>
+                    <%= f.collection_select :salesman_id, @employees, :id, :first_name, { include_blank: true }, class: 'form-control select-bootstrap'  %>
+                </div>
+                
                 <div class="form-group">
                   <%= f.label :installer %>
                     <%= f.collection_select :installer_id, @employees, :id, :first_name, { include_blank: true }, class: 'form-control select-bootstrap'  %>

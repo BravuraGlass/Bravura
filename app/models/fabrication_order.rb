@@ -7,6 +7,24 @@ class FabricationOrder < ApplicationRecord
 
   accepts_nested_attributes_for :rooms
 
+  def self.statuses
+    Status.where(:category => Status.categories[:fabrication_orders]).order(:order)
+  end
+
+  # collect all audit logs of rooms, products, product sections
+  def all_audit_logs
+    room_ids = self.room_ids
+    room_logs = AuditLog.where(auditable_type: "Room", auditable_id: room_ids)
+
+    product_ids = Product.select("id").where(room_id: room_ids).collect(&:id)
+    product_logs = AuditLog.where(auditable_type: "Product", :auditable_id => product_ids)
+
+    product_section_ids = ProductSection.select("id").where(product_id: product_ids).collect(&:id)
+    product_section_logs = AuditLog.where(auditable_type: "ProductSection", :auditable_id =>  product_section_ids)
+
+    (room_logs + product_logs + product_section_logs).sort {|x,y| y.created_at <=> x.created_at }
+  end
+
   # loop through rooms and products to get the list of segments
   def sections
     sections = []
@@ -37,6 +55,10 @@ class FabricationOrder < ApplicationRecord
   def sections_to_json
     sections.to_json
   end
+  
+  def address
+    return self.title.blank? ? self.job.address : self.title
+  end  
 
   def sections_status
     ready = 0

@@ -54,12 +54,12 @@
                     </tr>
                     <% else %>
                       <% @jobs.each do |job| %>
-                        <tr onclick="location.href = '<%=job_path(job)%>'" class="pointer <%= 'selected' if (job.id == @job.id) %>">
+                        <tr onclick="location.href = '<%=job_path(job)%>'" class="pointer <%= 'selected' if (job.id == @job.id) %>" >
                           <td>
                             <%= l(job.appointment, format: '%Y/%m/%d') if job.appointment %>
                           </td>
-                          <td>
-                            <span>(<%= job.id %>) <%= job.address.nil? ? "empty" : job.address[0...30] %></span>
+                          <td >
+                            <span class="<%= 'confirmed' if job.confirmed_appointment %>">(<%= job.id %>) <%= job.address.nil? ? "empty" : job.address[0...30] %></span>
                             <% job.comments[0..1].each do |c| %>
                               <div class="comment">
                                 <span class="comment-date"><%= l(c.created_at, format: :short) %>,</span>
@@ -109,6 +109,7 @@
                         link_to("View FO", edit_fabrication_order_path(@job.fabrication_order), :class => 'btn btn-default') :
                         link_to('Create FO', job_fabrication_orders_path(@job), method: :post, class: 'btn btn-default') %>
                   <%= link_to 'Print FO', f_orders_barcode_path(@job.fabrication_order), target: "_blank", :class => 'btn btn-default' if @job.fabrication_order %>
+                  <%= link_to 'Dashboard', dashboard_path(job_id: @job.id), :class => 'btn btn-default' if @job.fabrication_order %>
 
                 <!-- <%= link_to 'View FO', job_fabrication_order_path(@job, @job.fabrication_order),  class: 'btn btn-default' if @job.fabrication_order %>
                 <%= link_to 'Create FO', job_fabrication_orders_path(@job), method: :post, class: 'btn btn-primary'  if !@job.fabrication_order %> -->

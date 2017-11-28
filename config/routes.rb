@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   
   resources :dashboard, only: :index do
     collection do
-      ["forders_detail","sections_detail", "jobs_detail"].each do |act|
+      ["forders_detail","sections_detail", "jobs_detail","rooms_detail","products_detail","detail"].each do |act|
         get act
       end  
       put 'status_multiple_update'
@@ -41,6 +41,12 @@ Rails.application.routes.draw do
   resources :fabrication_orders, only: [:index, :new, :edit, :update, :destroy] do
     collection do
       get 'addresses'
+    end
+
+    member do
+      get 'audit_room'
+      get 'audit_product'
+      get 'audit_section'
     end
     
     resources :rooms, only: [:new, :edit, :update, :destroy, :clone] do
@@ -104,6 +110,7 @@ Rails.application.routes.draw do
     end  
     collection do
       get 'all_active_data'
+      get 'active_list'
     end
     resources :comments
     resources :fabrication_orders, only: [:create, :show]

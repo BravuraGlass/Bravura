@@ -1,0 +1,21 @@
+<% if @room %>
+  <% if @clone[:success] %>
+    $('#cloneMasterModal').modal('hide');
+
+    var html = "<%= escape_javascript(render partial: "/fabrication_orders/room", locals: {room: @clone[:room]}) %>";
+    <% if @prev_cloned_room %>
+      $(html).insertAfter("[data-associated-room-id='<%= @prev_cloned_room.id %>']:last");
+    <% else %>
+      $(html).insertBefore("[data-associated-room-id='<%= @next_cloned_room.id %>']:first");
+    <% end %>
+
+    $("#next_room_span").text("<%= @next_room_name %>");
+    $("#master_next_room").val("<%= @next_room_name %>");
+    window.location.hash = '#room_<%= @clone[:room].id %>';
+  <% else %>
+    var errorMessages = "<%= escape_javascript(raw @clone[:error_messages].join('/n')) %>";
+    alert(errorMessages);
+  <% end %>
+<% else %>
+  alert("Invalid master data");
+<% end %>

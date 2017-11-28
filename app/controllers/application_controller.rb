@@ -8,13 +8,17 @@ class ApplicationController < ActionController::Base
   
   def api_login_status
     
-    if User.api_login_status(params) == false
+    api_login =  User.api_login(params)
+    
+    if api_login [:status] == false
        result = {
          status: :failed,
          message: "access denied, please login first",
          data: nil,
        }
-       render json: result
+       render json: result  
+    else
+      @api_user = api_login[:user]        
     end  
   end  
   

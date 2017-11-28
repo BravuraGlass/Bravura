@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171117134003) do
+ActiveRecord::Schema.define(version: 20171125071916) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -92,6 +92,8 @@ ActiveRecord::Schema.define(version: 20171117134003) do
     t.string "address2"
     t.text "notes"
     t.boolean "confirmed_appointment"
+    t.decimal "balance", precision: 10
+    t.datetime "appointment_end"
     t.index ["customer_id"], name: "index_jobs_on_customer_id"
     t.index ["installer_id"], name: "index_jobs_on_installer_id"
     t.index ["salesman_id"], name: "index_jobs_on_salesman_id"

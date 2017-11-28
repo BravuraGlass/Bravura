@@ -4,6 +4,10 @@
     <div class="col-lg-12">
       <div class="panel panel-default">
         <div class="panel-body">
+          <%= render 'shared/search_address', 
+                      job_adresses: @job_adresses, 
+                      action_search: sections_detail_dashboard_index_path(status: params[:status]) %>
+          <br/>
           <div>Change All : <%= select_tag "change_all_section", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, params[:status]) %></div>
           <br />
           <%= form_tag status_multiple_update_dashboard_index_path, method: :put do -%>
@@ -11,8 +15,8 @@
             <thead>
               <tr>
                 <th class="sort-alpha">Status</th>
-                <th class="sort-alpha">Section</th>
-                <th class="sort-alpha">Fabrication Order</th>
+                <th class="sort-alpha">Material</th>
+                <th class="sort-alpha">Address</th>
               </tr>
             </thead>
             <tbody>
@@ -20,7 +24,7 @@
               <tr>
                 <td><%= select_tag "section_detail[#{sect.id}]", options_for_select(@statuses.collect {|stat| [stat.name, stat.name]}, sect.status), class: "section_detail_select"  %></td>
                 <td><%= sect.name %></td>
-                <td><%= sect.product.room.fabrication_order.title %></td>
+                <td><%= sect.job_address %></td>
               </tr>
               <% end %>
             </tbody>
