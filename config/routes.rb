@@ -37,6 +37,13 @@ Rails.application.routes.draw do
     end  
   end
   resources :customers
+  
+  resources :utilities do 
+    collection do 
+      get "data_backup"
+      get "download"
+    end  
+  end  
 
   resources :fabrication_orders, only: [:index, :new, :edit, :update, :destroy] do
     collection do

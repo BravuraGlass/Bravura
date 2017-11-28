@@ -90,6 +90,18 @@
          <% end %>
 
 <% end %>
+ 
+         <% if current_user.type_of_user == "0" and current_user.first_name.downcase.include?("kevin") %>
+         <li class="nav-heading">
+           <span>Utilities</span>
+         </li>
+         <li>
+            <a href="/utilities/data_backup" title="Data Backup">
+               <em><i class="fa fa-cube"></i></em>
+               <span>Data Backup</span>
+            </a>
+         </li>
+         <% end %>
 
 
          <li class="nav-heading">
