@@ -1,5 +1,5 @@
 class RoomsController < ApplicationController
-  include AuditableController
+
   before_action :set_room, only: [:show, :edit, :update, :destroy, :update_status]
   
   skip_before_action :require_login,:verify_authenticity_token, only: [:statuses, :available_statuses, :update_status], if: -> { request.format.json? }
@@ -33,8 +33,9 @@ class RoomsController < ApplicationController
   def update
     
     respond_to do |format|
-
+      params[:room][:audit_user_name] = current_user.try(:full_name)
       if @room.update(room_params)
+            
         format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Room was successfully updated.' }
         format.json { render :show, status: :ok, location: @room }
       else
@@ -52,7 +53,7 @@ class RoomsController < ApplicationController
         format.json { render json: api_response(:failed,"status can't empty",nil)}
       elsif @statuses.include?(params[:status]) == false  
         format.json { render json: api_response(:failed,"status name is invalid",nil)}
-      elsif @room.update_attribute(:status, params[:status])
+      elsif @room.update(status: params[:status], audit_user_name: @api_user.full_name)
         result = {id: @room.id, name: @room.name, status: @room.status}
         format.json { render json: api_response(:success,nil,result)}
       else
@@ -134,7 +135,7 @@ class RoomsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def room_params
-      params.require(:room).permit(:name, :description, :master, :room_id, :status)
+      params.require(:room).permit(:name, :description, :master, :room_id, :status, :audit_user_name)
     end
 
 

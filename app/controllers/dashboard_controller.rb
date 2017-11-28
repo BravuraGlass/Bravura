@@ -148,7 +148,7 @@ class DashboardController < ApplicationController
                        .order("products.id desc")
                        .select("products.*, jobs.address as job_address") 
                        
-    @statuses = Status.where(category: Status.categories[:products])
+    @statuses = Status.where(category: Status.categories[:tasks])
 
     respond_to do |format|
       
@@ -176,7 +176,7 @@ class DashboardController < ApplicationController
         data.each do |key,value|
           if value != params[:orig_status]
             psection = ProductSection.find(key.to_i)
-            psection.update_attribute(:status,value) 
+            psection.update(status: value, audit_user_name: @current_user.try(:full_name) || @api_user.try(:full_name)) 
             result << {id: psection.id, name: psection.name, status: psection.status}
           end   
         end  
@@ -221,7 +221,7 @@ class DashboardController < ApplicationController
         data.each do |key,value|
           if value != params[:orig_status]
             theroom = Room.find(key.to_i)
-            theroom.update_attribute(:status,value)
+            theroom.update(status: value, audit_user_name: @current_user.try(:full_name) || @api_user.try(:full_name)) 
             result << {id: theroom.id, name: theroom.name, status: theroom.status}
           end   
         end
@@ -236,7 +236,7 @@ class DashboardController < ApplicationController
         data.each do |key,value|
           if value != params[:orig_status]
             theproduct = Product.find(key.to_i)
-            theproduct.update_attribute(:status,value)
+            theproduct.update(status: value, audit_user_name: @current_user.try(:full_name) || @api_user.try(:full_name)) 
             result << {id: theproduct.id, name: theproduct.name, type: theproduct.try(:product_type).try(:name), sku: theproduct.sku, price: theproduct.price, room: theproduct.try(:room).try(:name), status: theproduct.status}
           end   
         end

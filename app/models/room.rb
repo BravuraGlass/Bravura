@@ -9,11 +9,12 @@ class Room < ApplicationRecord
   
   after_update :sync_status
   after_update :update_product_section_names, if: :name_was_updated?
-
   
   validates_uniqueness_of :master, uniqueness: true, allow_blank: true
   validates_presence_of :name
   validates_uniqueness_of :name, uniqueness: true, allow_blank: true, scope: :fabrication_order_id
+  
+  attr_accessor :audit_user_name
 
   def self.statuses
     Status.where(:category => Status.categories[:rooms]).order(:order)
@@ -108,15 +109,87 @@ class Room < ApplicationRecord
   
   
   def sync_status
+    unless self.status_before_last_save == self.status
+      AuditLog.create(
+        user_name: self.audit_user_name,
+        details: "updated room's status from #{self.status_before_last_save} to #{self.status}",
+        auditable: self
+      )
+    end 
+      
     if self.status == "FINISHED"
-      Product.where("room_id=?", self.id).update_all("status='FINISHED'")
-      ProductSection.where("products.room_id=?", self.id).joins(:product).update_all("product_sections.status='FINISHED'")
+      products =  Product.where("room_id=?", self.id) 
+      products.each do |prod|
+        unless prod.status == "FINISHED"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated task's status from #{prod.status} to FINISHED",
+            auditable: prod
+          )
+        end  
+      end  
+      products.update_all("status='FINISHED'")
+      
+      product_sections = ProductSection.where("products.room_id=?", self.id).joins(:product) 
+      product_sections.each do |sect|
+        unless sect.status == "FINISHED"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated material's status from #{sect.status} to FINISHED",
+            auditable: sect
+          )
+        end  
+      end
+      product_sections.update_all("product_sections.status='FINISHED'")
     elsif self.status == "Not Active"
-      Product.where("room_id=?", self.id).update_all("status='N/A'")
-      ProductSection.where("products.room_id=?", self.id).joins(:product).update_all("product_sections.status='N/A'")
+      products = Product.where("room_id=?", self.id)    
+      products.each do |prod|
+        unless prod.status == "N/A"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated task's status from #{prod.status} to N/A",
+            auditable: prod
+          )
+        end  
+      end  
+      products.update_all("status='N/A'")
+            
+      product_sections = ProductSection.where("products.room_id=?", self.id).joins(:product)
+      product_sections.each do |sect|
+        unless sect.status == "N/A"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated material's status from #{sect.status} to N/A",
+            auditable: sect
+          )
+        end  
+      end
+      product_sections.update_all("product_sections.status='N/A'")
+      
     elsif attribute_before_last_save("status") == "Not Active" && self.status == "Active"
-      Product.where("room_id=?", self.id).update_all("status='In Fabrication'")
-      ProductSection.where("products.room_id=?", self.id).joins(:product).update_all("product_sections.status='Measured'")
+      products = Product.where("room_id=?", self.id)
+      products.each do |prod|
+        unless prod.status == "Measured"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated task's status from #{prod.status} to Measured",
+            auditable: prod
+          )
+        end  
+      end 
+      products.update_all("status='Measured'")
+      
+      product_sections = ProductSection.where("products.room_id=?", self.id).joins(:product)
+      product_sections.each do |sect|
+        unless sect.status == "In Fabrication"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated material's status from #{sect.status} to In Fabrication",
+            auditable: sect
+          )
+        end  
+      end
+      product_sections.update_all("product_sections.status='In Fabrication'")
     end  
   end  
   

@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-  include AuditableController
+
   before_action :set_product, only: [:show, :edit, :update, :destroy, :update_task_status]
   
   skip_before_action :require_login,:verify_authenticity_token, only: [:tasks, :available_task_statuses, :update_task_status], if: -> { request.format.json? }
@@ -95,7 +95,7 @@ class ProductsController < ApplicationController
         format.json { render json: api_response(:failed,"status can't empty",nil)}
       elsif @statuses.include?(params[:status]) == false  
         format.json { render json: api_response(:failed,"status name is invalid",nil)}
-      elsif @product.update_attribute(:status, params[:status])
+      elsif @product.update(status: params[:status], audit_user_name: @api_user.full_name)
         result = {id: @product.id, name: @product.name, status: @product.status}
         format.json { render json: api_response(:success,nil,result)}
       else
@@ -108,7 +108,9 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
+      params[:product][:audit_user_name] = @current_user.try(:full_name) || current_user.try(:full_name)
       if @product.update(product_params)
+
         format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
@@ -138,7 +140,7 @@ class ProductsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:product_type_id, :name, :description,
-           :status, :sku, :price, :room_name, :room_id, :sections, :fabrication_order_id)
+           :status, :sku, :price, :room_name, :room_id, :sections, :fabrication_order_id, :audit_user_name)
     end
 
     # Sets the audit log data

@@ -8,6 +8,7 @@ class Product < ApplicationRecord
   has_many :product_sections, :dependent => :destroy
   
   after_update :sync_status
+  attr_accessor :audit_user_name
 
   def self.statuses
     Status.where(:category => Status.categories[:products]).order(:order)
@@ -61,16 +62,53 @@ class Product < ApplicationRecord
 
   private
     def sync_status
+      unless self.status_before_last_save == self.status
+        AuditLog.create(
+          user_name: self.audit_user_name,
+          details: "updated task's status from #{self.status_before_last_save} to #{self.status}",
+          auditable: self
+        )
+      end 
+      
       if self.status == "FINISHED"
-        ProductSection.where("product_id=?", self.id).update_all("status='FINISHED'")
+        prosects = ProductSection.where("product_id=?", self.id)
+        prosects.each do |sect|
+          unless sect.status == "FINISHED"
+            AuditLog.create(
+              user_name: self.audit_user_name,
+              details: "updated material's status from #{sect.status} to FINISHED",
+              auditable: sect
+            )  
+          end  
+        end
+        prosects.update_all("status='FINISHED'")  
+         
       end  
       
+      old_room_status = self.room.status
+      
       if self.room.products.collect {|prod| prod.status}.uniq == ["FINISHED"]
+        
         Room.where("id = ?", self.room_id).update_all("status='FINISHED'")
+        unless old_room_status == "FINISHED"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated room's status from #{old_room_status} to FINISHED",
+            auditable: self.room
+          )
+        end  
       end  
 
       if self.status == "Pending"
         Room.where("id = ?", self.room_id).update_all("status='Active'")
+        
+        unless old_room_status == "Active"
+          AuditLog.create(
+            user_name: self.audit_user_name,
+            details: "updated room's status from #{old_room_status} to Active",
+            auditable: self.room
+          )
+        end 
       end
     end  
   
