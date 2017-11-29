@@ -91,7 +91,7 @@ class Job < ApplicationRecord
     return arr_products
   end  
   
-  def product_detail
+  def product_detail(statuses=["Active","Locked","N/A"])
     products = []
     data = []
     total_col = 0
@@ -101,9 +101,9 @@ class Job < ApplicationRecord
     arr_products.each do |arr_prod|
       total_col += arr_prod[:max_col]
     end  
-    
-    self.fabrication_order.rooms.order("name asc").each_with_index do |room, idx|
-      rows = [{content: room.name, prod_count: 0}]
+
+    self.fabrication_order.rooms.where(rooms: {status: statuses}).order("name asc").each_with_index do |room, idx|
+      rows = [{content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"}]
 
       arr_products.each_with_index do |arr_prod,idx|
         tru_sect_count = 0
@@ -112,7 +112,7 @@ class Job < ApplicationRecord
           if arr_prod[:name] == prod.name
             prod.product_sections.each do |sect|
               #rows << "#{sect.name} #{prod.name}"
-              rows << {content: sect.status, prod_count: idx+1}
+              rows << {content: sect.status, prod_count: idx+1, class_name: sect.class.to_s, id: sect.id, url: "/fabrication_orders/#{sect.id}/audit_section"}
               tru_sect_count+=1
             end  
             

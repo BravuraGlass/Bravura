@@ -43,6 +43,14 @@
                <span>Map</span>
             </a>
          </li>
+         <% if current_user.type_of_user.eql?("5") %>
+         <li class="<%= 'active' if current_controller == 'audit_logs' %>">
+            <a href="<%= audit_logs_path %>" title="Audit Logs">
+               <em class="icon-pencil"></em>
+               <span>Audit Logs</span>
+            </a>
+         </li>
+         <% end %>
 
 
 <% if current_user && current_user.type_of_user.eql?("0") %>

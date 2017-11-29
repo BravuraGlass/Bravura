@@ -110,6 +110,8 @@ Rails.application.routes.draw do
       get 'barcode'
     end  
   end   
+  
+  resources :audit_logs, only: [:index]
 
   resources :jobs, only: [:index, :new, :create, :update, :destroy] do
     member do

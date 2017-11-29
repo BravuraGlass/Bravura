@@ -159,6 +159,15 @@ span.job-detail-element {
   background-color: lightgreen !important;
 }
 
+#jobDetailPanel {
+  overflow: auto;
+  height: 100vh;
+}
+
+#jobListPanel {
+  overflow: auto;
+  height: 100vh;
+}
 
 
 

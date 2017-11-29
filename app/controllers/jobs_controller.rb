@@ -138,7 +138,11 @@ class JobsController < ApplicationController
     @job.active = 1
     # set appointmend end date
     if @job.appointment.present?
-      @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
+      if @job.appointment_end.nil?
+        @job.appointment_end = nil
+      else   
+        @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
+     end  
     end
     respond_to do |format|
       if @job.save
@@ -156,7 +160,11 @@ class JobsController < ApplicationController
       if @job.update(job_params)
         # set appointmend end date
         if @job.appointment.present?
-          @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
+          if @job.appointment_end.nil?
+            @job.appointment_end = nil
+          else   
+            @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
+          end  
         end
         # upload images
         if job_params[:images]
@@ -209,6 +217,8 @@ class JobsController < ApplicationController
   end
   
   def product_detail
+    @selected_status = params[:status] || ["Active","Locked","N/A"]
+    @statuses = [["Active","A"],["Locked","L"],["N/A","N/A"],["Finished","F"]]
     respond_to do |format|
       format.html {}
     end  
