@@ -1,0 +1,11 @@
+<div class="btn-group">
+  <div class="btn btn-default <%= 'active' if params[:category] == 'material' || params[:category].blank?%>">
+    <%= link_to "Material", audit_logs_url({category: 'material'}.merge(params.except(:category).as_json)) %>
+  </div>
+  <div class="btn btn-default <%= 'active' if params[:category] == 'task' %>">
+    <%= link_to "Task", audit_logs_url({category: 'task'}.merge(params.except(:category).as_json)) %>
+  </div>
+  <div class="btn btn-default <%= 'active' if params[:category] == 'room' %>">
+    <%= link_to "Room", audit_logs_url({category: 'room'}.merge(params.except(:category).as_json)) %>
+  </div> 
+</div>

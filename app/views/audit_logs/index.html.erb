@@ -4,7 +4,8 @@
 </h3>
 <div class="container-fluid">
    <div class="row">
-      <div>
+      <div class="col-lg-12">
+         <%= render partial: "audit_menu" %>
          <div class="panel panel-default">
             <div class="panel-heading">
             </div>
@@ -20,7 +21,8 @@
                         <input type="radio" class="filter-button" name="filter" id='filter-today' value="today" <%= @filter_today ? 'checked="true"': '' %>>Today</label>
                         <label class="btn btn-default <%= @filter_yesterday ? 'active': '' %>">
                         <input type="radio" class="filter-button" name="filter" id='filter-yesterday' value="yesterday" <%= @filter_yesterday ? 'checked="true"': '' %>>Yesterday</label>
-
+                        
+                        <%= hidden_field_tag "category", params[:category] %>
                       </div>
                       <%= date_field("", "date", value: @selected_date, class: 'btn btn-default' ) %>
                       <%= link_to "Go", "#", {class: "btn btn-default filter-button"} %> <br /><br />

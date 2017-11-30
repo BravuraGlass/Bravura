@@ -129,8 +129,9 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
       marker.setVisible(true);
     }
   }
-  map.bounds.extendWith(markers);
-  map.fitMapToBounds();
+}
+
+function initMap<%= (address_field_id == "address" ) ? 'customer_address' : 'address' %>() {
 }
 
 function geocodeAddress(geocoder, map) {

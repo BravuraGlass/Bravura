@@ -114,7 +114,7 @@ class ProductSectionsController < ApplicationController
 
   def edit_section_status
     respond_to do |format|
-      psection = @product_section.update(status: params[:new_status], audit_user_name: current_user.full_name)
+      psection = @product_section.update(status: params[:new_status], audit_user_name: @api_user.try(:full_name) || @current_user.try(:full_name))
       
       format.html do
         if psection

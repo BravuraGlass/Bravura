@@ -1,10 +1,23 @@
 class AuditLogsController < ApplicationController
-  def index
-=begin    
+
+  before_action :require_admin
+  before_action :init_search, only: [:index]
+
+  def index  
     @show_active = params[:active].eql?('false') ? false : true
     @users = User.order("first_name, last_name")
-    @jobs = Job.where("active = ?", true)
+    
+    @jobs = []
+    
+    Job.where("active = ?", true).each do |job|
+      @jobs << job unless job.fabrication_order.nil?
+    end  
+    
+    
+    @audit_logs = AdvancedSearch.new.audit_logs(params, 1, 1000)
+  end
 
+  def init_search
     if params[:date].blank?
       @filter_all = true
     elsif params[:date] == Time.zone.now.strftime("%Y-%m-%d")
@@ -15,31 +28,6 @@ class AuditLogsController < ApplicationController
     
     @selected_date = params[:date]
     
-    if params[:category].blank? or params[:category] == "material"
-      thecategory = "ProductSection"
-    elsif params[:category] == "task"
-      thecategory = "Product"
-    else
-      thecategory = params[:category].titleize
-    end      
-    
-    @where = ""
-    if params[:date].blank?
-      @where +=  "auditable_type = '#{thecategory}'"    
-    else
-      @where +=  "auditable_type = '#{thecategory}' AND DATE(created_at) = '#{params[:date]}'"
-    end     
-    
-    if params[:user].blank? == false and params[:address].blank? == false
-    @where += " AND "
-   
-    if params[:user].blank? == false and params[:address].blank? == false
-      @where += "user_name = '#{params[:user]}'"
-    end  
-    
-    Rails.logger.info "SQL #{@where}"
-    @audit_logs = AuditLog.where(@where)
-=end
-    render plain: "test"    
-  end  
+  end
+
 end

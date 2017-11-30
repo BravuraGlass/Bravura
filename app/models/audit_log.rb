@@ -13,6 +13,6 @@ class AuditLog < ApplicationRecord
   end  
   
   def item_name
-    self.auditable.name
+    self.auditable.try(:name)
   end  
 end
