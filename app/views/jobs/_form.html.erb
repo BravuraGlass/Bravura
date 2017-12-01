@@ -72,10 +72,14 @@
                   <%= f.date_field :appointment, class: 'form-control', id: :appointment_date, :readonly => readonly %>
                   <%= f.time_field :appointment, class: 'form-control', :style => 'display:inline !important; width: 45%;float:left;', id: :appointment_time, :readonly => readonly %>
                   <%= f.label " to", :style => 'font-weight: normal; display: inline-table; text-align: center; margin: 5px auto;width: 10%;' %>
-                  <%= f.time_field :appointment_end, class: 'form-control', :style => 'display:inline !important;width:45%;float:right;', id: :appointment_end_hour, :readonly => readonly %>
+                  <%= f.time_field :appointment_end, class: 'form-control', :style => 'display:inline !important;width:45%;float:right;', id: :appointment_end_hour, :readonly => readonly %><br />
                   <%= f.hidden_field :appointment, class: 'form-control', data: {offset: @server_offset},  id: :appointment, :readonly => readonly %>
-                  Confirmed : <%= f.check_box :confirmed_appointment %>
+                  
                 </div>
+                
+                <div class="form-group">
+                  Confirmed : <%= f.check_box :confirmed_appointment %>
+                </div>  
               </div>
             </div>
 

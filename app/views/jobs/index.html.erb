@@ -12,6 +12,7 @@
               <div class="row actions-panel">
                 <div class="col-xs-12 col-md-12">
                   <div class="btn-group">
+                    <%= render :partial => 'shared/flash_messages' %>
                     <% if current_user.type_of_user.eql?("0") %>
                       <span>Only Active: </span>
                       <%= check_box_tag :show_active, :show_active, @show_active %>

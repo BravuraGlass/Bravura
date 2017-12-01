@@ -141,7 +141,7 @@ class JobsController < ApplicationController
     end
     respond_to do |format|
       if @job.save
-        format.html { redirect_to job_path(@job), notice: 'Job was successfully created.' }
+        format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
       else
         format.html { render :new }
       end
