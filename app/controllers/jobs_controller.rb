@@ -65,7 +65,7 @@ class JobsController < ApplicationController
     
     end
     
-    @jobs = Job.where(where).joins("LEFT JOIN customers ON customers.id = jobs.id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname as customer_firstname, customers.contact_lastname as customer_lastname, customers.company_name as customer_company_name, jobs.*, fabrication_orders.status as fo_status")
+    @jobs = Job.where(where).joins("LEFT JOIN customers ON customers.id = jobs.customer_id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname as customer_firstname, customers.contact_lastname as customer_lastname, customers.company_name as customer_company_name, jobs.*, fabrication_orders.status as fo_status")
     # set_markers if @job.id
   end
 
