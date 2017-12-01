@@ -10,8 +10,16 @@
 <script>
 
 function initMaps() {
-   initMapaddress();
-   initMapcustomer_address();
+   var addrField = document.getElementById('address');
+   var field_id = "<%= address_field_id %>";
+   console.log(field_id);
+    if (addrField || field_id == "address"){
+      initMapaddress();
+    };
+   var custField = document.getElementById('customer_address');
+    if (custField){
+      initMapcustomer_address();
+    };
 }
 
 function initMap<%= address_field_id ? address_field_id : '' %>() {
@@ -129,9 +137,6 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
       marker.setVisible(true);
     }
   }
-}
-
-function initMap<%= (address_field_id == "address" ) ? 'customer_address' : 'address' %>() {
 }
 
 function geocodeAddress(geocoder, map) {

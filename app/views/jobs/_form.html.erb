@@ -124,6 +124,7 @@
             </div>
             <div class="action-links <%= 'hide' if readonly %>">
               <%= f.submit nil, :class => 'btn btn-primary' %>
+              <%= link_to 'Cancel',  jobs_path(filter: 'all') , :class => 'btn btn-default'  %>
             </div>
             <% end %>
             <div class="row images <%= 'hide' unless @job.id %>">

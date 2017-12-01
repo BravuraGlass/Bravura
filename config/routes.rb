@@ -113,7 +113,7 @@ Rails.application.routes.draw do
   
   resources :audit_logs, only: [:index]
 
-  resources :jobs, only: [:index, :new, :create, :update, :destroy] do
+  resources :jobs, only: [:index, :new, :create, :update, :destroy, :show] do
     member do
       get 'product_detail'
     end  

@@ -34,7 +34,7 @@ class ProductsController < ApplicationController
       room = Room.create(name: product_params[:room_name]|| 'New Room')
       room.fabrication_order = fabrication_order
       if room.save
-        audit_room = AuditLog.create(ip: request.remote_ip, user_name: (current_user.first_name || current_user.email), where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: room, details: 'Newly created data')
+        audit_room = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: room, details: 'Newly created data')
       end
     else
       room = Room.find(product_params[:room_id])
@@ -48,6 +48,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
+        AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: @product, details: 'Newly created data')
         # create each section associated to the product
         sections = 0..product_params[:sections].to_i - 1
         abc = ("A".."Z").to_a
@@ -56,7 +57,7 @@ class ProductsController < ApplicationController
           first_status = Status.where(:category => Status.categories[:products]).order(:order).first || ''
           ps = ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)
           if ps
-            audit_ps = AuditLog.create(ip: request.remote_ip, user_name: (current_user.first_name || current_user.email), where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: ps, details: 'Newly created data')
+            audit_ps = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: ps, details: 'Newly created data')
           end
         end
         
