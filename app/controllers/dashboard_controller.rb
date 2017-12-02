@@ -1,6 +1,6 @@
 class DashboardController < ApplicationController
   include Referencable
-  before_action :require_admin, except: :index
+  before_action :require_admin, except: [:index, :sections_detail, :status_multiple_update]
   
   skip_before_action :require_admin, :require_login,:verify_authenticity_token, if: -> { request.format.json? }
   before_action :api_login_status, if: -> { request.format.json? }  
@@ -170,6 +170,8 @@ class DashboardController < ApplicationController
 
   def status_multiple_update
     result = []
+    api_user_admin = User.where("access_token =? AND id=? AND token_expired >= ? AND type_of_user = 0", params[:access_token], params[:access_id], Date.today)[0]
+
     if params[:orig_action] == "sections_detail" or params[:category] == "material"
       data = params[:section_detail].blank? == false ? params[:section_detail] : params[:new_statuses]
       unless data.blank?
@@ -184,67 +186,70 @@ class DashboardController < ApplicationController
       else
         msg = "No single status was updated"
       end    
-    elsif params[:orig_action] == "forders_detail" or params[:category] == "fabrication_order"
-      data = params[:forder_detail].blank? == false ? params[:forder_detail] : params[:new_statuses] 
-      unless data.blank?
-        data.each do |key,value|
-          if value != params[:orig_status]  
-            thefo = FabricationOrder.find(key.to_i)
-            thefo.update_attribute(:status,value) 
-            result << {id: thefo.id, address: thefo.title, status: thefo.status}
-          end  
-        end
-        msg = "Fabrication Order statuses were successfully updated"
-      else
-        msg = "No single status was updated"
-      end      
-      
-    elsif params[:orig_action] == "jobs_detail" or params[:category] == "job"
-      data = params[:job_detail].blank? == false ? params[:job_detail] : params[:new_statuses] 
-      unless data.blank?
-        data.each do |key,value|
-          if value != params[:orig_status]
-            thejob = Job.find(key.to_i)
-            thejob.update_attribute(:status,value)
-            result << {id: thejob.id, customer: thejob.customer.contact_info, status: thejob.status, address: thejob.address}
-          end   
-        end
-        msg = "Job statuses were successfully updated"  
-      else
-        msg = "No single status was updated"
-      end      
+    
+    elsif current_user.try(:admin?) || api_user_admin.present?
+    
+      if params[:orig_action] == "forders_detail" or params[:category] == "fabrication_order"
+        data = params[:forder_detail].blank? == false ? params[:forder_detail] : params[:new_statuses] 
+        unless data.blank?
+          data.each do |key,value|
+            if value != params[:orig_status]  
+              thefo = FabricationOrder.find(key.to_i)
+              thefo.update_attribute(:status,value) 
+              result << {id: thefo.id, address: thefo.title, status: thefo.status}
+            end  
+          end
+          msg = "Fabrication Order statuses were successfully updated"
+        else
+          msg = "No single status was updated"
+        end      
+        
+      elsif params[:orig_action] == "jobs_detail" or params[:category] == "job"
+        data = params[:job_detail].blank? == false ? params[:job_detail] : params[:new_statuses] 
+        unless data.blank?
+          data.each do |key,value|
+            if value != params[:orig_status]
+              thejob = Job.find(key.to_i)
+              thejob.update_attribute(:status,value)
+              result << {id: thejob.id, customer: thejob.customer.contact_info, status: thejob.status, address: thejob.address}
+            end   
+          end
+          msg = "Job statuses were successfully updated"  
+        else
+          msg = "No single status was updated"
+        end      
 
 
-    elsif params[:orig_action] == "rooms_detail" or params[:category] == "room"
-      data = params[:room_detail].blank? == false ? params[:room_detail] : params[:new_statuses] 
-      unless data.blank?
-        data.each do |key,value|
-          if value != params[:orig_status]
-            theroom = Room.find(key.to_i)
-            theroom.update(status: value, audit_user_name: @current_user.try(:full_name) || @api_user.try(:full_name)) 
-            result << {id: theroom.id, name: theroom.name, status: theroom.status}
-          end   
+      elsif params[:orig_action] == "rooms_detail" or params[:category] == "room"
+        data = params[:room_detail].blank? == false ? params[:room_detail] : params[:new_statuses] 
+        unless data.blank?
+          data.each do |key,value|
+            if value != params[:orig_status]
+              theroom = Room.find(key.to_i)
+              theroom.update(status: value, audit_user_name: @current_user.try(:full_name) || @api_user.try(:full_name)) 
+              result << {id: theroom.id, name: theroom.name, status: theroom.status}
+            end   
+          end
+          msg = "Room statuses were successfully updated"  
+        else
+          msg = "No single status was updated"
         end
-        msg = "Room statuses were successfully updated"  
-      else
-        msg = "No single status was updated"
+
+      elsif params[:orig_action] == "products_detail" or params[:category] == "product"
+        data = params[:product_detail].blank? == false ? params[:product_detail] : params[:new_statuses] 
+        unless data.blank?
+          data.each do |key,value|
+            if value != params[:orig_status]
+              theproduct = Product.find(key.to_i)
+              theproduct.update(status: value, audit_user_name: @current_user.try(:full_name) || @api_user.try(:full_name)) 
+              result << {id: theproduct.id, name: theproduct.name, type: theproduct.try(:product_type).try(:name), sku: theproduct.sku, price: theproduct.price, room: theproduct.try(:room).try(:name), status: theproduct.status}
+            end   
+          end
+          msg = "Task statuses were successfully updated"  
+        else
+          msg = "No single status was updated"
+        end
       end
-
-    elsif params[:orig_action] == "products_detail" or params[:category] == "product"
-      data = params[:product_detail].blank? == false ? params[:product_detail] : params[:new_statuses] 
-      unless data.blank?
-        data.each do |key,value|
-          if value != params[:orig_status]
-            theproduct = Product.find(key.to_i)
-            theproduct.update(status: value, audit_user_name: @current_user.try(:full_name) || @api_user.try(:full_name)) 
-            result << {id: theproduct.id, name: theproduct.name, type: theproduct.try(:product_type).try(:name), sku: theproduct.sku, price: theproduct.price, room: theproduct.try(:room).try(:name), status: theproduct.status}
-          end   
-        end
-        msg = "Task statuses were successfully updated"  
-      else
-        msg = "No single status was updated"
-      end
-      
     end
     
     respond_to do |format|

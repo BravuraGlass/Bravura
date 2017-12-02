@@ -35,7 +35,9 @@
  .pointer {
    cursor: pointer;
  }
-
+.right {
+  text-align: right;
+}
 .center {
   text-align: center;
 }
@@ -166,3 +168,6 @@ span.job-detail-element {
 }
 
 
+ul.pagination.small {
+  margin: 10px 0 0 0;
+}

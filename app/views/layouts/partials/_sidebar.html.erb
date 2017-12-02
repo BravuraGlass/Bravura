@@ -99,7 +99,7 @@
 
 <% end %>
  
-         <% if current_user.type_of_user == "0" and current_user.first_name.downcase.include?("kevin") %>
+         <% if current_user.type_of_user == "0" and (current_user.first_name.downcase.include?("kevin") or current_user.first_name.downcase.include?("adit")) %>
          <li class="nav-heading">
            <span>Utilities</span>
          </li>
