@@ -35,6 +35,7 @@
                     <!-- <li><%= link_to 'View FO', job_fabrication_order_path(@job, @job.fo_id),  class: 'btn btn-default' if @job.fo_id %></li>
                 <li><%= link_to 'Create FO', job_fabrication_orders_path(@job), method: :post, class: 'btn btn-primary'  if !@job.fo_id %> </li>-->
                     <li><a data-toggle="tab" href="#comments">Comments</a></li>
+                    <li><%= link_to 'Section Detail', product_detail_job_path, :class => 'btn btn-default'  if @job.fo_id %></li>
                   </ul>
                   <div class="tab-content">
                     <div id="home" class="tab-pane fade in active">
