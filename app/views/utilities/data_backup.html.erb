@@ -1,4 +1,4 @@
-<% if is_admin(current_user) and current_user.first_name.downcase.include?("kevin") %>
+<% if is_admin(current_user) and (current_user.first_name.downcase.include?("kevin") or current_user.first_name.downcase.include?("adit")) %>
 
 <h3>Data Backup
    <small>Download Backup Data</small>
