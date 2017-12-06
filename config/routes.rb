@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  
+  get 'locations/index'
 
   resources :working_logs, only: :index do
     collection do

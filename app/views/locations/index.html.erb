@@ -1,0 +1,16 @@
+<div id="map" class="full-map">
+	<div id="location-map"></div>
+</div>
+
+<script>
+	// Loop through our array of markers & place each one on the map
+  var markers = <%=raw @markers.to_json || '{}' %>;
+
+  var user_id = '<%=raw current_user.id %>';
+
+  console.log(markers);
+
+  function initMaps() {
+  	initMapWithMarkers(markers)
+  }
+</script>
