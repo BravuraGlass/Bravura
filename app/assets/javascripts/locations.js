@@ -30,26 +30,3 @@ function initMapWithMarkers(markers) {
 
   socket.on('update_positions', updatePositions);
 }
-
-function updatePositions(positions) {
-
-    console.log('---------updated positions -----------', positions);
-
-    markers.forEach((item, index) => {
-      /*
-      var data = positions[item.user_id];
-      if (data.lat != item.lat || data.lng != item.lng) {
-        markers[index].lat = data.lat;
-        markers[index].lng = data.lng;
-
-        var marker_data = markers[index];
-        var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-        var content = marker_data.title || '';
-
-        var marker = gMapMarkers[index]
-
-        marker.setPosition(position);
-      }
-      */
-    });
-  }
