@@ -4,6 +4,7 @@ require 'barby/outputter/png_outputter'
 
 class ProductSectionsController < ApplicationController
   include Printable
+  include AuditableController
   
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
      :update_status, :edit_section_status]
@@ -48,10 +49,7 @@ class ProductSectionsController < ApplicationController
   # PATCH/PUT /product_section/1.json
   def update
     respond_to do |format|
-      params[:product_section][:audit_user_name] = current_user.full_name
-
       if @product_section.update(product_section_params)
-
         format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Section was successfully updated.' }
         format.json do
           flash[:notice] = "status for #{@product_section.name} was successfully updated"
@@ -88,7 +86,7 @@ class ProductSectionsController < ApplicationController
           }
         else  
           ProductSection.where("id IN (?)", params[:ids].split(",")).each do |product_section|
-            psection = product_section.update(status: params[:new_status], audit_user_name: @api_user.try(:full_name) || @current_user.try(:full_name))
+            psection = product_section.update(status: params[:new_status])
             product_section.reload
           
             data << {
@@ -114,7 +112,7 @@ class ProductSectionsController < ApplicationController
 
   def edit_section_status
     respond_to do |format|
-      psection = @product_section.update(status: params[:new_status], audit_user_name: @api_user.try(:full_name) || @current_user.try(:full_name))
+      psection = @product_section.update(status: params[:new_status])
       
       format.html do
         if psection
@@ -213,7 +211,7 @@ class ProductSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_section_params
-      params.require(:product_section).permit(:name, :status, :audit_user_name)
+      params.require(:product_section).permit(:name, :status)
     end
 
 

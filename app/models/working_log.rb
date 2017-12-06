@@ -104,7 +104,7 @@ class WorkingLog < ApplicationRecord
           break
         end
       end
-    end    
+    end
 
     unless errors.size > 0
       WorkingLog.create(
@@ -286,9 +286,7 @@ class WorkingLog < ApplicationRecord
           duration: duration, 
           date: wlog.readable_date, 
           checkin: data[idx-1].submit_time.strftime("%H:%M:%S"), 
-          checkin_location: data[idx-1].get_location,
           checkout: data[idx].submit_time.strftime("%H:%M:%S"),
-          checkout_location: data[idx].get_location,
           checkin_method: data[idx-1].submit_method,
           checkout_method: data[idx].submit_method
         }

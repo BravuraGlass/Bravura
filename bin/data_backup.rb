@@ -15,17 +15,14 @@ module Clockwork
       "password" => data[clock_env]["password"]
     }
     
-    puts "dumping START"
     puts time.strftime("%Y%m%d-%H%M%S")
 
     dumper = MysqlDumper.new config
 
-    dumper.dump_to(ENV['BRAVURA_PATH']+"/tmp/backup/#{time.strftime("%Y%m%d-%H%M%S")}_bravura.sql")
-    
-    puts "dumping FINISH"
+    dumper.dump_to(ENV['BRAVURA_PATH']+"/tmp/#{time}bravura.sql")
  
   end
   
-  every(1.day, 'immediate.job', :at => "#{Time.now.hour}:#{Time.now.min+1}")
-  every(1.day, 'midnight.job', :at => "01:00")
+  every(1.day, 'backup.job', :at => '19:50')
+
 end

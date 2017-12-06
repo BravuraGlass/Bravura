@@ -41,16 +41,11 @@ class WorkingLogsController < ApplicationController
   end
   
   def new_report_detail
-
     @user = User.find(params[:user_id])
     if params[:week] == "current_week"
-      sday = Date.today.beginning_of_week(:sunday)
-      eday = sday + 6.day
-      arr_dates = (sday..eday).to_a
+      arr_dates = (Date.today.beginning_of_week..Date.today.end_of_week).to_a
     elsif params[:week] == "last_week"
-      sday = Date.today.prev_week.beginning_of_week(:sunday)
-      eday = sday + 6.day
-      arr_dates = (sday..eday).to_a
+      arr_dates = (Date.today.prev_week.beginning_of_week..Date.today.prev_week.end_of_week).to_a
     end     
     
     @dates = arr_dates.collect {|thedate| [thedate.strftime("%A %B %d, %Y"),thedate.to_s.gsub("-","")]}
@@ -118,11 +113,11 @@ class WorkingLogsController < ApplicationController
   
   def start_end_week
     if @week == "current_week"
-      @wstart = Date.today.beginning_of_week(:sunday).to_s.gsub("-","").to_i
-      @wend = (Date.today.beginning_of_week(:sunday) + 6.day).to_s.gsub("-","").to_i
+      @wstart = Date.today.beginning_of_week.to_s.gsub("-","").to_i
+      @wend = Date.today.end_of_week.to_s.gsub("-","").to_i
     elsif @week == "last_week"
-      @wstart = Date.today.prev_week.beginning_of_week(:sunday).to_s.gsub("-","").to_i
-      @wend = (Date.today.prev_week.beginning_of_week(:sunday) + 6.day).to_s.gsub("-","").to_i
+      @wstart = Date.today.prev_week.beginning_of_week.to_s.gsub("-","").to_i
+      @wend = Date.today.prev_week.end_of_week.to_s.gsub("-","").to_i
     end  
   end
   

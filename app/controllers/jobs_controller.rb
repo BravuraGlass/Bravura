@@ -2,7 +2,7 @@ class JobsController < ApplicationController
   include AuditableController
 
   before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail]
-  before_action :load_common_data, except: [:index]
+  before_action :load_common_data
   before_action :set_markers, only: [:show, :edit]
   
   skip_before_action :require_login, :verify_authenticity_token, only: [:all_active_data], if: -> { request.format.json? }   
@@ -28,21 +28,22 @@ class JobsController < ApplicationController
   def index
     @show_active = params[:active].eql?('false') ? false : true
     @selected_date = Date.today
+    @need_libs = ['maps']
 
     if params['filter']
       case params['filter']
       when 'all'
         @filter_all = true
-        where = {active: @show_active}
+        @jobs = Job.where(active: @show_active)
       when 'today'
         @filter_today = true
-        where = {active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day}
+        @jobs = Job.where(active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day)
       when 'tomorrow'
         @filter_tomorrow = true
-        where = {active: @show_active, appointment: Date.tomorrow.beginning_of_day..Date.tomorrow.end_of_day}
+        @jobs = Job.where(active: @show_active, appointment: Date.tomorrow.beginning_of_day..Date.tomorrow.end_of_day  )
       when 'nextweek'
         @filter_nextweek = true
-        where = {active: @show_active, appointment: Date.today.next_week..Date.today.next_week.end_of_week}
+        @jobs = Job.where(active: @show_active, appointment: Date.today.next_week..Date.today.next_week.end_of_week )
       when 'date'
         @filter_date = true
         if params['date']
@@ -51,21 +52,25 @@ class JobsController < ApplicationController
           rescue
             @selected_date = Date.today
           end
-          whhere = {active: true, appointment: @selected_date.beginning_of_day..@selected_date.end_of_day}
+          @jobs = Job.where(active: true, appointment: @selected_date.beginning_of_day..@selected_date.end_of_day)
         end
       else
         # default to today
         @filter_today = true
-        where = {active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day}
+        @jobs = Job.where(active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day)
       end
     else
       # default to all if no filter was set
-      @filter_all = true
-      whhere = {active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day}
-    
+      if params[:id]
+        @filter_all = true
+        @jobs = Job.where(active: @show_active).order("id=#{params[:id]} DESC")
+      else
+        @filter_today = true
+        @jobs = Job.where(active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day)
+      end
     end
-    
-    @jobs = Job.where(where).joins("LEFT JOIN customers ON customers.id = jobs.customer_id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname as customer_firstname, customers.contact_lastname as customer_lastname, customers.company_name as customer_company_name, jobs.*, fabrication_orders.status as fo_status")
+
+    @job = (params[:id])? Job.find(params[:id]) : @jobs.first || Job.new
     # set_markers if @job.id
   end
 
@@ -112,9 +117,6 @@ class JobsController < ApplicationController
   # GET /jobs/1
   # GET /jobs/1.json
   def show
-    @job = Job.where(id: params[:id]).joins("LEFT JOIN customers ON customers.id = jobs.customer_id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname as customer_firstname, customers.contact_lastname as customer_lastname, customers.company_name as customer_company_name, jobs.*, fabrication_orders.id as fo_id,fabrication_orders.status as fo_status").first
-    @prev = @job.prev
-    @next = @job.next
     @need_libs = ['maps']
   end
 
@@ -136,15 +138,11 @@ class JobsController < ApplicationController
     @job.active = 1
     # set appointmend end date
     if @job.appointment.present?
-      if @job.appointment_end.nil?
-        @job.appointment_end = nil
-      else   
-        @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
-     end  
+      @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
     end
     respond_to do |format|
       if @job.save
-        format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
+        format.html { redirect_to select_job_path(@job), notice: 'Job was successfully created.' }
       else
         format.html { render :new }
       end
@@ -158,11 +156,7 @@ class JobsController < ApplicationController
       if @job.update(job_params)
         # set appointmend end date
         if @job.appointment.present?
-          if @job.appointment_end.nil?
-            @job.appointment_end = nil
-          else   
-            @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
-          end  
+          @job.appointment_end =  @job.appointment.beginning_of_day + ( @job.appointment_end -  @job.appointment_end.beginning_of_day)
         end
         # upload images
         if job_params[:images]
@@ -215,8 +209,6 @@ class JobsController < ApplicationController
   end
   
   def product_detail
-    @selected_status = params[:status] || ["Active","Locked","N/A"]
-    @statuses = [["Active","A"],["Locked","L"],["N/A","N/A"],["Finished","F"]]
     respond_to do |format|
       format.html {}
     end  
@@ -230,14 +222,12 @@ class JobsController < ApplicationController
 
     # Loads the common required data for all forms
     def load_common_data
-    
       @customers ||= Customer.all
       @employees ||= Employee.all
       @server_offset = Time.zone.utc_offset / 3600
       @statuses ||= Status.where(:category => Status.categories[:jobs]).order(:order)
 
       @status_checklist ||= StatusChecklistItem.all.includes(:status).to_json
-
     end
 
 

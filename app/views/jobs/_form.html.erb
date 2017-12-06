@@ -48,6 +48,27 @@
             </div>
             <div class="row">
               <div class="col-md-12 col-xs-12">
+                <div class="comments-list">
+                  <table class="table table-striped">
+                    <tbody>
+                      <% @job.comments.each do |comment| %>
+                        <tr>
+                          <td><span class="comment-date"><%= l(comment.created_at, format: :short) %></span>
+                            <span class="comment-author"><%= comment.user.first_name %> </span>said:
+                            <%= comment.body %>
+                          </td>
+                          <td align="right">
+                            <% if current_user.id === comment.user_id %>
+                              <a href="<%= job_comment_path(@job, comment) %>" class="btn" data-confirm="Are you sure you want to delete this Comment"
+                                data-method="delete">
+                        <i class="fa fa-trash-o" aria-hidden="true"></i></a>
+                              <% end %>
+                          </td>
+                        </tr>
+                        <% end %>
+                    </tbody>
+                  </table>
+                </div>
                 <div class="form-group">
                   <%= f.label "Address" %>
                     <!-- <%= check_box_tag :set_location, :set_location, true, :onclick => "BRAVURA.showLocationMap();" %> -->
@@ -72,14 +93,10 @@
                   <%= f.date_field :appointment, class: 'form-control', id: :appointment_date, :readonly => readonly %>
                   <%= f.time_field :appointment, class: 'form-control', :style => 'display:inline !important; width: 45%;float:left;', id: :appointment_time, :readonly => readonly %>
                   <%= f.label " to", :style => 'font-weight: normal; display: inline-table; text-align: center; margin: 5px auto;width: 10%;' %>
-                  <%= f.time_field :appointment_end, class: 'form-control', :style => 'display:inline !important;width:45%;float:right;', id: :appointment_end_hour, :readonly => readonly %><br />
+                  <%= f.time_field :appointment_end, class: 'form-control', :style => 'display:inline !important;width:45%;float:right;', id: :appointment_end_hour, :readonly => readonly %>
                   <%= f.hidden_field :appointment, class: 'form-control', data: {offset: @server_offset},  id: :appointment, :readonly => readonly %>
-                  
-                </div>
-                
-                <div class="form-group">
                   Confirmed : <%= f.check_box :confirmed_appointment %>
-                </div>  
+                </div>
               </div>
             </div>
 
@@ -123,12 +140,21 @@
                     Active <%= f.check_box :active, { class: 'form-control' } %>
                   </div>
                 </div>
+                
+                <div class="form-group">
+                  <%= f.label :salesman %>
+                    <%= f.collection_select :salesman_id, @employees, :id, :first_name, { include_blank: true }, class: 'form-control select-bootstrap'  %>
+                </div>
+                
+                <div class="form-group">
+                  <%= f.label :installer %>
+                    <%= f.collection_select :installer_id, @employees, :id, :first_name, { include_blank: true }, class: 'form-control select-bootstrap'  %>
+                </div>
 
               </div>
             </div>
             <div class="action-links <%= 'hide' if readonly %>">
               <%= f.submit nil, :class => 'btn btn-primary' %>
-              <%= link_to 'Cancel',  jobs_path(filter: 'all') , :class => 'btn btn-default'  %>
             </div>
             <% end %>
             <div class="row images <%= 'hide' unless @job.id %>">
@@ -170,6 +196,11 @@
               </div>
             </div>
             <% end %>
+          <div class="row">
+            <div class="col-lg-12">
+              <%= render :partial => 'comments',  locals: {readonly: readonly} if @job.id%>
+            </div>
+          </div>
          </div>
       </div>
    </div>

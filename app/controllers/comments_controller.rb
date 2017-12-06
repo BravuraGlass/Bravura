@@ -1,20 +1,16 @@
 class CommentsController < ApplicationController
   def create
-    @job = Job.find(params[:job_id])
-    @job.comments.create(comment_params)
-    respond_to do |format|
-      format.html { redirect_to select_job_path(@job) }
-      format.js
-    end
+    job = Job.find(params[:job_id])
+    job.comments.create(comment_params)
+    redirect_to select_job_path(job)
   end
 
   def destroy
     comment = Comment.find(params[:id])
-    @job = comment.job
     comment.destroy
 
     respond_to do |format|
-      format.html { redirect_to select_job_path(@job) }
+      format.html { redirect_to select_job_path(comment.job) }
       format.js
     end
   end

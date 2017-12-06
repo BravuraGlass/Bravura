@@ -9,43 +9,30 @@
           <small></small>
         </div>
         <div class="panel-body">
-          <div class="tab-view-panel table-overflow">
-            <% if @job.fabrication_order %>
-              <%= form_tag product_detail_job_path, id: "product_detail_job_#{@job.id}", method: :get do -%>
-                <table class="datatable table table-striped table-hover responsive">
-                  <thead>
-                    <th class="no-sort" style="width: 130px">
-                      <% i = 0 %>
-                      <% @statuses.each do |status,value| %>
-                        <input type="checkbox" name="status[]" class="check_status" value="<%= status %>" id="check_status_<%= i+=1 %>" <%= 'checked' if @selected_status.include? status.to_s rescue '' %>>
-                        <label for="check_status_<%= i %>"><span></span><%= value %></label>
-                      <% end %>
-                    </th>            
-                    <% @job.products_group.each_with_index do |arr_prod,idx| %>  
-                      <% 1.upto(arr_prod[:max_col]) do |idx2| %>         
-                        <th class="<%= column_color(idx+1) %>"><%= (idx2 == 1) ? "#{arr_prod[:name]}" : "" %></th>
-                      <% end %>  
-                    <% end %>    
-                  </thead>
-                  <tbody>
-                    <% @job.product_detail(@selected_status).each do |row| %>
-                      <tr>
-                        <% row.each do |val| %>
-                          <td class="<%= column_color(val[:prod_count]) %>">
-                            <%= link_to val[:content], val[:url], remote: true, class: column_color(val[:prod_count])%>
-                          </td>
-                        <% end %>  
-                      </tr>
-                    <% end %> 
-                  </tbody>
-                </table> 
-                <%= link_to 'Back to Job', job_path(@job), :class => 'btn btn-primary' %>                
-              <% end %>
-            <% end %>
-          </div>          
+          <% if @job.fabrication_order %>
+          <table class="datatable table table-striped table-hover responsive">
+            <thead>
+              <th></th>            
+              <% @job.products_group.each_with_index do |arr_prod,idx| %>  
+                <% 1.upto(arr_prod[:max_col]) do |idx2| %>         
+                  <th class="<%= column_color(idx+1) %>"><%= (idx2 == 1) ? "#{arr_prod[:name]}" : "" %></th>
+                <% end %>  
+              <% end %>    
+            </thead>
+            <tbody>
+              <% @job.product_detail.each do |row| %>
+                <tr>
+                  <% row.each do |val| %>
+                    <td class="<%= column_color(val[:prod_count]) %>"><%= val[:content] %></td>
+                  <% end %>  
+                </tr>
+              <% end %> 
+            </tbody>
+          </table> 
+  
+          <% end %>          
         </div>
       </div>
     </div>
   </div>
 </div>
-<div id="modal_container"></div>

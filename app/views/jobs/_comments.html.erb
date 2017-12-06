@@ -23,7 +23,7 @@
           </div> -->
         </div>
       </div>
-    <%= form_for([@job, @job.comments.build], remote: true, :html => { :class => "comments", :role => 'form' }) do |f| %>
+    <%= form_for([@job, @job.comments.build], :html => { :class => "comments", :role => 'form' }) do |f| %>
       <%= f.text_field :user_id, :value => current_user.id, :hidden => true  %>
       <%= f.text_field :job_id, :value => @job.id, :hidden => true  %>
       <div class="row">

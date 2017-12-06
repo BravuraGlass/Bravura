@@ -21,6 +21,8 @@ unless ENV['HOME'] == "/home/ubuntu"
 end
 
 gem 'mysql2'
+    
+gem 'thin'
 
 gem 'deep_cloneable'
 
@@ -32,8 +34,6 @@ gem 'uglifier', '>= 1.3.0'
 # gem 'therubyracer', platforms: :ruby
 
 gem 'sprockets-rails', '2.3.3'
-
-gem 'puma'
 
 gem 'clockwork'
 

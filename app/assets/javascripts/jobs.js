@@ -241,10 +241,6 @@ BRAVURA.readURL = function readURL(input) {
   }
 };
 
-BRAVURA.checkStatus = function checkStatus(){
-  $("form[id^=product_detail_job_]").submit()
-}
-
 
 // set the behavior on document ready
 $(document).ready(function(){
@@ -269,13 +265,11 @@ $(document).ready(function(){
   $('#createCustomerSaveButton').on('click', function () { BRAVURA.saveAndAssignCustomerToJob(); });
   $('#closePanelButton').on('click', function () { BRAVURA.closeJobDetailPanel(); });
 
-  $('.check_status').on('change', function(){ BRAVURA.checkStatus();});
-
   $('.job-detail-element').on('click', function (element) {
     // BRAVURA.showJobDetails(element);
   
-    event.preventDefault();
-    event.stopPropagation();
+    event.preventDefault(); 
+    event.stopPropagation(); 
     
     var idval = $(this).attr("id").split("job-detail-")[1];
     window.location.href = "/jobs/"+idval+"/product_detail";

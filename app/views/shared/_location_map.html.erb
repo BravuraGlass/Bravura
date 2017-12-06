@@ -10,16 +10,8 @@
 <script>
 
 function initMaps() {
-   var addrField = document.getElementById('address');
-   var field_id = "<%= address_field_id %>";
-   console.log(field_id);
-    if (addrField || field_id == "address"){
-      initMapaddress();
-    };
-   var custField = document.getElementById('customer_address');
-    if (custField){
-      initMapcustomer_address();
-    };
+   initMapaddress();
+   initMapcustomer_address();
 }
 
 function initMap<%= address_field_id ? address_field_id : '' %>() {
@@ -137,6 +129,8 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
       marker.setVisible(true);
     }
   }
+  map.bounds.extendWith(markers);
+  map.fitMapToBounds();
 }
 
 function geocodeAddress(geocoder, map) {

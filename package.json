@@ -1,5 +1,6 @@
 {
   "name": "bravuracrm",
   "private": true,
-  "dependencies": {}
+  "dependencies": {
+  }
 }

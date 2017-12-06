@@ -15,3 +15,5 @@
 //= require animo.js/animo
 //--- Localize
 //= require jquery-localize-i18n/dist/jquery.localize
+//--- SocketIO
+//= require socket.io-client/dist/socket.io

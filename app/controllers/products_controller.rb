@@ -1,5 +1,5 @@
 class ProductsController < ApplicationController
-
+  include AuditableController
   before_action :set_product, only: [:show, :edit, :update, :destroy, :update_task_status]
   
   skip_before_action :require_login,:verify_authenticity_token, only: [:tasks, :available_task_statuses, :update_task_status], if: -> { request.format.json? }
@@ -34,7 +34,7 @@ class ProductsController < ApplicationController
       room = Room.create(name: product_params[:room_name]|| 'New Room')
       room.fabrication_order = fabrication_order
       if room.save
-        audit_room = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: room, details: 'Newly created data')
+        audit_room = AuditLog.create(ip: request.remote_ip, user_name: (current_user.first_name || current_user.email), where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: room, details: 'Newly created data')
       end
     else
       room = Room.find(product_params[:room_id])
@@ -48,7 +48,6 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
-        AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: @product, details: 'Newly created data')
         # create each section associated to the product
         sections = 0..product_params[:sections].to_i - 1
         abc = ("A".."Z").to_a
@@ -57,7 +56,7 @@ class ProductsController < ApplicationController
           first_status = Status.where(:category => Status.categories[:products]).order(:order).first || ''
           ps = ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)
           if ps
-            audit_ps = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: ps, details: 'Newly created data')
+            audit_ps = AuditLog.create(ip: request.remote_ip, user_name: (current_user.first_name || current_user.email), where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: ps, details: 'Newly created data')
           end
         end
         
@@ -96,7 +95,7 @@ class ProductsController < ApplicationController
         format.json { render json: api_response(:failed,"status can't empty",nil)}
       elsif @statuses.include?(params[:status]) == false  
         format.json { render json: api_response(:failed,"status name is invalid",nil)}
-      elsif @product.update(status: params[:status], audit_user_name: @api_user.full_name)
+      elsif @product.update_attribute(:status, params[:status])
         result = {id: @product.id, name: @product.name, status: @product.status}
         format.json { render json: api_response(:success,nil,result)}
       else
@@ -109,9 +108,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
-      params[:product][:audit_user_name] = @current_user.try(:full_name) || current_user.try(:full_name)
       if @product.update(product_params)
-
         format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
@@ -141,7 +138,7 @@ class ProductsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_params
       params.require(:product).permit(:product_type_id, :name, :description,
-           :status, :sku, :price, :room_name, :room_id, :sections, :fabrication_order_id, :audit_user_name)
+           :status, :sku, :price, :room_name, :room_id, :sections, :fabrication_order_id)
     end
 
     # Sets the audit log data

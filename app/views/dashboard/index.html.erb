@@ -26,7 +26,9 @@
               <tr>
                 <td style="width:25%"><%= key %></td>
                 <td style="width:25%"><%= value %></td>
-                <td><%= link_to "detail", sections_detail_dashboard_index_path(status: key, job_id: params[:job_id]) %></td>
+                <% if current_user.admin? %>
+                  <td><%= link_to "detail", sections_detail_dashboard_index_path(status: key, job_id: params[:job_id]) %></td>
+                <% end %>  
               </tr>
               <% end %>
             </tbody>

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
 
+  get 'locations/index'
+
   resources :working_logs, only: :index do
     collection do
       post 'checkin'
@@ -37,13 +39,6 @@ Rails.application.routes.draw do
     end  
   end
   resources :customers
-  
-  resources :utilities do 
-    collection do 
-      get "data_backup"
-      get "download"
-    end  
-  end  
 
   resources :fabrication_orders, only: [:index, :new, :edit, :update, :destroy] do
     collection do
@@ -110,10 +105,8 @@ Rails.application.routes.draw do
       get 'barcode'
     end  
   end   
-  
-  resources :audit_logs, only: [:index]
 
-  resources :jobs, only: [:index, :new, :create, :update, :destroy, :show] do
+  resources :jobs, only: [:index, :new, :create, :update, :destroy] do
     member do
       get 'product_detail'
     end  

@@ -4,7 +4,7 @@
 </h3>
 <div class="container-fluid">
    <div class="row">
-      <div id="jobListPanel" class="col-lg-12 no-padding">
+      <div id="jobListPanel" class="<%= @job.id ? 'col-lg-7' : 'col-lg-12' %> no-padding">
          <div class="panel panel-default">
             <div class="panel-heading">
             </div>
@@ -12,7 +12,6 @@
               <div class="row actions-panel">
                 <div class="col-xs-12 col-md-12">
                   <div class="btn-group">
-                    <%= render :partial => 'shared/flash_messages' %>
                     <% if current_user.type_of_user.eql?("0") %>
                       <span>Only Active: </span>
                       <%= check_box_tag :show_active, :show_active, @show_active %>
@@ -45,7 +44,7 @@
                     <th class="sort-alpha">Job Status</th>
                     <th class="sort-alpha">FO Status</th>
                     <th class="no-sort">Sections Done</th>
-                    <th class="no-sort">Actions</th>
+                    <!-- <th class="no-sort">Actions</th> -->
                   </tr>
                 </thead>
                 <tbody>
@@ -55,21 +54,28 @@
                     </tr>
                     <% else %>
                       <% @jobs.each do |job| %>
-                        <tr onclick="location.href = '<%=job_path(job)%>'" class="pointer" >
+                        <tr onclick="location.href = '<%=job_path(job)%>'" class="pointer <%= 'selected' if (job.id == @job.id) %>" >
                           <td>
                             <%= l(job.appointment, format: '%Y/%m/%d') if job.appointment %>
                           </td>
                           <td >
                             <span class="<%= 'confirmed' if job.confirmed_appointment %>">(<%= job.id %>) <%= job.address.nil? ? "empty" : job.address[0...30] %></span>
+                            <% job.comments[0..1].each do |c| %>
+                              <div class="comment">
+                                <span class="comment-date"><%= l(c.created_at, format: :short) %>,</span>
+                                <span class="comment-author"><%= c.user.first_name %> </span>said:
+                                <%= c.body %>
+                              </div>
+                              <% end %>
                           </td>
-                          <td>
-                            <%= "#{job.customer_firstname} #{job.customer_lastname} - #{job.customer_company_name}" %>
+                          <td title="<%= job.customer.contact_details %>">
+                            <%= job.customer.contact_info %>
                           </td>
                           <td>
                             <%= job.status %>
                           </td>
                           <td>
-                            <%= job.fo_status %>
+                            <%= job.fabrication_order ? job.fabrication_order.status : '' %>
                           </td>
                           <td>
                             <%
@@ -78,14 +84,8 @@
                               class_status = status[:done] ? 'green' : 'yellow'
                             %>
                               <span id="job-detail-<%= job.id %>" data-job-details="<%= job.fabrication_order.sections_to_json %>" class="job-detail-element <%= class_status %>"><%= "#{status[:ready]} of #{status[:total]}" %></span>
-
-                            <% end %>
+                              <% end %>
                           </td>
-                          <td>
-                            <%= job.fabrication_order ?
-                            link_to("View FO", edit_fabrication_order_path(job.fabrication_order), :class => 'btn btn-default btn-xs') :
-                            link_to('Create FO', job_fabrication_orders_path(job), method: :post, class: 'btn btn-default btn-xs') %>
-                          </td>  
                         </tr>
                         <% end %>
                           <% end %>
@@ -95,6 +95,99 @@
             </div>
          </div>
       </div>
+      <% if @job.id %>
+      <div id="jobDetailPanel" class="col-lg-5 no-padding">
+         <div class="panel panel-default">
+            <div class="panel-heading job">
+              Job ID # <%= @job.id %>
+              <small><%= l(@job.created_at, format: :short) if @job.created_at %> <a id="closePanelButton" class="btn" href="#"><i class="fa fa-close"></i>Close</a></small>
+            </div>
+            <div class="panel-body">
+              <div class="actions row">
+                <div class="col-xs-12">
+                  <%= @job.fabrication_order ?
+                        link_to("View FO", edit_fabrication_order_path(@job.fabrication_order), :class => 'btn btn-default') :
+                        link_to('Create FO', job_fabrication_orders_path(@job), method: :post, class: 'btn btn-default') %>
+                  <%= link_to 'Print FO', f_orders_barcode_path(@job.fabrication_order), target: "_blank", :class => 'btn btn-default' if @job.fabrication_order %>
+                  <%= link_to 'Dashboard', dashboard_path(job_id: @job.id), :class => 'btn btn-default' if @job.fabrication_order %>
+
+                <!-- <%= link_to 'View FO', job_fabrication_order_path(@job, @job.fabrication_order),  class: 'btn btn-default' if @job.fabrication_order %>
+                <%= link_to 'Create FO', job_fabrication_orders_path(@job), method: :post, class: 'btn btn-primary'  if !@job.fabrication_order %> -->
+                </div>
+              </div>
+              <%- job = @job %>
+              <%= render :partial => 'form', locals: {readonly: false} %>
+
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="panel panel-default">
+                  <div class="panel-heading pointer" onclick="BRAVURA.showCustomerPanel();">Customer Information
+                      <small><%= @job.customer.company_name %></small>
+                    </div>
+                    <div id="customerInfoPanel" class="panel-body hide">
+                      <%= form_for @job.customer, :html => { :class => "customer", :role => 'form' } do |f| %>
+
+                          <div class="form-group col-lg-6">
+                            <%= f.label :contact_firstname %>
+                            <%= f.text_field :contact_firstname, :class => 'form-control', id: :customer_contact_firstname %>
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <%= f.label :contact_lastname %>
+                            <%= f.text_field :contact_lastname, :class => 'form-control', id: :customer_contact_lastname %>
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <%= f.label :company_name %>
+                            <%= f.text_field :company_name, :class => 'form-control', id: :customer_company_name %>
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <%= f.label :email %>
+                            <%= f.text_field :email, :class => 'form-control', id: :customer_email %>
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <%= f.label :email2 %>
+                            <%= f.text_field :email2, :class => 'form-control', id: :customer_email2 %>
+                          </div>
+                          <div class="form-group col-lg-6">
+                            <%= f.label :address %>
+                            <%= f.text_field :address, :class => 'form-control', id: :customer_address %>
+                          </div>
+                          <div class="form-group col-lg-4">
+                            <%= f.label :phone_number %>
+                            <%= f.text_field :phone_number, :class => 'form-control', id: :customer_phone_number %>
+                          </div>
+                          <div class="form-group col-lg-4">
+                            <%= f.label :phone_number2 %>
+                            <%= f.text_field :phone_number2, :class => 'form-control', id: :customer_phone_number2 %>
+                          </div>
+                          <div class="form-group col-lg-4">
+                            <%= f.label :fax %>
+                            <%= f.text_field :fax, :class => 'form-control', id: :customer_fax %>
+                          </div>
+                          <div class="form-group">
+                            <%= f.label :notes %>
+                            <%= f.text_area :notes, :class => 'form-control', id: :customer_notes %>
+                          </div>
+                          <div class="actions">
+                            <%= f.submit nil, :class => 'btn btn-primary' %>
+                            <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                                customers_path, :class => 'btn btn-default' %>
+                          </div>
+                    <% end %>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                        job_path(job),
+                        :method => :delete,
+                        :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                        :class => 'btn btn-xs btn-danger' if (job.id) %>
+            </div>
+          </div>
+        </div>
+      </div>
+      <% end %>
     </div>
 </div>
 <%= render :partial => 'product_detail' %>
