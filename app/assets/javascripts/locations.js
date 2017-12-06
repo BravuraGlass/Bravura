@@ -35,8 +35,8 @@ function updatePositions(positions) {
 
     console.log('---------updated positions -----------', positions);
 
-    /*
     markers.forEach((item, index) => {
+      /*
       var data = positions[item.user_id];
       if (data.lat != item.lat || data.lng != item.lng) {
         markers[index].lat = data.lat;
@@ -50,6 +50,6 @@ function updatePositions(positions) {
 
         marker.setPosition(position);
       }
+      */
     });
-    */
   }
