@@ -12,8 +12,8 @@
                <table class="datatable table table-striped table-hover responsive">
                   <thead>
                     <tr>
-                      <th class="sort-alpha">Title</th>
-                      <th class="sort-alpha">Description</th>
+                      <th class="sort-alpha" width="30%">Title</th>
+                      <th class="sort-alpha" width="40%">Description</th>
                       <!-- <th class="sort-alpha">Status</th> -->
                       <th class="no-sort">Actions</th>
                     </tr>
@@ -36,6 +36,10 @@
                                         :method => :delete,
                                         :data => { :confirm => 'Are you sure you want to delete the fabrication_order?' },
                                         :class => 'btn btn-xs btn-danger' %>
+                            <%= fabrication_order.job_id ?
+                              link_to("View FO", edit_fabrication_order_path(fabrication_order), :class => 'btn btn-default btn-xs') :
+                              link_to('Create FO', job_fabrication_orders_path(fabrication_order), method: :post, class: 'btn btn-default btn-xs') %>
+                            <%= link_to 'Print FO', f_orders_barcode_path(fabrication_order), target: "_blank", :class => 'btn btn-default btn-xs' %>
                           </td>
                       </tr>
                       <% end %>

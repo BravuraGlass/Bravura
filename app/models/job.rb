@@ -8,6 +8,8 @@ class Job < ApplicationRecord
   belongs_to :customer
   belongs_to :salesman, foreign_key: 'salesman_id', class_name: 'Employee', optional: true
   belongs_to :installer, foreign_key: 'installer_id', class_name: 'Employee', optional: true
+
+  scope :active_job, -> { where(active: true) }
   
   def self.all_active_data
     result = []
@@ -134,11 +136,11 @@ class Job < ApplicationRecord
   end
 
   def next
-    self.class.where("id > ?", id).first
+    self.class.where("id > ?", id).active_job.first
   end
 
   def prev
-    self.class.where("id < ?", id).last
+    self.class.where("id < ?", id).active_job.last
   end
   
 end

@@ -18,9 +18,7 @@ module AuditableController
     if (request.post? || request.patch? || request.put? || request.delete? )
       @audit_log = AuditLog.new
       @audit_log.ip = request.remote_ip
-      @audit_log.user_name = current_user.first_name || current_user.email
-      @audit_log.where = request.headers['latlong'] || "not determined location"
-      @audit_log.user_agent = request.user_agent
+      @audit_log.user_name = current_user.full_name
     end
 
   end

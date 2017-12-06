@@ -13,11 +13,11 @@
               <thead>
                 <tr>
                   <th class="sort-alpha">Date</th>
-                  <th class="sort-alpha">Start</th>
                   <th class="sort-alpha">Location Start</th>
-                  <th class="sort-alpha">Finish</th>
                   <th class="sort-alpha">Location Finish</th>
-                  <th class="sort-alpha">Duration</th>
+                  <th class="sort-alpha">Start</th>              
+                  <th class="sort-alpha">Finish</th>
+                  <th class="sort-alpha">Duration</th>              
                   <th>Actions</th>
                 </tr>
               </thead>
@@ -27,10 +27,11 @@
                   <% @working_log_arr.each do |wlog| %>
                     <tr <%= raw " class='manual-color'" if wlog[:status] == "manual" %>>
                       <td><%= wlog[:date] %></td>
-                      <td class="<%= wlog[:checkin_method] %>-color"><%= wlog[:checkin] %></td>
                       <td class="<%= wlog[:checkin_location] %>-color"><%= wlog[:checkin_location] %></td>
-                      <td class="<%= wlog[:checkout_method] %>-color"><%= wlog[:checkin] %></td>
                       <td class="<%= wlog[:checkout_location] %>-color"><%= wlog[:checkout_location] %></td>
+                      <td class="<%= wlog[:checkin_method] %>-color"><%= wlog[:checkin] %></td>
+                      <td class="<%= wlog[:checkout_method] %>-color"><%= wlog[:checkout] %></td>
+
                       <td><%= time_diff wlog[:duration] %></td> 
                       <td><%= link_to "Edit",edit_report_detail_working_logs_path(ids: wlog[:ids], user_id: wlog[:user_id], week: @week) %>&nbsp;&nbsp;
 <%= link_to 'Delete',destroy_report_working_logs_path(ids: wlog[:ids], user_id: wlog[:user_id], week: @week), :method => :delete, :data => { :confirm => 'Are you sure you want to delete this working log?' } %></td>
@@ -40,7 +41,7 @@
                     <% @total_time += wlog[:duration] %>
                   <% end %>
                   <tr>
-                    <td colspan="3">Total :</td>
+                    <td colspan="5">Total :</td>
                     <td><%= time_diff @total_time %></td>
                   </tr>     
                 <% else %>

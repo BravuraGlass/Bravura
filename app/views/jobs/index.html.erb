@@ -45,7 +45,7 @@
                     <th class="sort-alpha">Job Status</th>
                     <th class="sort-alpha">FO Status</th>
                     <th class="no-sort">Sections Done</th>
-                    <!-- <th class="no-sort">Actions</th> -->
+                    <th class="no-sort">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -78,8 +78,14 @@
                               class_status = status[:done] ? 'green' : 'yellow'
                             %>
                               <span id="job-detail-<%= job.id %>" data-job-details="<%= job.fabrication_order.sections_to_json %>" class="job-detail-element <%= class_status %>"><%= "#{status[:ready]} of #{status[:total]}" %></span>
-                              <% end %>
+
+                            <% end %>
                           </td>
+                          <td>
+                            <%= job.fabrication_order ?
+                            link_to("View FO", edit_fabrication_order_path(job.fabrication_order), :class => 'btn btn-default btn-xs') :
+                            link_to('Create FO', job_fabrication_orders_path(job), method: :post, class: 'btn btn-default btn-xs') %>
+                          </td>  
                         </tr>
                         <% end %>
                           <% end %>
