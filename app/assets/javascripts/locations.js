@@ -2,6 +2,8 @@
 var gMapMarkers = [];
 var map;
 
+var socket = io('http://52.15.199.76:8080/');
+
 function initMapWithMarkers(markers) {
 
   var center = markers.length > 0 ? markers[0] : {
