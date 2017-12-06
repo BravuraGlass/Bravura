@@ -31,7 +31,7 @@ function initMapWithMarkers(markers) {
   socket.on('update_positions', updatePositions);
 }
 
-var socket = io('http://192.168.88.55:8080/');
+var socket = io('http://localhost:8080/');
 
 function updatePositions(positions) {
 
