@@ -31,12 +31,13 @@ function initMapWithMarkers(markers) {
   socket.on('update_positions', updatePositions);
 }
 
-var socket = io('http://localhost:8080/');
+//var socket = io('http://localhost:8080/');
 
 function updatePositions(positions) {
 
     console.log('---------updated positions -----------', positions);
 
+    /*
     markers.forEach((item, index) => {
       var data = positions[item.user_id];
       if (data.lat != item.lat || data.lng != item.lng) {
@@ -52,4 +53,5 @@ function updatePositions(positions) {
         marker.setPosition(position);
       }
     });
+    */
   }

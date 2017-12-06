@@ -61,9 +61,6 @@
          <%= render partial: "layouts/partials/footer" %>
       </footer>
    </div>
-   <%- if (@need_libs || []).include?('maps') %>
-   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHSbVfDBDr13syJSeZPwjxOXS8kssI0S4&libraries=places&callback=initMaps"></script>
-   <% end -%>
    <!-- =============== VENDOR SCRIPTS ===============-->
    <%= javascript_include_tag 'base' %>
    <!-- =============== VIEW VENDOR SCRIPTS ===============-->
@@ -71,6 +68,9 @@
    <!-- =============== APP SCRIPTS ===============-->
    <%= javascript_include_tag 'application' %>
 
+   <%- if (@need_libs || []).include?('maps') %>
+   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHSbVfDBDr13syJSeZPwjxOXS8kssI0S4&libraries=places&callback=initMaps"></script>
+   <% end -%>
    <%= yield :body_area %>
 
 
