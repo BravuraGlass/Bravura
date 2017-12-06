@@ -95,6 +95,15 @@
                <span>Working Logs</span>
             </a>
          </li> 
+         
+         <li class="<%= 'active' if current_controller == 'locations' %>">
+            <a href="<%= locations_index_path %>" title="Locations">
+               <em><i class="icon-check"></i></em>
+               <span>Locations</span>
+            </a>
+         </li> 
+         
+         
          <% end %>
 
 <% end %>
