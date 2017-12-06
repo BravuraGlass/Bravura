@@ -28,6 +28,7 @@
                       <%= link_to "Go", "#", {class: "btn btn-default filter-button"} %> <br /><br />
                       User : <%= select_tag "user", options_for_select(@users.collect {|user| user.full_name},params[:user]), include_blank: "All Users" %>
                       Address : <%= select_tag "address", options_for_select(@jobs.collect {|job| ["(#{job.id}) #{job.address}", job.id]},params[:address]), include_blank: "All" %>
+                      Status : <%= select_tag "status", options_for_select(@statuses.collect {|sta| [sta.name, sta.name]},params[:status]), include_blank: "All" %>
                     <% end %>
                   </div>
                 </div>
@@ -38,16 +39,14 @@
                     <th>User</th>
                     <th>Time</th>
                     <th>Description</th>
-                    <th>Category</th>
-                    <th>Item Name</th>
+                    <th><%= params[:category].blank? ? "Material" : params[:category].titleize %> Name</th>
                 </thead>
                 <tbody>
                   <% @audit_logs.each do |alog| %>
                     <tr>
                       <td><%= alog.user_name %></td>
-                      <td><%= alog.created_at %></td>
+                      <td><%= alog.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
                       <td><%= alog.details %></td>
-                      <td><%= alog.category %></td>
                       <td><%= alog.item_name %></td>
                     </tr>  
                   <% end %>   

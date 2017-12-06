@@ -22,4 +22,8 @@ $(document).ready(function(){
   $('select#address').on('change', function() { 
     jQuery('#filter-form').submit();
   });
+  
+  $('select#status').on('change', function() { 
+    jQuery('#filter-form').submit();
+  });
 })

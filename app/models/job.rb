@@ -8,8 +8,11 @@ class Job < ApplicationRecord
   belongs_to :customer
   belongs_to :salesman, foreign_key: 'salesman_id', class_name: 'Employee', optional: true
   belongs_to :installer, foreign_key: 'installer_id', class_name: 'Employee', optional: true
+  attr_accessor :audit_user_name
 
   scope :active_job, -> { where(active: true) }
+  
+  after_update :sync_status
   
   def self.all_active_data
     result = []
@@ -142,5 +145,16 @@ class Job < ApplicationRecord
   def prev
     self.class.where("id < ?", id).active_job.last
   end
+  
+  private
+  def sync_status
+    unless self.status == self.status_before_last_save
+      AuditLog.create(
+        user_name: self.audit_user_name,
+        details: "updated job's status from #{self.status_before_last_save} to #{self.status}",
+        auditable: self
+      )
+    end      
+  end  
   
 end

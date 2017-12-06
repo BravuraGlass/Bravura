@@ -5,6 +5,13 @@ module SearchParameter
       @plain_condition << " DATE(created_at) = '#{params[:date]}'"
     end
   end
+  
+  def status_filter params
+    if params && params[:status].present?
+      @plain_condition << " AND " if @conditions.present? or @plain_condition.present?
+      @plain_condition << " details LIKE '%to #{params[:status]}%'"
+    end  
+  end 
 
   def category_filter params
     if params[:category].blank? or params[:category] == "material"
@@ -19,6 +26,9 @@ module SearchParameter
       @conditions[:auditable_type] = params[:category].titleize
       @conditions[:auditable_id] = Room.joins(:fabrication_order => :job).where("jobs.active = ?", true).collect {|room| room.id}
       
+    elsif params[:category] == "job"  
+      @conditions[:auditable_type] = params[:category].titleize
+      @conditions[:auditable_id] = Job.where("active = ?", true).collect {|job| job.id}
     end  
   end
 
@@ -30,14 +40,18 @@ module SearchParameter
 
   def address_filter params
     if params && params[:address].present?
-      fo = FabricationOrder.find_by(job_id: params[:address])
-      if fo.product_section_ids && params[:category].blank? or params[:category] == "material"
+      job = Job.find(params[:address])
+      fo = job.fabrication_order
+      if fo.try(:product_section_ids) && (params[:category].blank? or params[:category] == "material")
         @conditions[:auditable_id] = fo.product_section_ids
-      elsif fo.product_ids && params[:category] == "task"
+      elsif fo.try(:product_ids) && params[:category] == "task"
         @conditions[:auditable_id] = fo.product_ids
-      elsif fo.room_ids && params[:category] == "room" 
+      elsif fo.try(:room_ids) && params[:category] == "room" 
         @conditions[:auditable_id] = fo.room_ids
+      elsif job.id && params[:category] == "job" 
+        @conditions[:auditable_id] = [job.id]  
       end
     end
   end
+   
 end

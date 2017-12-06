@@ -1,5 +1,4 @@
 class JobsController < ApplicationController
-  include AuditableController
 
   before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail]
   before_action :load_common_data, except: [:index]
@@ -144,6 +143,8 @@ class JobsController < ApplicationController
     end
     respond_to do |format|
       if @job.save
+        AuditLog.create(ip: request.remote_ip, user_name: @current_user.try(:full_name) || @api_user.try(:full_name), user_agent: request.user_agent, auditable: @job, details: "Newly created data, set status to #{@job.status}")
+        
         format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
       else
         format.html { render :new }
@@ -155,6 +156,7 @@ class JobsController < ApplicationController
   # PATCH/PUT /jobs/1.json
   def update
     respond_to do |format|
+      params[:job][:audit_user_name] = @current_user.try(:full_name) || @api_user.try(:full_name)
       if @job.update(job_params)
         # set appointmend end date
         if @job.appointment.present?
@@ -170,6 +172,7 @@ class JobsController < ApplicationController
             @job.images << image
           end
         end
+    
         @job.save!
         format.html { redirect_to select_job_path(@job), notice: 'Job was successfully updated.' }
         format.json do
@@ -245,7 +248,7 @@ class JobsController < ApplicationController
     def job_params
       params.require(:job).permit(:customer_id, :price, :priority, :deposit, :status,
               :appointment, :appointment_end, :salesman_id, :installer_id, :duration, :duedate, :paid, :balance,
-              :notes, :active, :address, :address2, :latitude, :longitude, :confirmed_appointment)
+              :notes, :active, :address, :address2, :latitude, :longitude, :confirmed_appointment, :audit_user_name)
     end
 
     def picture_params

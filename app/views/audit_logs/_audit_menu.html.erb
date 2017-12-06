@@ -8,4 +8,7 @@
   <div class="btn btn-default <%= 'active' if params[:category] == 'room' %>">
     <%= link_to "Room", audit_logs_url({category: 'room'}.merge(params.except(:category).as_json)) %>
   </div> 
+  <div class="btn btn-default <%= 'active' if params[:category] == 'job' %>">
+    <%= link_to "Job", audit_logs_url({category: 'job'}.merge(params.except(:category).as_json)) %>
+  </div> 
 </div>

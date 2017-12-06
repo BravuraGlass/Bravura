@@ -13,6 +13,10 @@ class AuditLog < ApplicationRecord
   end  
   
   def item_name
-    self.auditable.try(:name)
+    if auditable_type == "Job"
+      self.auditable.try(:address)
+    else  
+      self.auditable.try(:name)
+    end  
   end  
 end

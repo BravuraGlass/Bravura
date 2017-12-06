@@ -34,7 +34,7 @@ class ProductsController < ApplicationController
       room = Room.create(name: product_params[:room_name]|| 'New Room')
       room.fabrication_order = fabrication_order
       if room.save
-        audit_room = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: room, details: 'Newly created data')
+        audit_room = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, user_agent: request.user_agent, auditable: room, details: "Newly created data, set status to #{room.status}")
       end
     else
       room = Room.find(product_params[:room_id])
@@ -48,7 +48,7 @@ class ProductsController < ApplicationController
 
     respond_to do |format|
       if @product.save
-        AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: @product, details: 'Newly created data')
+        AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, user_agent: request.user_agent, auditable: @product, details: "Newly created data, set status to #{@product.status}")
         # create each section associated to the product
         sections = 0..product_params[:sections].to_i - 1
         abc = ("A".."Z").to_a
@@ -57,7 +57,7 @@ class ProductsController < ApplicationController
           first_status = Status.where(:category => Status.categories[:products]).order(:order).first || ''
           ps = ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)
           if ps
-            audit_ps = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, where: (request.headers['latlong'] || "not determined location"), user_agent: request.user_agent, auditable: ps, details: 'Newly created data')
+            audit_ps = AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, user_agent: request.user_agent, auditable: ps, details: "Newly created data, set status to #{ps.status}")
           end
         end
         
@@ -109,7 +109,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
-      params[:product][:audit_user_name] = @current_user.try(:full_name) || current_user.try(:full_name)
+      params[:product][:audit_user_name] = @current_user.try(:full_name) || @api_user.try(:full_name)
       if @product.update(product_params)
 
         format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Product was successfully updated.' }

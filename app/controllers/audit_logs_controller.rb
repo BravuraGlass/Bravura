@@ -9,10 +9,25 @@ class AuditLogsController < ApplicationController
     
     @jobs = []
     
-    Job.where("active = ?", true).each do |job|
-      @jobs << job unless job.fabrication_order.nil?
+    if params[:category] == 'job'
+      @jobs = Job.where("active = ?", true)
+    else  
+      Job.where("active = ?", true).each do |job|
+        @jobs << job unless job.fabrication_order.nil?
+      end  
     end  
     
+    if params[:category] == "material" or params[:category].blank?
+      @statuses = Status.where(category: Status.categories[:products])
+    elsif params[:category] == "task"
+      @statuses = Status.where(category: Status.categories[:tasks])
+    else
+      @statuses = Status.where(category: Status.categories[params[:category].pluralize])
+    end    
+    
+    unless @statuses.collect {|sta| sta.name}.include?(params[:status])
+      params[:status] = nil    
+    end  
     
     @audit_logs = AdvancedSearch.new.audit_logs(params, 1, 1000)
   end
