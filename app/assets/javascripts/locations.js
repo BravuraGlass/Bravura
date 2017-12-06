@@ -1,11 +1,9 @@
 
 var gMapMarkers = [];
 var map;
-
-var socket = io('http://52.15.199.76:8080/');
+var socket = io('http://52.15.199.76:8080');
 
 function initMapWithMarkers(markers) {
-
   var center = markers.length > 0 ? markers[0] : {
       lat: 40.6179997,
       lng: -73.9344151
@@ -33,12 +31,11 @@ function initMapWithMarkers(markers) {
   socket.on('update_positions', updatePositions);
 }
 
-//var socket = io('http://localhost:8080/');
-
 function updatePositions(positions) {
 
     console.log('---------updated positions -----------', positions);
 
+    /*
     markers.forEach((item, index) => {
       var data = positions[item.user_id];
       if (data.lat != item.lat || data.lng != item.lng) {
@@ -54,4 +51,5 @@ function updatePositions(positions) {
         marker.setPosition(position);
       }
     });
+    */
   }
