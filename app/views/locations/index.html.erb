@@ -59,12 +59,13 @@
         for(item in positions) {
         //positions.forEach((item, index) => {
           data = positions[item];
+
+          var isExist = false;
           for(var i=0; i<markers.length; i++) {
-    
-            var isExist = false;
             if(markers[i].user_id == data.user_id) {
     
               isExist = true;
+              
               if (data.lat != markers[i].lat || data.lng != markers[i].lng) {
                 markers[i].lat = data.lat;
                 markers[i].lng = data.lng;
