@@ -4,7 +4,7 @@ class LocationsController < ApplicationController
   	@need_libs = ['maps']
   	@allLocations = Location.all
     @markers = Gmaps4rails.build_markers(@allLocations) do |location, marker|
-      title = "#{location.user.first_name} #{location.user.last_name}"
+      title = "#{location.user.try(:first_name)} #{location.user.try(:last_name)}"
       marker.lat location.latitude
       marker.lng location.longitude
       marker.title title
