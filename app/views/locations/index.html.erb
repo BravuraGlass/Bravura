@@ -16,6 +16,7 @@
 
 
   var gMapMarkers = [];
+  var infoWindowList = [];
   var map = null;
   var socket = io('http://52.15.199.76:8080');
 
@@ -33,6 +34,8 @@
       }
 
     gMapMarkers = [];
+    infoWindowList = [];
+
     if(markers && markers.length > 0) {
       for( var i = 0; i < markers.length; i++ ) {
         var marker_data = markers[i];
@@ -45,6 +48,16 @@
         });
         marker.setVisible(true);
         gMapMarkers.push(marker);
+
+        var infoWindow = new google.maps.InfoWindow( {
+          content: content
+        });
+
+        marker.addListener('click', function() {
+          infoWindow.open(map, marker);
+        });
+
+        //infoWindowList.push(infoWindow);
       }
     }
 
@@ -98,6 +111,14 @@
               user_id: data.user_id,
               lat: data.lat,
               lng: data.lng
+            });
+
+            var infoWindow = new google.maps.InfoWindow( {
+              content: data.user_id
+            });
+    
+            marker.addListener('click', function() {
+              infoWindow.open(map, marker);
             });
           }
 
