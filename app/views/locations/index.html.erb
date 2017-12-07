@@ -55,7 +55,9 @@
     
         console.log('---------updated positions -----------', positions);
     
-        positions.forEach((item, index) => {
+        var index = 0;
+        for(item in positions) {
+        //positions.forEach((item, index) => {
           data = positions[item.user_id];
           for(var i=0; i<markers.length; i++) {
     
@@ -97,8 +99,10 @@
               });
             }
           }
-        });
-        
+
+          index++;
+        }
+
         /*
         markers.forEach((item, index) => {
           var data = positions[item.user_id];
