@@ -9,6 +9,8 @@ class User < ApplicationRecord
   validates_uniqueness_of :email
   has_many :working_logs
   
+  TYPE_OF_USERS = ["System Administrator", "Sales Representative", "Field Worker"]
+  
   def generate_token(host="")
     self.access_token = SecureRandom.uuid
     self.token_expired = Date.today.next_month

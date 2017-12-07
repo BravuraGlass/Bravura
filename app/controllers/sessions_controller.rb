@@ -34,7 +34,8 @@ class SessionsController < ApplicationController
               first_name: user.first_name,
               last_name: user.last_name,
               phonenumber: user.phonenumber,
-              address: user.address      
+              address: user.address,
+              type_of_user: User::TYPE_OF_USERS[user.type_of_user.to_i]    
             },
             message: nil
           }
