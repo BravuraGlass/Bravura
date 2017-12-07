@@ -35,6 +35,18 @@
    <%= csrf_meta_tags %>
 </head>
 
+<!-- =============== VENDOR SCRIPTS ===============-->
+<%= javascript_include_tag 'base' %>
+<!-- =============== VIEW VENDOR SCRIPTS ===============-->
+<%= javascript_include_tag params[:controller] %>
+<!-- =============== APP SCRIPTS ===============-->
+<%= javascript_include_tag 'application' %>
+
+<%- if (@need_libs || []).include?('maps') %>
+<script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHSbVfDBDr13syJSeZPwjxOXS8kssI0S4&libraries=places&callback=initMaps"></script>
+<% end -%>
+<%= yield :body_area %>
+
 <body>
    <div class="wrapper">
       <!-- top navbar-->
@@ -61,19 +73,6 @@
          <%= render partial: "layouts/partials/footer" %>
       </footer>
    </div>
-   <!-- =============== VENDOR SCRIPTS ===============-->
-   <%= javascript_include_tag 'base' %>
-   <!-- =============== VIEW VENDOR SCRIPTS ===============-->
-   <%= javascript_include_tag params[:controller] %>
-   <!-- =============== APP SCRIPTS ===============-->
-   <%= javascript_include_tag 'application' %>
-
-   <%- if (@need_libs || []).include?('maps') %>
-   <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHSbVfDBDr13syJSeZPwjxOXS8kssI0S4&libraries=places&callback=initMaps"></script>
-   <% end -%>
-   <%= yield :body_area %>
-
-
 
 </body>
 
