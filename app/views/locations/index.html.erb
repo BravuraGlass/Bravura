@@ -53,9 +53,11 @@
           content: content
         });
 
-        marker.addListener('click', function() {
-          infoWindow.open(map, marker);
-        });
+        google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+            return function() {
+              infowindow.open(map,marker);
+            };
+        })(marker,content,infowindow)); 
 
         //infoWindowList.push(infoWindow);
       }
@@ -117,9 +119,11 @@
               content: data.user_id
             });
     
-            marker.addListener('click', function() {
-              infoWindow.open(map, marker);
-            });
+            google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+                return function() {
+                  infowindow.open(map,marker);
+                };
+            })(marker,content,infowindow)); 
           }
 
           index++;
