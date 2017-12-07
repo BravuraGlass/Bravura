@@ -80,24 +80,24 @@
                 break;
               }
             }
+          }
     
-            if(isExist != true) {
-              var content = data.user_id || '';
-              var position = new google.maps.LatLng(data.lat, data.lng);
-              var marker = new google.maps.Marker({
-                position: position,
-                map: map,
-                title: content
-              });
-    
-              marker.setVisible(true);
-              gMapMarkers.push(marker);
-              markers.push({
-                user_id: data.user_id,
-                lat: data.lat,
-                lng: data.lng
-              });
-            }
+          if(isExist != true) {
+            var content = data.user_id || '';
+            var position = new google.maps.LatLng(data.lat, data.lng);
+            var marker = new google.maps.Marker({
+              position: position,
+              map: map,
+              title: content
+            });
+  
+            marker.setVisible(true);
+            gMapMarkers.push(marker);
+            markers.push({
+              user_id: data.user_id,
+              lat: data.lat,
+              lng: data.lng
+            });
           }
 
           index++;
