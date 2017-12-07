@@ -32,10 +32,6 @@
         });
       }
 
-      for(var i=0; i<gMapMarkers.length; i++) {
-        gMapMarkers[i].setMap(null);
-      }
-
     gMapMarkers = [];
     if(markers && markers.length > 0) {
       for( var i = 0; i < markers.length; i++ ) {
@@ -74,7 +70,5 @@
             marker.setPosition(position);
           }
         });
-
-        initMapWithMarkers(markers)
       }
 </script>
