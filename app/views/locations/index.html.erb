@@ -53,11 +53,11 @@
           content: content
         });
 
-        google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+        google.maps.event.addListener(marker,'click', (function(marker,content,infoWindow){ 
             return function() {
-              infowindow.open(map,marker);
+              infoWindow.open(map,marker);
             };
-        })(marker,content,infowindow)); 
+        })(marker,content,infoWindow)); 
 
         //infoWindowList.push(infoWindow);
       }
@@ -119,11 +119,11 @@
               content: data.user_id
             });
     
-            google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){ 
+            google.maps.event.addListener(marker,'click', (function(marker,content,infoWindow){ 
                 return function() {
-                  infowindow.open(map,marker);
+                  infoWindow.open(map,marker);
                 };
-            })(marker,content,infowindow)); 
+            })(marker,content,infoWindow)); 
           }
 
           index++;
