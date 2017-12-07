@@ -58,22 +58,22 @@
         var index = 0;
         for(item in positions) {
         //positions.forEach((item, index) => {
-          data = positions[item.user_id];
+          data = positions[item];
           for(var i=0; i<markers.length; i++) {
     
             var isExist = false;
-            if(markers[i].user_id == item.user_id) {
+            if(markers[i].user_id == data.user_id) {
     
               isExist = true;
-              if (data.lat != item.lat || data.lng != item.lng) {
-                markers[index].lat = data.lat;
-                markers[index].lng = data.lng;
+              if (data.lat != markers[i].lat || data.lng != markers[i].lng) {
+                markers[i].lat = data.lat;
+                markers[i].lng = data.lng;
         
-                var marker_data = markers[index];
+                var marker_data = markers[i];
                 var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
                 var content = marker_data.title || '';
         
-                var marker = gMapMarkers[index]
+                var marker = gMapMarkers[i]
         
                 marker.setPosition(position);
     
