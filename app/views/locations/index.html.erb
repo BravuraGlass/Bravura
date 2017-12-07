@@ -39,7 +39,7 @@
     if(markers && markers.length > 0) {
       for( var i = 0; i < markers.length; i++ ) {
         var marker_data = markers[i];
-        var content = marker_data.user_id || '';
+        var content = marker_data.marker_title || '';
         var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
         var marker = new google.maps.Marker({
           position: position,
@@ -85,7 +85,7 @@
         
                 var marker_data = markers[i];
                 var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-                var content = marker_data.user_id || '';
+                var content = marker_data.marker_title || '';
         
                 var marker = gMapMarkers[i]
         
@@ -102,7 +102,7 @@
             var marker = new google.maps.Marker({
               position: position,
               map: map,
-              title: content
+              title: marker_title
             });
   
             marker.setVisible(true);
