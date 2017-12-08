@@ -38,7 +38,7 @@
             </a>
          </li>
          <li class="<%= 'active' if current_controller == 'maps' %>">
-            <a href="<%= map_index_path %>" title="Map">
+            <a href="<%= map_index_path(show_all: 'on', show_tasks: 'on', show_jobs: 'on', show_workers: 'on', date: '') %>" title="Map">
                <em class="icon-map"></em>
                <span>Map</span>
             </a>
