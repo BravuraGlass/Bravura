@@ -38,6 +38,14 @@ class User < ApplicationRecord
     self.type_of_user == "0" ? true : false
   end  
 
+  def destroy
+      raise DisabledDeletionException
+  end
+
+  def delete
+    self.destroy
+  end
+
 =begin  
   def self.admins_always_access
     User.where("type_of_user = ?","0").each do |user|
@@ -46,4 +54,10 @@ class User < ApplicationRecord
   end  
 =end  
 
+end
+
+class DisabledDeletionException < Exception
+  def message
+    "This entity is not deleteable"
+  end
 end

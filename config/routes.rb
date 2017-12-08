@@ -33,7 +33,7 @@ Rails.application.routes.draw do
   resources :statuses
   resources :tasks
   resources :employees
-  resources :users do
+  resources :users, except: [:destroy] do
     member do
       get "revoke"
     end  

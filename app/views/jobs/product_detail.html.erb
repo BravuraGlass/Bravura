@@ -10,7 +10,11 @@
         </div>
         <div class="panel-body">
           <div class="tab-view-panel table-overflow">
-            <% if @job.fabrication_order %>
+            <% if @job.fabrication_order 
+                status = @job.fabrication_order.sections_status
+                class_status = status[:done] ? 'green' : 'yellow' %>
+              Section Done : 
+              <span id="job-detail-<%= @job.id %>" data-job-details="<%= @job.fabrication_order.sections_to_json %>" class="<%= class_status %>"><%= "#{status[:ready]} of #{status[:total]}" %></span>
               <%= form_tag product_detail_job_path, id: "product_detail_job_#{@job.id}", method: :get do -%>
                 <table class="datatable table table-striped table-hover responsive">
                   <thead>

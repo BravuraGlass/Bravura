@@ -60,11 +60,11 @@ class JobsController < ApplicationController
     else
       # default to all if no filter was set
       @filter_all = true
-      whhere = {active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day}
+      where = {active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day}
     
     end
     
-    @jobs = Job.where(where).joins("LEFT JOIN customers ON customers.id = jobs.customer_id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname as customer_firstname, customers.contact_lastname as customer_lastname, customers.company_name as customer_company_name, jobs.*, fabrication_orders.status as fo_status")
+    @jobs = Job.where(where).joins("LEFT JOIN customers ON customers.id = jobs.customer_id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname AS customer_firstname, customers.contact_lastname AS customer_lastname, customers.company_name AS customer_company_name, jobs.*, fabrication_orders.status AS fo_status, fabrication_orders.id AS fo_id")
     # set_markers if @job.id
   end
 
