@@ -315,7 +315,9 @@ class WorkingLog < ApplicationRecord
           checkin: data[idx].submit_time.strftime("%H:%M:%S"), 
           checkout: nil,
           checkin_method: data[idx].submit_method,
-          checkout_method: nil
+          checkout_method: nil,
+          checkin_location: data[idx].get_location,
+          checkout_location: nil
         }
           
         row+=1    
@@ -329,7 +331,9 @@ class WorkingLog < ApplicationRecord
           checkin: nil, 
           checkout: data[idx].submit_time.strftime("%H:%M:%S"),
           checkin_method: nil,
-          checkout_method: data[idx].submit_method
+          checkout_method: data[idx].submit_method,
+          checkin_location: nil,
+          checkout_location: data[idx].get_location
         }
           
         row+=1          
