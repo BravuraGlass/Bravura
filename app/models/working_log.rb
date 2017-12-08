@@ -22,6 +22,16 @@ class WorkingLog < ApplicationRecord
       longitude: data[:longitude],
       checkin_or_checkout: checkin_or_checkout
     }
+    
+    if data[:latitude].blank? or data[:longitude].blank?
+      wlog = WorkingLog.new(wlog_hash) 
+      wlog.errors.add(:base, "invalid location, please activate your GPS")
+      return wlog
+    elsif data[:latitude].to_i == 0 or data[:longitude].to_i == 0
+      wlog = WorkingLog.new(wlog_hash) 
+      wlog.errors.add(:base, "invalid location, please activate your GPS")  
+      return wlog
+    end  
 
     if data[:barcode]
       wlog_hash[:submit_method] = "automatic"
