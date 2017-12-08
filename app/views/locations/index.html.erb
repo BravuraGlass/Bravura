@@ -21,15 +21,10 @@
   var socket = io('http://52.15.199.76:8080');
 
   function initMapWithMarkers(markers) {
-    var center = markers.length > 0 ? markers[0] : {
-        lat: 40.6179997,
-        lng: -73.9344151
-      };
-
+  
       if(map == null) {
         map = new google.maps.Map(document.getElementById('location-map'), {
-          zoom: 6,
-          center: center
+          zoom: 6
         });
       }
 
@@ -99,12 +94,12 @@
           }
     
           if(isExist != true) {
-            var content = data.user_id || '';
+            var content = data.marker_title || '';
             var position = new google.maps.LatLng(data.lat, data.lng);
             var marker = new google.maps.Marker({
               position: position,
               map: map,
-              title: data.marker_title
+              title: content
             });
   
             marker.setVisible(true);
@@ -113,6 +108,7 @@
               user_id: data.user_id,
               lat: data.lat,
               lng: data.lng
+              marker_title: data.marker_title
             });
 
             var infoWindow = new google.maps.InfoWindow( {
