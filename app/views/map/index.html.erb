@@ -26,6 +26,14 @@
         </div>
       </div>
       <div class="form-group">
+        <div class="checkbox c-checkbox">
+          <label>
+            <input class="bj-filter-map" type="checkbox" name="show_workers" id="show_workers" <%= "checked" if @show_workers %> />
+            <span class="fa fa-check"></span>Show Workers
+          </label>
+        </div>
+      </div>
+      <div class="form-group">
         <%= date_field("", "date", value: (@show_all ? nil : @selected_date), data: {today: Time.zone.now.strftime("%Y-%m-%d") },class: 'btn btn-default' ) %>
       </div>
       <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
@@ -39,6 +47,9 @@
   </div>
   <div class="col-md-1 center">
     Task: <br/><%= image_tag  "/assets/mapicons/task.png" %>
+  </div>
+  <div class="col-md-1 center">
+    Worker: <br/><%= image_tag  "/assets/mapicons/worker.png" %>
   </div>
 </div>
 <div id="map" class="full-map">

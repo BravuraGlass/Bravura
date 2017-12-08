@@ -8,6 +8,13 @@ class User < ApplicationRecord
   validates_presence_of :type_of_user
   validates_uniqueness_of :email
   has_many :working_logs
+  has_many :locations, -> { order(created_at: :desc) }
+
+  scope :last_locations, -> {
+    joins(:locations)
+      .where('locations.created_at = (SELECT MAX(locations.created_at) FROM locations WHERE locations.user_id = users.id)')
+      .group(["users.id","locations.longitude","locations.latitude"])
+    }
   
   TYPE_OF_USERS = ["System Administrator", "Sales Representative", "Field Worker"]
   

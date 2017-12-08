@@ -9,7 +9,7 @@ BRAVURA.defaultDate = function defaultDate(){
 };
 
 BRAVURA.checkAllCheked = function checkAllCheked(){
-  var count_checked = $('input[class=bj-filter-map]:checkbox:checked').length == 2 ;
+  var count_checked = $('input[class=bj-filter-map]:checkbox:checked').length == 3 ;
   if(count_checked){
     BRAVURA.toggleShowAll(true)
     BRAVURA.clearDate()
@@ -32,6 +32,11 @@ BRAVURA.toggleCheckJob = function toggleCheckJob(value){
   $('#show_jobs').prop('checked', value);
 };
 
+
+BRAVURA.toggleCheckWorker = function toggleCheckWorker(value){
+  $('#show_workers').prop('checked', value);
+};
+
 BRAVURA.submitForm = function submitForm(){
   $('#form-map').submit()
 };
@@ -43,9 +48,11 @@ $(document).ready(function(){
       BRAVURA.clearDate()
       BRAVURA.toggleCheckTask(true)
       BRAVURA.toggleCheckJob(true)
+      BRAVURA.toggleCheckWorker(true)
     }else{
       BRAVURA.toggleCheckTask(false)
       BRAVURA.toggleCheckJob(false)
+      BRAVURA.toggleCheckWorker(false)
       BRAVURA.defaultDate()
     }
   });
@@ -55,6 +62,10 @@ $(document).ready(function(){
   });
 
   $('#show_jobs').on('click', function() { 
+    BRAVURA.checkAllCheked()
+  });
+
+  $('#show_workers').on('click', function() { 
     BRAVURA.checkAllCheked()
   });
 });

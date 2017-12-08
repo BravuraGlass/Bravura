@@ -38,6 +38,20 @@ Status.create(category: "products",name: "FINISHED", order: 19)
 Customer.create(contact_firstname: "Satya", contact_lastname: "Nadella", email: "satya@microsoft.com", company_name: "Microsoft")
 Customer.create(contact_firstname: "Yukihiro", contact_lastname: "Mastsumoto", email: "matz@ruby.org", company_name: "Ruby")
 
+
+time_now = Time.now
+start = (time_now - 1.week).to_i
+
+Location.create(user_id: 1, latitude: 40.7233, longitude: -74.003, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 2, latitude: 40.852, longitude: -74.0753, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 3, latitude: 40.7233, longitude: -74.003, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 1, latitude: 40.6488, longitude: -73.9464, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 2, latitude: 40.6937, longitude: -73.988, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 3, latitude: 40.6715, longitude: -73.9476, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 1, latitude: 40.7188, longitude: -73.9901, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 2, latitude: 40.6131, longitude: -73.963, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user_id: 3, latitude: 40.7282, longitude: -73.7949, created_at: Time.at(rand(time_now.to_i - start)) + start)
+
 Employee.create(first_name: "Edison", last_name: "Cavani", email_address: "edison@psg.com")
 Employee.create(first_name: "Leroy", last_name: "Sane", email_address: "leroy@mancity.com")
 
