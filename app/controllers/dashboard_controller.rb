@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
   
   skip_before_action :require_admin, :require_login,:verify_authenticity_token, if: -> { request.format.json? }
   before_action :api_login_status, if: -> { request.format.json? }  
-  before_action :require_admin_api, if: -> { request.format.json? } , except:  [:index, :sections_detail, :status_multiple_update]
+  before_action :require_admin_api, if: -> { request.format.json? } , except:  [:index, :sections_detail, :detail, :status_multiple_update]
   before_action :set_job_addresses, only: [:index, :sections_detail, :forders_detail, :jobs_detail, :rooms_detail, :products_detail, :detail]
   
   def index
@@ -36,16 +36,20 @@ class DashboardController < ApplicationController
   def detail
     if params[:category] == "materials"
       sections_detail
-    elsif params[:category] == "jobs"
-      jobs_detail
-    elsif params[:category] == "fabrication_orders"
-      forders_detail
-    elsif params[:category] == "tasks"
-      products_detail
-    elsif params[:category] == "rooms"
-      rooms_detail      
-    end  
-        
+    elsif current_user.try(:admin?) || @api_user.try(:admin?) 
+      if params[:category] == "jobs"
+        jobs_detail
+      elsif params[:category] == "fabrication_orders"
+        forders_detail
+      elsif params[:category] == "tasks"
+        products_detail
+      elsif params[:category] == "rooms"
+        rooms_detail  
+      end
+    else
+      render json: api_response(:failed, "you are not authorized to access this page", nil) and return
+    end
+       
   end   
   
   def sections_detail
