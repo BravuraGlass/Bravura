@@ -4,6 +4,15 @@ BRAVURA.showCustomerPanel = function showCustomerPanel(){
   $('#customerInfoPanel').toggleClass('hide');
 };
 
+BRAVURA.pickAddress = function pickAddress() {
+  var address = $('#pick_address').data('address');
+  var latitude = $('#pick_address').data('latitude');
+  var longitude = $('#pick_address').data('longitude');
+  $('#address').val(address);
+  $('#latitude').val(latitude);
+  $('#longitude').val(longitude);
+}
+
 BRAVURA.onFocusStatus = function onFocusStatus() {
   BRAVURA.previousStatus = $('select#job_status').find(':selected').val();
 };
@@ -309,6 +318,8 @@ $(document).ready(function(){
   $('#appointment_date').on('change', function() { setAppointment(); });
 
   $('#appointment_time').on('change', function() { setAppointment(); });
+
+  $('#pick_address').on('click', function() { BRAVURA.pickAddress(); })
 
   function formatDate(date) {
     var day = date.getDate();

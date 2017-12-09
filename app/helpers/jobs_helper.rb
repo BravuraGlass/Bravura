@@ -9,6 +9,15 @@ module JobsHelper
     end      
   end  
 
+  def prev_address(job)
+    prev_address = ""
+    if job.object.prev_address
+      prev_address << "<small>previous address : #{job.object.prev_address.try(:address)}<small> " 
+      prev_address << link_to('[pick this]', 'javascript:void(0)', id: 'pick_address', data: {address: "#{job.object.prev_address.try(:address)}", latitude: "#{job.object.prev_address.try(:latitude)}", longitude: "#{job.object.prev_address.try(:longitude)}"})
+    end
+    prev_address.html_safe
+  end
+
   def prev_next_button(prev, next_obj)
     buttons = ""
     if prev && next_obj

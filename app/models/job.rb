@@ -145,6 +145,14 @@ class Job < ApplicationRecord
   def prev
     self.class.where("id < ?", id).active_job.last
   end
+
+  def prev_address
+    self.class.where.not(
+      address: nil, 
+      latitude: nil, 
+      longitude: nil
+    ).order(created_at: :desc).first
+  end
   
   private
   def sync_status

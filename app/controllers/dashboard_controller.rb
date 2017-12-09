@@ -4,7 +4,7 @@ class DashboardController < ApplicationController
   
   skip_before_action :require_admin, :require_login,:verify_authenticity_token, if: -> { request.format.json? }
   before_action :api_login_status, if: -> { request.format.json? }  
-  before_action :require_admin_api, if: -> { request.format.json? } , except: :index
+  before_action :require_admin_api, if: -> { request.format.json? } , except:  [:index, :sections_detail, :status_multiple_update]
   before_action :set_job_addresses, only: [:index, :sections_detail, :forders_detail, :jobs_detail, :rooms_detail, :products_detail, :detail]
   
   def index
@@ -170,7 +170,6 @@ class DashboardController < ApplicationController
 
   def status_multiple_update
     result = []
-    api_user_admin = User.where("access_token =? AND id=? AND token_expired >= ? AND type_of_user = 0", params[:access_token], params[:access_id], Date.today)[0]
 
     if params[:orig_action] == "sections_detail" or params[:category] == "material"
       data = params[:section_detail].blank? == false ? params[:section_detail] : params[:new_statuses]
@@ -187,7 +186,7 @@ class DashboardController < ApplicationController
         msg = "No single status was updated"
       end    
     
-    elsif current_user.try(:admin?) || api_user_admin.present?
+    elsif current_user.try(:admin?) || @api_user.try(:admin?) 
     
       if params[:orig_action] == "forders_detail" or params[:category] == "fabrication_order"
         data = params[:forder_detail].blank? == false ? params[:forder_detail] : params[:new_statuses] 
@@ -250,6 +249,9 @@ class DashboardController < ApplicationController
           msg = "No single status was updated"
         end
       end
+    
+    else
+      render json: api_response(:failed, "you are not authorized to access this page", nil) and return
     end
     
     respond_to do |format|

@@ -51,6 +51,7 @@
                 <div class="form-group">
                   <%= f.label "Address" %>
                     <!-- <%= check_box_tag :set_location, :set_location, true, :onclick => "BRAVURA.showLocationMap();" %> -->
+                    <%= prev_address(f) %>
                     <%= f.text_field :address, :class => 'form-control', :id => :address, :readonly => readonly %>
                       <%= f.hidden_field :longitude, :class => 'form-control', :id => :longitude, :readonly => readonly %>
                         <%= f.hidden_field :latitude, :class => 'form-control', :id => :latitude, :readonly => readonly %>

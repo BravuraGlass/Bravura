@@ -145,7 +145,7 @@ class JobsController < ApplicationController
       if @job.save
         AuditLog.create(ip: request.remote_ip, user_name: @current_user.try(:full_name) || @api_user.try(:full_name), user_agent: request.user_agent, auditable: @job, details: "Newly created data, set status to #{@job.status}")
         
-        format.html { redirect_to jobs_path, notice: 'Job was successfully created.' }
+        format.html { redirect_to jobs_path(filter: :all), notice: 'Job was successfully created.' }
       else
         format.html { render :new }
       end

@@ -51,9 +51,9 @@ class ProductsController < ApplicationController
         AuditLog.create(ip: request.remote_ip, user_name: current_user.full_name, user_agent: request.user_agent, auditable: @product, details: "Newly created data, set status to #{@product.status}")
         # create each section associated to the product
         sections = 0..product_params[:sections].to_i - 1
-        abc = ("A".."Z").to_a
-        sections.each do |i|
-          section_name = "#{fabrication_order.job.id}-#{room.name}-#{@product.product_index}#{abc[i]}"
+        sections.each_with_index do |i, no|
+          section_name = "#{fabrication_order.job.id}-#{room.name}-#{@product.id}"
+          section_name << "-#{no+1}" if sections.to_a.length > 1
           first_status = Status.where(:category => Status.categories[:products]).order(:order).first || ''
           ps = ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)
           if ps
