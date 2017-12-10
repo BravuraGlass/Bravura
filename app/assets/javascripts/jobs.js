@@ -13,6 +13,25 @@ BRAVURA.pickAddress = function pickAddress() {
   $('#longitude').val(longitude);
 }
 
+BRAVURA.pickCustomerAddress = function pickCustomerAddress() {
+  var address = $('#pick_customer_address').data('address');
+  var address2 = $('#pick_customer_address').data('address2');
+  var latitude = $('#pick_customer_address').data('latitude');
+  var longitude = $('#pick_customer_address').data('longitude');
+  $('#address').val(address);
+  $('#address2').val(address2);
+  var geocoder = new google.maps.Geocoder;
+  geocoder.geocode({address: address}, function (e, t) {
+    if (t === google.maps.GeocoderStatus.OK) {
+      $('#latitude').val(e[0].geometry.location.lat().toFixed(3));
+      $('#longitude').val(e[0].geometry.location.lng().toFixed(3));
+    }else{
+      $('#latitude').val(latitude);
+      $('#longitude').val(longitude);
+    }
+  });
+
+}
 BRAVURA.onFocusStatus = function onFocusStatus() {
   BRAVURA.previousStatus = $('select#job_status').find(':selected').val();
 };
@@ -320,6 +339,7 @@ $(document).ready(function(){
   $('#appointment_time').on('change', function() { setAppointment(); });
 
   $('#pick_address').on('click', function() { BRAVURA.pickAddress(); })
+  $('#pick_customer_address').on('click', function() { BRAVURA.pickCustomerAddress(); })
 
   function formatDate(date) {
     var day = date.getDate();

@@ -153,6 +153,14 @@ class Job < ApplicationRecord
       longitude: nil
     ).order(created_at: :desc).first
   end
+
+  def last_job
+    Job.last
+  end
+
+  def last_customer
+    last_job.customer
+  end
   
   private
   def sync_status
