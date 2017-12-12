@@ -215,9 +215,23 @@ $(document).ready(function(){
     }
 
     $(this).data('was', $(this).val())
+    if($(this).hasClass('parsley-error')){
+      if($(this).next().hasClass('error')){
+        $(this).next().remove()
+      }
+    }
+    $(this).removeClass("parsley-error");
+    
+
 
   }).on('ajax:error',function(e, xhr, status, error){
-    alert("failed");
+    var message = "";
+    Object.keys(xhr.responseJSON).forEach(function(key) {
+      message = message + ' ' + xhr.responseJSON[key];
+    });
+    $(this).addClass("parsley-error");
+    $( "<label class='error'><i style='color: #f05050'>"+message+" </i></p>" ).insertAfter($(this));
+    alert('failed')
   });
 
   $(".room-status-select").focus(function () {

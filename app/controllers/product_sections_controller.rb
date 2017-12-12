@@ -58,7 +58,7 @@ class ProductSectionsController < ApplicationController
           render json: @product_section, status: :ok, location: @product_section
         end  
       else
-        format.html { render :edit }
+        format.html { render :edit, :layout => "application" }
         format.json { render json: @product_section.errors, status: :unprocessable_entity }
       end
     end
@@ -213,7 +213,7 @@ class ProductSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_section_params
-      params.require(:product_section).permit(:name, :status, :audit_user_name)
+      params.require(:product_section).permit(:name, :size, :status, :audit_user_name)
     end
 
 

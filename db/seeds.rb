@@ -33,6 +33,7 @@ Status.create(category: "products",name: "@ Skyland", order: 8)
 Status.create(category: "products",name: "Ordered", order: 9)
 Status.create(category: "products",name: "Installed", order: 10)
 Status.create(category: "products",name: "N/A", order: 11)
+Status.create(category: "products",name: "To Temper", order: 12)
 Status.create(category: "products",name: "FINISHED", order: 19)
 
 Customer.create(contact_firstname: "Satya", contact_lastname: "Nadella", email: "satya@microsoft.com", company_name: "Microsoft")

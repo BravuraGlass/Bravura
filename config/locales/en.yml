@@ -40,4 +40,11 @@ en:
       default: "%m/%d/%Y %H:%M"
       short: "%H:%M"
       notime: "%m/%d/%Y"
+  activerecord:
+    errors:
+      models:
+        product_section:
+          attributes:
+            size:
+              blank: "Size must be entered before the material to be tempered."
 

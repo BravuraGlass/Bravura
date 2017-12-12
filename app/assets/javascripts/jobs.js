@@ -16,20 +16,9 @@ BRAVURA.pickAddress = function pickAddress() {
 BRAVURA.pickCustomerAddress = function pickCustomerAddress() {
   var address = $('#pick_customer_address').data('address');
   var address2 = $('#pick_customer_address').data('address2');
-  var latitude = $('#pick_customer_address').data('latitude');
-  var longitude = $('#pick_customer_address').data('longitude');
+
   $('#address').val(address);
   $('#address2').val(address2);
-  var geocoder = new google.maps.Geocoder;
-  geocoder.geocode({address: address}, function (e, t) {
-    if (t === google.maps.GeocoderStatus.OK) {
-      $('#latitude').val(e[0].geometry.location.lat().toFixed(3));
-      $('#longitude').val(e[0].geometry.location.lng().toFixed(3));
-    }else{
-      $('#latitude').val(latitude);
-      $('#longitude').val(longitude);
-    }
-  });
 
 }
 BRAVURA.onFocusStatus = function onFocusStatus() {
@@ -194,12 +183,18 @@ BRAVURA.saveAndAssignCustomerToJob = function saveAndAssignCustomerToJob() {
     url: "/customers.json",
     data: { "customer": customer }
   })
-    .done(function (response) {
+    .done(function (cust) {
       // if a new customer was created
-      if (response.id) {
-        var name = response.contact_firstname + ' ' + response.contact_lastname + ' - ' + response.company_name;
-        $('#job_customer_id').append('<option selected="true" value='+response.id+'>'+name+'</option>');
+      if (cust.id) {
+        var name = cust.contact_firstname + ' ' + cust.contact_lastname + ' - ' + cust.company_name;
+        $('#job_customer_id').append('<option selected="true" value='+cust.id+'>'+name+'</option>');
         $('#createCustomerModal').modal('hide');
+        
+        var thelabel = "Customer address: "+cust.address+", Apt#: "+cust.address2;    
+        $('#cust_address_label').text(thelabel);
+        $('#pick_customer_address').data('address',cust.address);
+        $('#pick_customer_address').data('address2',cust.address2);
+        $('#cust_address_title').show();
       } else {
         alert('There was an error creating a new customer');
       }
@@ -238,7 +233,6 @@ BRAVURA.uploadJobPictures = function uploadJobPictures(job_id) {
     $('#picture_preview').hide();
   })
   .fail(function (response) {
-    console.log(response.responseText);
     alert('There was an error uploading a new image');
   });
 };
@@ -312,6 +306,27 @@ $(document).ready(function(){
 
   $('.filter-button').on('change', function () {
     jQuery('#filter-form').submit();
+  });
+  
+  $('#job_customer_id').on('change', function () {
+    $.ajax({
+      method: "GET",
+      url: "/customers/"+$('#job_customer_id').val()+".json"
+    })
+      .done(function (cust) {
+        if (cust.id) {
+          var thelabel = "Customer address: "+cust.address+", Apt#: "+cust.address2;    
+          $('#cust_address_label').text(thelabel);
+          $('#pick_customer_address').data('address',cust.address);
+          $('#pick_customer_address').data('address2',cust.address2);
+          $('#cust_address_title').show();
+        } else {
+          alert('There was an error loading customer');
+        }
+      })
+      .fail(function (response) {
+        alert('There was an error loading a new customer');
+      });  
   });
 
   $('a.filter-button').on('click', function () {

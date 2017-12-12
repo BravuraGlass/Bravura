@@ -36,8 +36,9 @@ class CustomersController < ApplicationController
         format.html { redirect_to @customer, notice: 'Customer was successfully created.' }
         format.json { render json: @customer, status: :created, location: @customer }
       else
+        
         format.html { render :new }
-        format.json { render json: @customer.errors, status: :unprocessable_entity }
+        format.json { render json: @customer.errors.full_messages.join(","), status: :unprocessable_entity }
       end
     end
   end

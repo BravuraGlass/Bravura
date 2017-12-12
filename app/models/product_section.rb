@@ -1,6 +1,8 @@
 class ProductSection < ApplicationRecord
     include AuditableModel
 
+    validates_presence_of :size, :if => :status_is_to_temper?
+
     belongs_to :product
     after_update :sync_status
     attr_accessor :audit_user_name
@@ -14,6 +16,16 @@ class ProductSection < ApplicationRecord
                           }
                         }
                     })
+    end
+
+    def name_size
+      name_size = self.name
+      name_size << ", size: #{self.size}" if self.size
+      name_size
+    end
+
+    def status_is_to_temper?
+      self.status == "To Temper"
     end
     
     private

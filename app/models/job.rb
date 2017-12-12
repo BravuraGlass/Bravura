@@ -155,7 +155,7 @@ class Job < ApplicationRecord
   end
 
   def last_job
-    Job.last
+    Job.where("active=?",true).order(:id).last
   end
 
   def last_customer

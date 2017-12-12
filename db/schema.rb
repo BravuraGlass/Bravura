@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171204104934) do
+ActiveRecord::Schema.define(version: 20171211121202) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -120,6 +120,7 @@ ActiveRecord::Schema.define(version: 20171204104934) do
     t.string "status", default: "In Fabrication"
     t.string "name"
     t.integer "section_index"
+    t.string "size"
     t.index ["product_id"], name: "index_product_sections_on_product_id"
   end
 

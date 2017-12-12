@@ -57,11 +57,11 @@
     <tr class="" data-parent="product_<%= product.id %>" data-associated-room-id=<%= room.id %>>
       <td></td>
       <td></td>
-      <td><%= section.name %></td>
+      <td><%= section.name_size %></td>
       <td></td>
       <td>
         <%= collection_select :product_section, :status, @product_statuses, :name, :name,
-        { selected: section.status } , { class: "form-control section-status-select section-status-parent-product-#{product.id} section-status-parent-room-#{room.id}", id: "section-status-#{section.id}",:data => { :remote => true, :url => product_section_path(section.id, format: :json), :method => :put , :was => section.status} }%>
+        { selected: section.status } , { class: "form-control section-status-select section-status-parent-product-#{product.id} section-status-parent-room-#{room.id}", id: "section-status-#{section.id}",:data => { :remote => true, :url => product_section_path(section.id, format: :json), :method => :put , :was => section.status, :size => section.size} }%>
       </td>
       <td>
         <%= link_to 'Barcode', s_orders_barcode_path(section), target: "_blank", :class => 'btn btn-default btn-xs' %>
