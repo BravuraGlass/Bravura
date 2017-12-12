@@ -62,6 +62,8 @@
         console.log("Real Markers: ", gMapMarkers);
 
         //infoWindowList.push(infoWindow);
+
+        filterData();
       }
     }
 
@@ -148,5 +150,24 @@
           }
         });
         */
+  }
+
+  function filterData() {
+    for(var i=markers.length - 1; i>=0; i--) {
+      if(isExist(markers[i].user_id)) {
+        markers.splice(i, 1);
+        gMapMarkers.splice(i, 1);
+      }
+    }
+  }
+
+  function isExist(user_id) {
+    for(var i=0; i<markers.length; i++) {
+      if(markers[i].user_id == user_id) {
+        return true;
+      }
+    }
+
+    return false;
   }
 </script>
