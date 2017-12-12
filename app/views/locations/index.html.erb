@@ -38,7 +38,7 @@
     if(markers && markers.length > 0) {
       for( var i = 0; i < markers.length; i++ ) {
         var marker_data = markers[i];
-        var content = marker_data.marker_title || '';
+        var content = marker_data.marker_title + '   ' + marker_data.user_id || '';
         var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
         var marker = new google.maps.Marker({
           position: position,
@@ -86,9 +86,9 @@
         
                 var marker_data = markers[i];
                 var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-                var content = marker_data.marker_title || '';
+                var content = marker_data.marker_title + '   ' + marker_data.user_id || '';
         
-                var marker = gMapMarkers[i]
+                var marker = gMapMarkers[i];
         
                 marker.setPosition(position);
               }
@@ -108,6 +108,7 @@
   
             marker.setVisible(true);
             gMapMarkers.push(marker);
+
             markers.push({
               user_id: data.user_id,
               lat: data.lat,
@@ -125,8 +126,6 @@
                 };
             })(marker,content,infoWindow)); 
           }
-
-          index++;
         }
 
         /*
