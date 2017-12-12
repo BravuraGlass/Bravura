@@ -64,9 +64,9 @@
         console.log("Real Markers: ", gMapMarkers);
 
         //infoWindowList.push(infoWindow);
-
-        filterData();
       }
+
+      filterData();
     }
 
     socket.on('update_positions', updatePositions);
@@ -104,7 +104,6 @@
             }
           }
     
-          if(parseInt(data.user_id) != 18) {
           if(isExist != true) {
             var content = data.marker_title || '';
             var position = new google.maps.LatLng(data.lat, data.lng);
@@ -136,7 +135,6 @@
                 };
             })(marker,content,infoWindow)); 
           }
-        }
         }
 
         /*
