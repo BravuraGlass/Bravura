@@ -45,6 +45,8 @@ class ProductsController < ApplicationController
     @product.name = product_params[:name]
     @product.product_type_id = product_params[:product_type_id]
     @product.room = room
+    
+    product_position = room.products.count + 1
 
     respond_to do |format|
       if @product.save
@@ -52,7 +54,7 @@ class ProductsController < ApplicationController
         # create each section associated to the product
         sections = 0..product_params[:sections].to_i - 1
         sections.each_with_index do |i, no|
-          section_name = "#{fabrication_order.job.id}-#{room.name}-#{@product.id}"
+          section_name = "#{fabrication_order.job.id}-#{room.name}-#{product_position}"
           section_name << "-#{no+1}" if sections.to_a.length > 1
           first_status = Status.where(:category => Status.categories[:products]).order(:order).first || ''
           ps = ProductSection.create(name: section_name, product: @product, status: first_status.name, section_index: i + 1)

@@ -366,7 +366,7 @@ class WorkingLog < ApplicationRecord
           end  
         end  
         
-        rs[row] = {user_id: wlog.user_id, name: wlog.user.full_name, duration: duration, status: status} 
+        rs[row] = {user_id: wlog.user_id, first_name: wlog.user.first_name, last_name: wlog.user.last_name, duration: duration, status: status} 
         
         if data[idx].user_id != data[idx+1].try(:user_id)      
           status = "automatic"
@@ -377,7 +377,7 @@ class WorkingLog < ApplicationRecord
           newrow = false   
         end
       else
-        rs[row] = {user_id: wlog.user_id, name: wlog.user.full_name, duration: duration, status: status}     
+        rs[row] = {user_id: wlog.user_id, first_name: wlog.user.first_name, last_name: wlog.user.last_name, duration: duration, status: status}     
         newrow = false
       end          
     end  
@@ -389,10 +389,10 @@ class WorkingLog < ApplicationRecord
     end    
 
     users.each do |user|
-      rs << {user_id: user.id, name: user.full_name, duration: 0, status: "manual"}
+      rs << {user_id: user.id, first_name: user.first_name, last_name: user.last_name, duration: 0, status: "manual"}
     end  
     
-    return rs
+    return rs.sort_by {|usr| usr[:last_name]}
   end 
   
   def self.report_raw(wstart,wend)
