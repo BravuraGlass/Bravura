@@ -91,7 +91,7 @@
         
                 var marker_data = markers[i];
                 var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-                var content = marker_data.marker_title + '   ' + marker_data.user_id || '';
+                var content = marker_data.marker_title || '';
         
                 var marker = gMapMarkers[i];
         
