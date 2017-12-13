@@ -86,7 +86,7 @@ $(document).ready(function(){
         '</div>'
       ].join('\n'),
       suggestion: function(data){
-        return `<li>(${data.id}) ${data.address}</li>`
+        return '<li>('+data.id+') '+data.address+'</li>'
       }
     }
   });
