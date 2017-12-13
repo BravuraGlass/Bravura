@@ -4,7 +4,7 @@ class UtilitiesController < ApplicationController
   def data_backup
     if current_user.first_name.downcase.include?("kevin") or current_user.first_name.downcase.include?("adit")
       #begin
-        @thefiles = Dir.entries(Rails.root.to_s+"/tmp/backup/")
+        @thefiles = Dir.entries(Rails.root.to_s+"/tmp/backup/").sort.reverse
       #rescue
       #  @thefiles = []
       #end

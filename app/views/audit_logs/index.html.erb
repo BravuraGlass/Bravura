@@ -27,28 +27,36 @@
                         <%= link_to "Go", "#", {class: "btn btn-default filter-button"} %> <br /><br />
                       </div>
                       <div class="form-group col-md-12">
-                        <div class="col-xs-12 col-md-3">
+                        <div class="col-xs-12 col-md-2">
                           <div class="col-sm-3 col-label">
                             <label>User:</label>
                           </div>
                           <div class="col-sm-9">
-                            <%= select_tag "user", options_for_select(@users.collect {|user| user.full_name},params[:user]), include_blank: "All Users",class: 'form-control select-bootstrap'  %>
+                            <%= select_tag "user", options_for_select(@users.collect {|user| user.full_name},params[:user]), include_blank: "All Users",class: 'form-control '  %>
                           </div>
                         </div>
-                        <div class="col-xs-12 col-md-6">
-                          <div class="col-sm-3 col-label">
+                        <div class="col-xs-12 col-md-4">
+                          <div class="col-sm-4 col-label">
                             <label>Select Address:</label>
                           </div>
-                          <div class="col-sm-9">
-                            <%= select_tag "address", options_for_select(@jobs.collect {|job| ["(#{job.id}) #{job.address}", job.id]},params[:address]), include_blank: "All", class: 'form-control select-bootstrap'%>
+                          <div class="col-sm-8">
+                            <%= select_tag "address", options_for_select(@jobs.collect {|job| ["(#{job.id}) #{job.address}", job.id]},params[:address]), include_blank: "All", class: 'form-control'%>
                           </div>
                         </div>
-                        <div class="col-xs-12 col-md-3">
+                        <div class="col-xs-12 col-md-4">
+                          <div class="col-sm-4 col-label">
+                            <label>Search Address:</label>
+                          </div>
+                          <div class="col-sm-6" id="scrollable-dropdown-menu">
+                            <%= text_field_tag "search_address",  params[:search_address], class: 'form-control typeahead' %>
+                          </div>
+                        </div>
+                        <div class="col-xs-12 col-md-2">
                           <div class="col-sm-3 col-label">
                             <label>Status:</label>
                           </div>
                           <div class="col-sm-9">
-                            <%= select_tag "status", options_for_select(@statuses.collect {|sta| [sta.name, sta.name]},params[:status]), include_blank: "All",class: 'form-control select-bootstrap'%>
+                            <%= select_tag "status", options_for_select(@statuses.collect {|sta| [sta.name, sta.name]},params[:status]), include_blank: "All",class: 'form-control '%>
                           </div>
                         </div>
                       </div>

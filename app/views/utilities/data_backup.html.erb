@@ -18,7 +18,7 @@
                   <th>Size</th>
                   <th>Download</th>
                 </tr>  
-                <% @thefiles.reverse.each do |thefile| %>
+                <% @thefiles.each do |thefile| %>
                   <% if thefile.include?("sql") %>
                     <tr>
                       <td><%= thefile %></td>

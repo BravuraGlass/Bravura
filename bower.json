@@ -81,7 +81,8 @@
     "datatables-buttons": "1.2.4",
     "datatables-responsive": "2.1.1",
     "chosen": "^1.7.0",
-    "socket.io-client" : "latest"
+    "socket.io-client": "latest",
+    "typeahead.js": "0.11.1"
   },
   "resolutions": {
     "jquery": "2.2.4"

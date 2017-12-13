@@ -63,8 +63,14 @@ class JobsController < ApplicationController
       where = {active: @show_active, appointment: Date.today.beginning_of_day..Date.today.end_of_day}
     
     end
+
+    plain_where = if params[:address]
+      "upper(jobs.address) like upper('%#{params[:address]}%')"
+    else
+      "1=1"
+    end
     
-    @jobs = Job.where(where).joins("LEFT JOIN customers ON customers.id = jobs.customer_id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname AS customer_firstname, customers.contact_lastname AS customer_lastname, customers.company_name AS customer_company_name, jobs.*, fabrication_orders.status AS fo_status, fabrication_orders.id AS fo_id")
+    @jobs = Job.where(where).where(plain_where).joins("LEFT JOIN customers ON customers.id = jobs.customer_id LEFT JOIN fabrication_orders ON fabrication_orders.job_id = jobs.id").select("customers.contact_firstname AS customer_firstname, customers.contact_lastname AS customer_lastname, customers.company_name AS customer_company_name, jobs.*, fabrication_orders.status AS fo_status, fabrication_orders.id AS fo_id")
     # set_markers if @job.id
   end
 

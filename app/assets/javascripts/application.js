@@ -38,6 +38,9 @@
 // --- Select2
 //= require select2/dist/js/select2
 
+// ---- typeahead
+//= require typeahead.js/dist/bloodhound
+//= require typeahead.js/dist/typeahead.jquery
 
 // --- Input Mask
 
