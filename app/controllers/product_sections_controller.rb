@@ -41,7 +41,16 @@ class ProductSectionsController < ApplicationController
   end  
 
   def edit
-    render :layout => "application"
+    respond_to do |format|
+      format.html  { 
+        @remote = false
+        render :layout => "application"
+      }
+      format.js {
+        @remote = true
+        render layout: false
+      }
+    end
   end
 
   # PATCH/PUT /product_section/1
@@ -57,9 +66,11 @@ class ProductSectionsController < ApplicationController
           flash[:notice] = "status for #{@product_section.name} was successfully updated"
           render json: @product_section, status: :ok, location: @product_section
         end  
+        format.js
       else
         format.html { render :edit, :layout => "application" }
         format.json { render json: @product_section.errors, status: :unprocessable_entity }
+        format.js
       end
     end
   end
@@ -213,7 +224,7 @@ class ProductSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_section_params
-      params.require(:product_section).permit(:name, :size, :status, :audit_user_name)
+      params.require(:product_section).permit(:name, :status, :audit_user_name, :size_a, :size_b, :size_c, :size_d, :edge_type_a, :edge_type_b, :edge_type_c, :edge_type_d)
     end
 
 

@@ -57,11 +57,12 @@
     <tr class="" data-parent="product_<%= product.id %>" data-associated-room-id=<%= room.id %>>
       <td></td>
       <td></td>
-      <td><%= section.name_size %></td>
+      <td>
+        <%= section.name %><%= link_to section.name_size, edit_fabrication_order_room_product_product_section_path(@fabrication_order, room, product, section), remote: true, class: "btn btn-default btn-xs", id: "link-section-#{section.id}" if section.name_size.present? %></td>
       <td></td>
       <td>
         <%= collection_select :product_section, :status, @product_statuses, :name, :name,
-        { selected: section.status } , { class: "form-control section-status-select section-status-parent-product-#{product.id} section-status-parent-room-#{room.id}", id: "section-status-#{section.id}",:data => { :remote => true, :url => product_section_path(section.id, format: :json), :method => :put , :was => section.status, :size => section.size} }%>
+        { selected: section.status } , { class: "form-control section-status-select section-status-parent-product-#{product.id} section-status-parent-room-#{room.id}", id: "section-status-#{section.id}",:data => { :remote => true, :url => product_section_path(section.id, format: :json), :method => :put , :was => section.status} }%>
       </td>
       <td>
         <%= link_to 'Barcode', s_orders_barcode_path(section), target: "_blank", :class => 'btn btn-default btn-xs' %>

@@ -7,10 +7,13 @@ module Printable
   end
     
   def convert_fabrication_orders_to_barcode id
-    FabricationOrder.find(id).rooms.each do |room|
+    fo = FabricationOrder.find(id)
+    addr = fo.job.address
+    apt = fo.job.address2
+    fo.rooms.each do |room|
       room.products.each do |product|
         product.product_sections.each do |sect|
-          @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png")]
+          @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]
         end        
       end
     end     
@@ -36,9 +39,12 @@ module Printable
   
   def convert_room_orders_to_barcode id
     room = Room.find(id)
+    addr = room.fabrication_order.job.address
+    apt  = room.fabrication_order.job.address2
+
     room.products.each do |product|
       product.product_sections.each do |sect|
-        @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png")]
+        @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]
       end        
     end      
   end  
@@ -60,8 +66,12 @@ module Printable
   end
   
   def convert_product_orders_to_barcode id
-    Product.find(id).product_sections.each do |sect|
-      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png")]   
+    product = Product.find(id)
+    addr = product.room.fabrication_order.job.address
+    apt  = product.room.fabrication_order.job.address2
+
+    product.product_sections.each do |sect|
+      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]   
     end  
   end  
 
@@ -80,7 +90,10 @@ module Printable
   
   def convert_section_orders_to_barcode id
     sect = ProductSection.find(id)
-    @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png")]    
+    addr = sect.product.room.fabrication_order.job.address
+    apt  = sect.product.room.fabrication_order.job.address2
+
+    @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]    
   end  
 
   def convert_section_orders_to_qr id

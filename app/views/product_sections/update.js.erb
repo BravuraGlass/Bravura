@@ -1,0 +1,8 @@
+<% if @product_section.valid? %>
+  $('#materialModal').modal('hide');
+  $('#link-section-<%= @product_section.id %>').html('<%= @product_section.name_size %>')
+<% else %>
+  $('#product_section_status').addClass("parsley-error");
+  $( "<label class='error'><i style='color: #f05050'> <%= @product_section.errors.full_messages.join(' ') %> </i></p>" ).insertAfter($('#product_section_status'));
+
+<% end %>

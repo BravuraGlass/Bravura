@@ -17,3 +17,9 @@ USER_TYPE = {
   :sales_representative => "1",
   :field_worker => "2"
 }
+
+EDGE_TYPE = [
+  "PL",
+  "BV",
+  "PL45"
+]

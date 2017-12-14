@@ -11,6 +11,14 @@
     text-align: center;
   }
 
+  .address {
+    margin-top: 10px;
+    max-width: 250px; 
+    display: inline-table;
+    text-align: justify;
+    font-size: x-large;
+  }
+
   table {
     margin: auto;
     border-width: 0;
@@ -41,6 +49,11 @@
         <h1><%= qr[0] %></h1>
         <div class="table">
           <%= image_tag qr[1] %>
+        </div>
+        <div class="address">
+          <div><%= qr[2] %></div>
+          <br/> Apt# <br/>
+          <div><%= qr[3] %></div>
         </div>
       </div>
     </div>

@@ -1,7 +1,7 @@
 class ProductSection < ApplicationRecord
     include AuditableModel
 
-    validates_presence_of :size, :if => :status_is_to_temper?
+    validate :validate_minimum_edge_size, :if => :status_is_to_temper?
 
     belongs_to :product
     after_update :sync_status
@@ -18,9 +18,24 @@ class ProductSection < ApplicationRecord
                     })
     end
 
+    def validate_minimum_edge_size
+      unless self.minimum_edge_size
+        errors.add :status, "Edge types must be entered before the material to be tempered."
+      end
+    end
+
+    def minimum_edge_size
+      [self.size_a.present?, self.size_b.present?, self.size_c.present?, self.size_d.present?].delete_if{|x| x.blank?}.compact.size > 1 &&
+        [self.edge_type_a.present?, self.edge_type_b.present?, self.edge_type_c.present?, self.edge_type_d.present?].delete_if{|x| x.blank?}.compact.size > 1
+    end
+
     def name_size
-      name_size = self.name
-      name_size << ", size: #{self.size}" if self.size
+      name_size = ""
+      name_size << "size: " if self.size_a.present? || self.size_b.present? || self.size_c.present? || self.size_d.present?
+      name_size << " #{self.size_a} " if self.size_a.present?
+      name_size << " x #{self.size_b} " if self.size_b.present?
+      name_size << " x #{self.size_c} " if self.size_c.present?
+      name_size << " x #{self.size_d} " if self.size_d.present?
       name_size
     end
 
