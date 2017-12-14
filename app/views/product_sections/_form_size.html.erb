@@ -1,0 +1,102 @@
+<% readonly ||= false %>
+
+<!-- START row-->
+<div class="row">
+   <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+      <!-- START panel-->
+      <div class="panel panel-default">
+         <div class="panel-heading"></div>
+         <div class="panel-body">
+
+            <%= form_for @product_section, :url => fabrication_order_room_product_product_section_path, :html => { :class => "product_section form-horizontal", :role => 'form', remote: @remote } do |f| %>
+              <% if @product_section.errors.any? %>
+                <div id="error_expl" class="panel panel-danger">
+                  <div class="panel-heading">
+                    <h3 class="panel-title"><%= pluralize(@product_section.errors.count, "error") %> prohibited this product_section from being saved:</h3>
+                  </div>
+                  <div class="panel-body">
+                    <ul>
+                    <% @product_section.errors.full_messages.each do |msg| %>
+                      <li><%= msg %></li>
+                    <% end %>
+                    </ul>
+                  </div>
+                </div>
+                <% end %>
+                <%= render :partial => 'shared/flash_messages' %>
+              <fieldset>
+                <div class="form-group">
+                   <label class="col-sm-2 control-label">Size</label>
+                   <div class="col-sm-8">
+                      <div class="row">
+                         <div class="col-sm-2">
+                            <%= f.number_field :size_a, maxlength: "4", size: "4", min:"1", max: "9999", :class => 'form-control input-sm change-size', placeholder: 'width', :readonly => readonly %>
+                         </div>
+                         <div class="col-sm-2">
+                            <%= f.select :fraction_size_a, options_for_select(FRACTION_TYPE, f.object.fraction_size_a) , {include_blank: true} ,{:class => 'form-control m-b select-bootstrap'}%>
+                         </div>
+                         <div class="col-sm-2">
+                            <%= f.number_field :size_b, maxlength: "4", size: "4", min:"1", max: "9999", :class => 'form-control input-sm change-size', placeholder: 'height', :readonly => readonly %>
+                         </div>
+                         <div class="col-sm-2">
+                            <%= f.select :fraction_size_b, options_for_select(FRACTION_TYPE, f.object.fraction_size_a) , {include_blank: true} ,{:class => 'form-control m-b select-bootstrap'}%>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </fieldset>
+             <fieldset>
+               <div class="form-group">
+                 <label class="col-sm-2 control-label"></label>
+                 <div class="col-sm-6">
+                    <div class="row">
+                      <div class="col-sm-3">
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="col-sm-6 col-centered">
+                          <%= f.select :edge_type_a, options_for_select(@edge_type, f.object.edge_type_a) , {include_blank: "-Edge A-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-3 height_canvas">
+                        <%= f.select :edge_type_d, options_for_select(@edge_type, f.object.edge_type_d) , {include_blank: "-Edge D-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                      </div>
+                      <div class="col-sm-6" id="canvas-wrapper">
+                        <canvas id="canvas">
+                          <img src="https://user-images.githubusercontent.com/116856/33920682-36c309e8-dffa-11e7-8979-7da6f97df992.jpg"/>
+                        </canvas>
+                      </div>
+                      <div class="col-sm-3 height_canvas">
+                        <%= f.select :edge_type_b, options_for_select(@edge_type, f.object.edge_type_b) , {include_blank: "-Edge B-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                      </div>
+                    </div>
+                    <div class="row">
+                      <div class="col-sm-3">
+                      </div>
+                      <div class="col-sm-6">
+                        <div class="col-sm-6 col-centered">
+                          <%= f.select :edge_type_c, options_for_select(@edge_type, f.object.edge_type_c) , {include_blank: "-Edge C-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                        </div>
+                      </div>
+                      <div class="col-sm-3">
+                      </div>
+                    </div>
+                 </div>
+               </div>
+             </fieldset>
+             <fieldset>
+               <div class="actions <%= 'hide' if readonly %>">
+                  <%= f.submit nil, :class => 'btn btn-primary' %>
+                  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                       edit_fabrication_order_path(params[:fabrication_order_id]), :class => 'btn btn-default' %>
+                </div>
+             </fieldset>
+            <% end %>
+
+         </div>
+      </div>
+   </div>
+</div>

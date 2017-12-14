@@ -1,0 +1,47 @@
+<h3>Edge Types
+   <small>List of existing edge_types</small>
+</h3>
+<div class="container-fluid">
+   <div class="row">
+      <div class="col-lg-12">
+         <div class="panel panel-default">
+            <div class="panel-heading">
+               <small></small>
+            </div>
+            <div class="panel-body">
+               <table class="datatable table table-striped table-hover responsive">
+                  <thead>
+                    <tr>
+                                            <th class="sort-alpha">Name</th>
+                                            <th class="no-sort">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                     <% @edge_types.each do |edge_type| %>
+                        <tr>
+                                                    <td><%= edge_type.name %></td>
+                                                    <td>
+                            <%= link_to 'Show',
+                                        edge_type_path(edge_type), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Edit',
+                                        edit_edge_type_path(edge_type), :class => 'btn btn-default btn-xs' %>
+                            <%= link_to 'Delete',
+                                        edge_type_path(edge_type),
+                                        :method => :delete,
+                                        :data => { :confirm => 'Are you sure you want to delete the edge_type?' },
+                                        :class => 'btn btn-xs btn-danger' %>
+                          </td>
+                        </tr>
+                      <% end %>
+                  </tbody>
+               </table>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+
+
+<%= link_to 'New Edge Type',
+            new_edge_type_path,
+            :class => 'btn btn-primary' %>

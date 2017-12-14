@@ -1,4 +1,12 @@
 $('#modal_container').empty().append('<%= escape_javascript(render partial: 'material') %>');
+$('.select-bootstrap').select2({
+  theme: 'bootstrap'
+});
 BRAVURA.resetCanvas()
 BRAVURA.draw();
+
+$('.change-size').on('blur', function(){
+  BRAVURA.resetCanvas()
+  BRAVURA.draw();
+})
 $('#materialModal').modal({show: true, keyboard: false});

@@ -56,4 +56,8 @@ Employee.create(first_name: "Leroy", last_name: "Sane", email_address: "leroy@ma
 
 ["Mirror","Window","Table"].each do |ptype|
   ProductType.create(name: ptype)
+end
+
+["PL", "BV", "PL45"].each do |etype|
+  EdgeType.create(name: etype)
 end  

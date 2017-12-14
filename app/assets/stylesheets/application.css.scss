@@ -254,4 +254,18 @@ ul.pagination.small {
 .col-centered{
   margin: 0 auto;
   float: none;
+  padding: 10px;
+}
+.vcenter {
+  height: 110px;
+  line-height: 100px;
+}
+
+.vcenter input, .vcenter span{
+  vertical-align: middle;
+}
+
+.height_canvas{
+  height: 200px;
+  padding-top: 80px;
 }

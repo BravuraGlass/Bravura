@@ -57,8 +57,7 @@
     <tr class="" data-parent="product_<%= product.id %>" data-associated-room-id=<%= room.id %>>
       <td></td>
       <td></td>
-      <td>
-        <%= section.name %><%= link_to section.name_size, edit_fabrication_order_room_product_product_section_path(@fabrication_order, room, product, section), remote: true, class: "btn btn-default btn-xs", id: "link-section-#{section.id}" if section.name_size.present? %></td>
+      <td id="name-section-<%= section.id %>"><%= section.name_size %></td>
       <td></td>
       <td>
         <%= collection_select :product_section, :status, @product_statuses, :name, :name,
@@ -68,6 +67,7 @@
         <%= link_to 'Barcode', s_orders_barcode_path(section), target: "_blank", :class => 'btn btn-default btn-xs' %>
         <%# link_to 'Print', s_orders_qr_path(section), target: "_blank", :class => 'btn btn-default btn-xs' %>
         <a href="<%= edit_fabrication_order_room_product_product_section_path(@fabrication_order, room, product, section) %>" class="btn btn-default btn-xs">Edit</a>
+        <%= link_to "Size", size_fabrication_order_room_product_product_section_path(@fabrication_order, room, product, section),  class: "btn btn-default btn-xs", id: "link-section-#{section.id}"  %>
         <a href="<%= fabrication_order_room_product_product_section_path(@fabrication_order, room, product, section) %>" class="btn btn-default btn-xs"
           data-confirm="Are you sure you want to delete this Product Section?" data-method="delete">Delete</a>
         <%= link_to "Audit", audit_section_fabrication_order_path(section.id), remote: true, class: "btn btn-default btn-xs"%>

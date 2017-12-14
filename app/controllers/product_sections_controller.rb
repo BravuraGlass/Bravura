@@ -6,7 +6,7 @@ class ProductSectionsController < ApplicationController
   include Printable
   
   before_action :set_product_section, only: [:barcode, :show, :edit, :update, :destroy,
-     :update_status, :edit_section_status]
+     :update_status, :edit_section_status, :size]
   skip_before_action :require_login, only: [:materials, :available_material_statuses, :edit_section_status, :update_status], if: -> { request.format.json? }   
   before_action :api_login_status, only: [:materials, :available_material_statuses, :update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
   
@@ -19,6 +19,20 @@ class ProductSectionsController < ApplicationController
     end  
   end  
   
+  def size
+    set_edge_type
+    respond_to do |format|
+      format.html  { 
+        @remote = false
+        render :layout => "application"
+      }
+      format.js {
+        @remote = true
+        render layout: false
+      }
+    end
+  end
+
   def available_material_statuses
     @statuses = Status.where(:category => Status.categories[:products]).order(:order).collect {|sta| sta.name}
     
@@ -43,12 +57,7 @@ class ProductSectionsController < ApplicationController
   def edit
     respond_to do |format|
       format.html  { 
-        @remote = false
         render :layout => "application"
-      }
-      format.js {
-        @remote = true
-        render layout: false
       }
     end
   end
@@ -68,7 +77,11 @@ class ProductSectionsController < ApplicationController
         end  
         format.js
       else
-        format.html { render :edit, :layout => "application" }
+        format.html {
+          set_edge_type
+          renderr = request.referrer.include?("size") ? :size : :edit
+          render renderr, :layout => "application" 
+        }
         format.json { render json: @product_section.errors, status: :unprocessable_entity }
         format.js
       end
@@ -186,6 +199,10 @@ class ProductSectionsController < ApplicationController
       end  
     end
   end
+
+  def set_edge_type
+    @edge_type = EdgeType.all.map{|x| [x.name, x.id]} rescue []
+  end
   
   
   
@@ -224,7 +241,7 @@ class ProductSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_section_params
-      params.require(:product_section).permit(:name, :status, :audit_user_name, :size_a, :size_b, :size_c, :size_d, :edge_type_a, :edge_type_b, :edge_type_c, :edge_type_d)
+      params.require(:product_section).permit(:name, :status, :audit_user_name, :size_a, :size_b, :fraction_size_a, :fraction_size_b, :edge_type_a, :edge_type_b, :edge_type_c, :edge_type_d)
     end
 
 

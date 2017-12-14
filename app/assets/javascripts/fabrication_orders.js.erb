@@ -1,10 +1,10 @@
 var BRAVURA = BRAVURA || {};
 
 BRAVURA.materialWidth = function materialWidth(){
-  return parseInt(document.getElementById("product_section_size_a").value) || parseInt(document.getElementById("product_section_size_c").value) || 100
+  return parseInt(document.getElementById("product_section_size_a").value) || 100
 }
 BRAVURA.materialHeight = function materialHeight(){
-  return parseInt(document.getElementById("product_section_size_b").value) || parseInt(document.getElementById("product_section_size_d").value) || 100
+  return parseInt(document.getElementById("product_section_size_b").value) || 100
 }
 BRAVURA.resetCanvas = function resetCanvas(){
   var number1 = BRAVURA.materialWidth() ;

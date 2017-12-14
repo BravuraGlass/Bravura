@@ -28,6 +28,7 @@ Rails.application.routes.draw do
     end
   end
   
+  resources :edge_types
   resources :product_types
   resources :status_checklist_items
   resources :statuses
@@ -64,7 +65,11 @@ Rails.application.routes.draw do
         get 'list'
       end  
       resources :products, only: [:new, :edit, :update, :destroy] do
-        resources :product_sections, only: [:new, :edit, :update, :destroy]
+        resources :product_sections, only: [:new, :edit, :update, :destroy] do
+          member do
+            get :size
+          end
+        end
       end
     end
     resources :products, only: [:create]

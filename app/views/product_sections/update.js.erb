@@ -1,8 +1,19 @@
 <% if @product_section.valid? %>
   $('#materialModal').modal('hide');
-  $('#link-section-<%= @product_section.id %>').html('<%= @product_section.name_size %>')
+  $('#name-section-<%= @product_section.id %>').html('<%= @product_section.name_size %>')
 <% else %>
-  $('#product_section_status').addClass("parsley-error");
-  $( "<label class='error'><i style='color: #f05050'> <%= @product_section.errors.full_messages.join(' ') %> </i></p>" ).insertAfter($('#product_section_status'));
+  if($('#product_section_status').length){
+    $('#product_section_status').addClass("parsley-error");
+    $( "<label class='error'><i style='color: #f05050'> <%= @product_section.errors.full_messages.join(' ') %> </i></p>" ).insertAfter($('#product_section_status'));
+  }else{
+    $('#product_section_size_a').attr('required', true);
+    $('#product_section_size_b').attr('required', true);
+    $('#product_section_edge_type_a').attr('required', true);
+    $('#product_section_edge_type_b').attr('required', true);
+    $('#product_section_edge_type_c').attr('required', true);
+    $('#product_section_edge_type_d').attr('required', true);
+    
+    $('form[id^=edit_product_section_]').submit();
+  }
 
 <% end %>

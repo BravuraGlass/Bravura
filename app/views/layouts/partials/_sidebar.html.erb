@@ -88,6 +88,12 @@
                <span>Product Types</span>
             </a>
          </li>
+         <li class="<%= 'active' if current_controller == 'edge_types' %>">
+            <a href="<%= edge_types_path %>" title="Edge Types">
+               <em><i class="fa fa-cube"></i></em>
+               <span>Edge Types</span>
+            </a>
+         </li>
          <% if current_user.type_of_user == "0" %>
          <li class="<%= 'active' if current_controller == 'working_logs' %>">
             <a href="<%= report_working_logs_path %>" title="Product Types">

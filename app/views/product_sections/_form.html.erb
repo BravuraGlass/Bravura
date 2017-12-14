@@ -7,7 +7,7 @@
       <div class="panel panel-default">
          <div class="panel-heading"></div>
          <div class="panel-body">
-            <%= form_for @product_section, :url => fabrication_order_room_product_product_section_path, :html => { :class => "product_section", :role => 'form', remote: @remote } do |f| %>
+            <%= form_for @product_section, :url => fabrication_order_room_product_product_section_path, :html => { :class => "product_section", :role => 'form' } do |f| %>
               <% if @product_section.errors.any? %>
               <div id="error_expl" class="panel panel-danger">
                 <div class="panel-heading">
@@ -33,54 +33,6 @@
                 <%= f.label :status %>
                   <%= f.collection_select :status, @statuses, :name, :name, { include_blank: false }, class: 'form-control select-bootstrap'  %>
               </div>
-
-              <div class="form-group">
-                <div class="col-md-12">
-                  <div class="col-md-4">
-                  </div>
-                  <div class="col-md-4 ">
-                    <div class="col-xs-8 col-centered">
-                    <%= f.text_field :size_a, :class => 'form-control change-size', placeholder: 'Size A', :readonly => readonly %>
-                    <%= f.select :edge_type_a, options_for_select(EDGE_TYPE, f.object.edge_type_a) , {include_blank: "-Edge A-"} ,{:class => 'form-control'}%>
-                    </div>
-                  </div>
-                  <div class="col-md-4"></div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-12">
-                  <div class="col-md-4">
-                    <div class="col-xs-8">
-                      <%= f.text_field :size_d, :class => 'form-control change-size', placeholder: 'Size D', :readonly => readonly %>
-                      <%= f.select :edge_type_d, options_for_select(EDGE_TYPE, f.object.edge_type_d) , {include_blank: "-Edge D-"} ,{:class => 'form-control'}%>
-                    </div>
-                  </div>
-                  <div class="col-md-4" id="canvas-wrapper">
-                    <canvas id="canvas">
-                      <img src="https://user-images.githubusercontent.com/116856/33920682-36c309e8-dffa-11e7-8979-7da6f97df992.jpg"/>
-                    </canvas>
-                  </div>
-                  <div class="col-md-4">
-                    <div class="col-xs-8">
-                      <%= f.text_field :size_b, :class => 'form-control change-size', placeholder: 'Size B', :readonly => readonly %>
-                      <%= f.select :edge_type_b, options_for_select(EDGE_TYPE, f.object.edge_type_b) , {include_blank: "-Edge B-"} ,{:class => 'form-control'}%>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="form-group">
-                <div class="col-md-12">
-                  <div class="col-md-4"></div>
-                  <div class="col-md-4">
-                    <div class="col-xs-8 col-centered">
-                      <%= f.text_field :size_c, :class => 'form-control change-size', placeholder: 'Size C', :readonly => readonly %>
-                      <%= f.select :edge_type_c, options_for_select(EDGE_TYPE, f.object.edge_type_c) , {include_blank: "-Edge C-"} ,{:class => 'form-control'}%>
-                    </div>
-                  </div>
-                  <div class="col-md-4"></div>
-                </div>
-              </div>
-
 
               <div class="actions <%= 'hide' if readonly %>">
                   <%= f.submit nil, :class => 'btn btn-primary' %>

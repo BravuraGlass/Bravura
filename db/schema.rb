@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171213234448) do
+ActiveRecord::Schema.define(version: 20171214100511) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -49,6 +49,12 @@ ActiveRecord::Schema.define(version: 20171213234448) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.string "address2"
+  end
+
+  create_table "edge_types", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   create_table "employees", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -122,8 +128,8 @@ ActiveRecord::Schema.define(version: 20171213234448) do
     t.integer "section_index"
     t.string "size_a"
     t.string "size_b"
-    t.string "size_c"
-    t.string "size_d"
+    t.string "fraction_size_a"
+    t.string "fraction_size_b"
     t.string "edge_type_a"
     t.string "edge_type_b"
     t.string "edge_type_c"
