@@ -224,8 +224,8 @@ class JobsController < ApplicationController
   end
   
   def product_detail
-    @selected_status = params[:status] || ["Active","Locked","N/A"]
-    @statuses = [["Active","A"],["Locked","L"],["N/A","N/A"],["Finished","F"]]
+    @selected_status = params[:status]
+    @statuses = [["N/A","N/A"],["FINISHED","F"]]
     respond_to do |format|
       format.html {}
     end  

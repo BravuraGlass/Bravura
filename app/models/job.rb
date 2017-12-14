@@ -96,7 +96,7 @@ class Job < ApplicationRecord
     return arr_products
   end  
   
-  def product_detail(statuses=["Active","Locked","N/A"])
+  def product_detail(statuses=[])
     products = []
     data = []
     total_col = 0
@@ -107,9 +107,10 @@ class Job < ApplicationRecord
       total_col += arr_prod[:max_col]
     end  
 
-    self.fabrication_order.rooms.where(rooms: {status: statuses}).order("name asc").each_with_index do |room, idx|
+    self.fabrication_order.rooms.order("name asc").each_with_index do |room, idx|
       rows = [{content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"}]
-
+       
+      empty_count = 0 
       arr_products.each_with_index do |arr_prod,idx|
         tru_sect_count = 0
         room.products.each do |prod|
@@ -117,8 +118,13 @@ class Job < ApplicationRecord
           if arr_prod[:name] == prod.name
             prod.product_sections.each do |sect|
               #rows << "#{sect.name} #{prod.name}"
-              rows << {content: sect.status, prod_count: idx+1, class_name: sect.class.to_s, id: sect.id, url: "/fabrication_orders/#{sect.id}/audit_section"}
-              tru_sect_count+=1
+              if statuses.nil? or statuses.size == 0 or statuses.include?(sect.status)
+                rows << {content: sect.status, prod_count: idx+1, class_name: sect.class.to_s, id: sect.id, url: "/fabrication_orders/#{sect.id}/audit_section"}
+              else
+                rows << {content: "", prod_count: idx+1}
+                empty_count += 1
+              end    
+              tru_sect_count += 1
             end  
             
           end
@@ -128,11 +134,14 @@ class Job < ApplicationRecord
         if arr_prod[:max_col] > tru_sect_count
           1.upto(arr_prod[:max_col] - tru_sect_count) do
             rows << {content: "", prod_count: idx+1}
+            empty_count += 1
           end
         end
       end    
       
-      data << rows
+      unless empty_count == total_col
+        data << rows
+      end  
     end
     
     return data   
