@@ -29,15 +29,41 @@ BRAVURA.draw = function draw(){
   ctx.strokeRect(0, 0, number1/max*200, number2/max*200);
 };
 
+
+BRAVURA.setPlAll = function setPlAll(){
+  if($('#set_pl').prop('checked')){
+    $('select[id^=product_section_edge_type_]').each(function(){
+      $(this).select2("val",$('#set_pl').val()); 
+    })
+  }else{
+    $('select[id^=product_section_edge_type_]').each(function(){
+      $(this).select2("val", ' '); 
+    })
+  }
+
+}
 // set the behavior on document ready
 $(document).ready(function(){
 
   BRAVURA.resetCanvas()
   BRAVURA.draw();
 
+ if ($('#product_section_edge_type_a').val() != '' &&
+     $('#product_section_edge_type_b').val() != '' &&
+     $('#product_section_edge_type_c').val() != '' && 
+     $('#product_section_edge_type_d').val() != ''){
+   $('#set_pl').prop('checked',true);
+ }else{
+   $('#set_pl').prop('checked',false);
+ }
+
  $('.change-size').on('blur', function(){
     BRAVURA.resetCanvas()
     BRAVURA.draw();
+ })
+
+ $('#set_pl').on('change', function(){
+   BRAVURA.setPlAll()
  })
 
 

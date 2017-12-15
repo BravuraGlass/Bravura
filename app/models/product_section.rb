@@ -3,6 +3,40 @@ class ProductSection < ApplicationRecord
 
     validate :validate_minimum_edge_size, :if => :status_is_to_temper?
 
+    validates :status, inclusion: { 
+      in: Status.where(category: "products").map(&:name),
+      message: "%{value} is not a valid status. Available status are #{Status.where(category: "products").map(&:name).join(', ')}" 
+    }
+    validates :fraction_size_a, inclusion: { 
+      in: FRACTION_TYPE,
+      message: "%{value} is not a valid fraction type a. Available fraction type are #{FRACTION_TYPE.join(', ')}" 
+    }, allow_blank: true
+
+    validates :fraction_size_b, inclusion: { 
+      in: FRACTION_TYPE,
+      message: "%{value} is not a valid fraction type b. Available fraction type are #{FRACTION_TYPE.join(', ')}" 
+    }, allow_blank: true
+
+    validates :edge_type_a, inclusion: {
+      in: EdgeType.all.map{|x| "#{x.id}"},
+      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
+    }, allow_blank: true
+
+    validates :edge_type_b, inclusion: {
+      in: EdgeType.all.map{|x| "#{x.id}"},
+      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
+    }, allow_blank: true
+
+    validates :edge_type_c, inclusion: {
+      in: EdgeType.all.map{|x| "#{x.id}"},
+      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
+    }, allow_blank: true
+
+    validates :edge_type_d, inclusion: {
+      in: EdgeType.all.map{|x| "#{x.id}"},
+      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
+    }, allow_blank: true
+    
     belongs_to :product
     after_update :sync_status
     attr_accessor :audit_user_name
@@ -32,8 +66,8 @@ class ProductSection < ApplicationRecord
     def name_size
       name_size = self.name
       name_size << ", size: " if self.size_a.present? || self.size_b.present?
-      name_size << " #{self.size_a} #{self.fraction_size_a} " if self.size_a.present? || self.fraction_size_a.present? 
-      name_size << " x #{self.size_b} #{self.fraction_size_b}" if self.size_b.present? || self.fraction_size_b.present?
+      name_size << "#{self.size_a}#{self.fraction_size_a}" if self.size_a.present? || self.fraction_size_a.present? 
+      name_size << "x#{self.size_b}#{self.fraction_size_b}" if self.size_b.present? || self.fraction_size_b.present?
       name_size
     end
 

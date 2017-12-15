@@ -46,6 +46,18 @@
                 </div>
              </fieldset>
              <fieldset>
+                <div class="form-group">
+                   <label class="col-sm-2 control-label">Set PL to All</label>
+                   <div class="col-sm-8">
+                      <div class="row">
+                         <div class="col-sm-2">
+                            <%= check_box_tag "set_pl", @edge_pl_val %>
+                         </div>
+                      </div>
+                   </div>
+                </div>
+             </fieldset>
+             <fieldset>
                <div class="form-group">
                  <label class="col-sm-2 control-label"></label>
                  <div class="col-sm-6">
@@ -54,7 +66,7 @@
                       </div>
                       <div class="col-sm-6">
                         <div class="col-sm-6 col-centered">
-                          <%= f.select :edge_type_a, options_for_select(@edge_type, f.object.edge_type_a) , {include_blank: "-Edge A-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                          <%= f.select :edge_type_a, options_for_select(@edge_type, f.object.edge_type_a) , {include_blank: "-Edge A-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
                         </div>
                       </div>
                       <div class="col-sm-3">
@@ -62,7 +74,7 @@
                     </div>
                     <div class="row">
                       <div class="col-sm-3 height_canvas">
-                        <%= f.select :edge_type_d, options_for_select(@edge_type, f.object.edge_type_d) , {include_blank: "-Edge D-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                        <%= f.select :edge_type_d, options_for_select(@edge_type, f.object.edge_type_d) , {include_blank: "-Edge D-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
                       </div>
                       <div class="col-sm-6" id="canvas-wrapper">
                         <canvas id="canvas">
@@ -70,7 +82,7 @@
                         </canvas>
                       </div>
                       <div class="col-sm-3 height_canvas">
-                        <%= f.select :edge_type_b, options_for_select(@edge_type, f.object.edge_type_b) , {include_blank: "-Edge B-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                        <%= f.select :edge_type_b, options_for_select(@edge_type, f.object.edge_type_b) , {include_blank: "-Edge B-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
                       </div>
                     </div>
                     <div class="row">
@@ -78,7 +90,7 @@
                       </div>
                       <div class="col-sm-6">
                         <div class="col-sm-6 col-centered">
-                          <%= f.select :edge_type_c, options_for_select(@edge_type, f.object.edge_type_c) , {include_blank: "-Edge C-"} ,{:class => 'form-control m-b select-bootstrap'}%>
+                          <%= f.select :edge_type_c, options_for_select(@edge_type, f.object.edge_type_c) , {include_blank: "-Edge C-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
                         </div>
                       </div>
                       <div class="col-sm-3">
