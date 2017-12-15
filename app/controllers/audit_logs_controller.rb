@@ -1,6 +1,6 @@
 class AuditLogsController < ApplicationController
 
-  before_action :require_admin
+  before_action :require_non_worker
   before_action :init_search, only: [:index]
 
   def index  

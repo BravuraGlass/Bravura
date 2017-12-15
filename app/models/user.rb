@@ -38,6 +38,10 @@ class User < ApplicationRecord
     self.type_of_user == "0" ? true : false
   end  
 
+  def non_worker?
+    ( self.type_of_user == "0" || self.type_of_user == "1" )? true : false
+  end  
+
   def destroy
       raise DisabledDeletionException
   end

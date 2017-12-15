@@ -12,8 +12,8 @@
         'paging':   true,  // Table pagination
         'ordering': true,  // Column ordering
         'info':     true,  // Bottom left status text
-        "pageLength": 50,
-        'responsive': true, // https://datatables.net/extensions/responsive/examples/
+        'pageLength': 50,
+
         // Text translation options
         // Note the required keywords between underscores (e.g _MENU_)
         oLanguage: {

@@ -16,7 +16,7 @@
               Section Done : 
               <span id="job-detail-<%= @job.id %>" data-job-details="<%= @job.fabrication_order.sections_to_json %>" class="<%= class_status %>"><%= "#{status[:ready]} of #{status[:total]}" %></span>
               <%= form_tag product_detail_job_path, id: "product_detail_job_#{@job.id}", method: :get do -%>
-                <table class="datatable table table-striped table-hover responsive">
+                <table class="datatable table table-striped table-hover nowrap">
                   <thead>
                     <th class="no-sort" style="width: 130px">
                       <% i = 0 %>
