@@ -2,7 +2,7 @@
 <tr id="room_<%= room.id %>" data-associated-room-id=<%= room.id %>>
   <td><%= master_formatting(room) %></td>
 <% if room.products.count && room.products.count > 0 %>
-  <td><em class="fa fa-minus pointer" id="room_<%= room.id %>"
+  <td class="font-primary-dark"><em class="fa fa-minus pointer" id="room_<%= room.id %>"
   onclick="BRAVURA.toggleProductSections(this, 'room_<%= room.id %>')" ></em> <%= room.name %></td>
 <% else %>
   <td><%= room.name %></td>
@@ -30,12 +30,12 @@
     <td></td>
     <td></td>
     <% if product.product_sections.count && product.product_sections.count  > 0 %>
-    <td>
+    <td class="font-primary">
       <em class="fa fa-minus pointer" id="room_<%= room.id %>"
   onclick="BRAVURA.toggleProductSections(this, 'product_<%= product.id %>')" ></em>
   <%= product.name %> (<%= product.product_type.name %>)</td>
     <% else %>
-    <td><%= product.name %> (<%= product.product_type.name %>)</td>
+    <td class="font-primary"><%= product.name %> (<%= product.product_type.name %>)</td>
     <% end %>
     <td><%= product.product_sections.count %></td>
     <td>
@@ -57,7 +57,7 @@
     <tr class="" data-parent="product_<%= product.id %>" data-associated-room-id=<%= room.id %>>
       <td></td>
       <td></td>
-      <td id="name-section-<%= section.id %>"><%= section.name_size %></td>
+      <td class="font-primary-light" id="name-section-<%= section.id %>"><%= section.name_size %></td>
       <td></td>
       <td>
         <%= collection_select :product_section, :status, @product_statuses, :name, :name,

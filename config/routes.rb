@@ -28,7 +28,11 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :edge_types
+  resources :edge_types do
+    collection do 
+      get :available_types
+    end
+  end
   resources :product_types
   resources :status_checklist_items
   resources :statuses
@@ -57,6 +61,7 @@ Rails.application.routes.draw do
       get 'audit_room'
       get 'audit_product'
       get 'audit_section'
+      get 'new_product'
     end
     
     resources :rooms, only: [:new, :edit, :update, :destroy, :clone] do
@@ -66,6 +71,9 @@ Rails.application.routes.draw do
       end  
       resources :products, only: [:new, :edit, :update, :destroy] do
         resources :product_sections, only: [:new, :edit, :update, :destroy] do
+          collection do
+            get :size_index
+          end
           member do
             get :size
           end

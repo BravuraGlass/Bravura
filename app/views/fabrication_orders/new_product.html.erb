@@ -1,0 +1,43 @@
+<div class="page-header">
+  <h1>Create Products</h1>
+</div>
+<h3>Fabrication Order
+   <small>create new_product</small>
+</h3>
+<div class="row">
+  <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+    <div class="panel panel-default">
+      <div class="panel-heading job">Fabrication Order # <%= @fabrication_order.job.id if @fabrication_order.job %>
+      </div>
+      <div class="panel-body">
+        <%= hidden_field :product, :fabrication_order_id, value: @fabrication_order.id, id: 'fabrication_order_id' %>
+        <div class="form-group">
+          <label for="room">Select or Create Room</label>
+          <div class="row">
+            <div class="col-md-6">
+              <%= collection_select :product, :room_id, @fabrication_order.sorting_rooms, :id, :name_with_master, { include_blank: true } , { class: 'form-control select-bootstrap' } %>
+            </div>
+            <div class="col-md-6">
+              <%= text_field :product, :room_name, class: 'form-control' %>
+            </div>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="product[product_type_id]">Product Type</label>
+          <%= collection_select :product, :product_type_id, @product_types, :id, :name, { include_blank: false } , { class: 'form-control select-bootstrap' } %>
+        </div>
+        <div class="form-group">
+          <label for="product[name]">Product Name</label>
+          <%= text_field :product, :name, class: "form-control", required: true %>
+        </div>
+        <div class="form-group">
+          <label for="product[sections]">Number of Sections</label>
+          <%= number_field :product, :sections, class: "form-control", min: "1", max: "100", required: true %>
+        </div>
+      </div>
+      <div class="panel-footer">
+      <button type="button" id="createEditProductModalSaveButton" class="btn btn-primary">Create</button>
+      </div>
+    </div>
+  </div>
+</div>

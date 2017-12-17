@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171214100511) do
+ActiveRecord::Schema.define(version: 20171216012327) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -126,14 +126,18 @@ ActiveRecord::Schema.define(version: 20171214100511) do
     t.string "status", default: "In Fabrication"
     t.string "name"
     t.integer "section_index"
-    t.string "size_a"
-    t.string "size_b"
     t.string "fraction_size_a"
     t.string "fraction_size_b"
-    t.string "edge_type_a"
-    t.string "edge_type_b"
-    t.string "edge_type_c"
-    t.string "edge_type_d"
+    t.integer "size_a"
+    t.integer "size_b"
+    t.bigint "edge_type_a_id"
+    t.bigint "edge_type_b_id"
+    t.bigint "edge_type_c_id"
+    t.bigint "edge_type_d_id"
+    t.index ["edge_type_a_id"], name: "fk_rails_a7ba3c6e68"
+    t.index ["edge_type_b_id"], name: "fk_rails_14e4375398"
+    t.index ["edge_type_c_id"], name: "fk_rails_a2016fd8e2"
+    t.index ["edge_type_d_id"], name: "fk_rails_f77859310b"
     t.index ["product_id"], name: "index_product_sections_on_product_id"
   end
 
@@ -236,6 +240,10 @@ ActiveRecord::Schema.define(version: 20171214100511) do
   add_foreign_key "jobs", "employees", column: "installer_id"
   add_foreign_key "jobs", "employees", column: "salesman_id"
   add_foreign_key "pictures", "jobs"
+  add_foreign_key "product_sections", "edge_types", column: "edge_type_a_id"
+  add_foreign_key "product_sections", "edge_types", column: "edge_type_b_id"
+  add_foreign_key "product_sections", "edge_types", column: "edge_type_c_id"
+  add_foreign_key "product_sections", "edge_types", column: "edge_type_d_id"
   add_foreign_key "product_sections", "products"
   add_foreign_key "products", "product_types"
   add_foreign_key "products", "rooms"

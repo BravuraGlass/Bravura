@@ -1,0 +1,19 @@
+<div class="page-header">
+  <h1>Edit Product Section</h1>
+</div>
+<h3>Size Index Section
+   <small>edit size</small>
+</h3>
+<div class="panel panel-default">
+  <div class="panel-heading">
+  <%= link_to 'Skip Size Setup', edit_fabrication_order_path(params[:fabrication_order_id]), :class => 'btn btn-primary' %>
+  </div>
+</div>
+<% @product_sections.each do |ps| %>
+  <%= render :partial => 'form_size', locals: { product_section: ps, ajax: true } %>
+<% end %>
+<div class="panel panel-footer">
+  <div class="panel-heading">
+  <%= link_to 'Finish', edit_fabrication_order_path(params[:fabrication_order_id]), :class => 'btn btn-primary' %>
+  </div>
+</div>

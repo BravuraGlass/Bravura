@@ -1,6 +1,6 @@
 include Printable
 class FabricationOrdersController < ApplicationController
-  before_action :set_fabrication_order, only: [:show, :edit, :update, :destroy]
+  before_action :set_fabrication_order, only: [:show, :edit, :update, :destroy, :new_product]
   before_action :load_common_data, except: [:addresses]
   
   skip_before_action :require_login, only: [:addresses], if: -> { request.format.json? }
@@ -147,7 +147,7 @@ class FabricationOrdersController < ApplicationController
       format.html  { render template: 'fabrication_orders/qr_codes', layout: false }
     end
   end
-  
+
   def addresses
     @fabrication_orders = FabricationOrder.joins(:job).where("jobs.active = ?", true).order(:id)
     
@@ -156,6 +156,9 @@ class FabricationOrdersController < ApplicationController
       format.json {render json: api_response(:success, nil, result)}
     end  
   end  
+
+  def new_product
+  end
 
   def audit_room
     @room = Room.find(params[:id])

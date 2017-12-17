@@ -1,6 +1,8 @@
 <% if @product_section.valid? %>
   $('#materialModal').modal('hide');
-  $('#name-section-<%= @product_section.id %>').html('<%= @product_section.name_size %>')
+  $('#name-section-<%= @product_section.id %>').html('<%= @product_section.name_size %>');
+  var el = document.getElementById('r_product_section_<%= @product_section.id %>');
+  el.style.display = 'none';
 <% else %>
   if($('#product_section_status').length){
     $('#product_section_status').addClass("parsley-error");
@@ -8,10 +10,10 @@
   }else{
     $('#product_section_size_a').attr('required', true);
     $('#product_section_size_b').attr('required', true);
-    $('#product_section_edge_type_a').attr('required', true);
-    $('#product_section_edge_type_b').attr('required', true);
-    $('#product_section_edge_type_c').attr('required', true);
-    $('#product_section_edge_type_d').attr('required', true);
+    $('#product_section_edge_type_a_id').attr('required', true);
+    $('#product_section_edge_type_b_id').attr('required', true);
+    $('#product_section_edge_type_c_id').attr('required', true);
+    $('#product_section_edge_type_d_id').attr('required', true);
     
     $('form[id^=edit_product_section_]').submit();
   }

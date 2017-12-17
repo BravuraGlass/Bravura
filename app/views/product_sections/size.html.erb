@@ -4,4 +4,4 @@
 <h3>Size Section
    <small>edit size</small>
 </h3>
-<%= render 'form_size' %>
+<%= render :partial => 'form_size', locals: { product_section: @product_section, ajax: false} %>

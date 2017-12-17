@@ -1,10 +1,14 @@
 var BRAVURA = BRAVURA || {};
 
 BRAVURA.materialWidth = function materialWidth(){
-  return parseInt(document.getElementById("product_section_size_a").value) || 200
+  if($("#product_section_size_a").length){
+    return parseInt(document.getElementById("product_section_size_a").value) || 200
+  }
 }
 BRAVURA.materialHeight = function materialHeight(){
-  return parseInt(document.getElementById("product_section_size_b").value) || 200
+  if($("#product_section_size_b").length){
+    return parseInt(document.getElementById("product_section_size_b").value) || 200
+  }
 }
 
 BRAVURA.resetCanvas = function resetCanvas(){
@@ -17,16 +21,18 @@ BRAVURA.resetCanvas = function resetCanvas(){
 }
 
 BRAVURA.draw = function draw(){
-  var number1 = BRAVURA.materialWidth() ;
-  var number2 = BRAVURA.materialHeight();
-  max = number1 > number2 ? number1 : number2
-  more_200 = max >= 200 ? false : true
-  var c = document.getElementById("canvas");
-  var ctx = c.getContext("2d");
-  ctx.clearRect(0, 0, c.width, c.height);
-  ctx.strokeStyle = BRAVURA.randomColor;
-  ctx.lineWidth = 4;
-  ctx.strokeRect(0, 0, number1/max*200, number2/max*200);
+  if($('#canvas').length){
+    var number1 = BRAVURA.materialWidth() ;
+    var number2 = BRAVURA.materialHeight();
+    max = number1 > number2 ? number1 : number2
+    more_200 = max >= 200 ? false : true
+    var c = document.getElementById("canvas");
+    var ctx = c.getContext("2d");
+    ctx.clearRect(0, 0, c.width, c.height);
+    ctx.strokeStyle = BRAVURA.randomColor;
+    ctx.lineWidth = 4;
+    ctx.strokeRect(0, 0, number1/max*200, number2/max*200);
+  }
 };
 
 
@@ -48,10 +54,10 @@ $(document).ready(function(){
   BRAVURA.resetCanvas()
   BRAVURA.draw();
 
- if ($('#product_section_edge_type_a').val() != '' &&
-     $('#product_section_edge_type_b').val() != '' &&
-     $('#product_section_edge_type_c').val() != '' && 
-     $('#product_section_edge_type_d').val() != ''){
+ if ($('#product_section_edge_type_a_id').val() != '' &&
+     $('#product_section_edge_type_b_id').val() != '' &&
+     $('#product_section_edge_type_c_id').val() != '' && 
+     $('#product_section_edge_type_d_id').val() != ''){
    $('#set_pl').prop('checked',true);
  }else{
    $('#set_pl').prop('checked',false);

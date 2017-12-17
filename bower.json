@@ -82,7 +82,9 @@
     "datatables-responsive": "2.1.1",
     "chosen": "^1.7.0",
     "socket.io-client": "latest",
-    "typeahead.js": "0.11.1"
+    "typeahead.js": "0.11.1",
+    "jquery-highlight-bartaz": "https://bartaz.github.io/sandbox.js/jquery.highlight.js",
+    "datatables-highlight": "https://cdn.datatables.net/plug-ins/1.10.16/features/searchHighlight/dataTables.searchHighlight.min.js"
   },
   "resolutions": {
     "jquery": "2.2.4"

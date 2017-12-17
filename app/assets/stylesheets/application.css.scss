@@ -269,3 +269,30 @@ ul.pagination.small {
   height: 200px;
   padding-top: 80px;
 }
+
+table.dataTable span.highlight {
+  background-color: #FFFF88;
+  border-radius: 0.28571429rem;
+}
+
+table.dataTable span.column_highlight {
+  background-color: #ffcc99;
+  border-radius: 0.28571429rem;
+}
+td.font-primary-dark{
+  font-weight: 900;
+  color: #44362e;
+  
+}
+
+td.font-primary{
+  font-weight: 900;
+  color: #634e42;
+  
+}
+
+td.font-primary-light{
+  font-weight: 900;
+  color: #826656;
+  
+}

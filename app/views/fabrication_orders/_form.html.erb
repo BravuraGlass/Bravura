@@ -49,7 +49,7 @@
                       Products<small></small>
                     </div>
                     <div class="panel-body">
-                      <%= link_to '+ New Product','#', :class => 'btn btn-primary', :id => 'newProductButton'%>
+                      <%= link_to '+ New Product', new_product_fabrication_order_path(@fabrication_order.id), :class => 'btn btn-primary'%>
                       <%= link_to '+ Clone From Master','#', :class => 'btn btn-primary cloneMasterButton'%> <%= raw next_room %>
                       <%= link_to 'Print','#', :class => 'btn btn-primary printProduct', :id => 'printProduct', style: "float: right;"%>
                       <% if  @fabrication_order.rooms && @fabrication_order.rooms.size > 0 %>
@@ -74,7 +74,7 @@
                       <% else %>
                       <p>There are no products associated to this order, click New Product to create one.</p>
                       <% end %>
-                      <%= link_to '+ New Product','#', :class => 'btn btn-primary', :id => 'newProductButton' if (@fabrication_order.rooms && @fabrication_order.rooms.size > 2)%>
+                      <%= link_to '+ New Product', new_product_fabrication_order_path(@fabrication_order.id), :class => 'btn btn-primary' if (@fabrication_order.rooms && @fabrication_order.rooms.size > 2)%>
                       <%= link_to '+ Clone From Master','#', :class => 'btn btn-primary cloneMasterButton'%> <%= raw next_room %>
                       <%= link_to 'Print','#', :class => 'btn btn-primary printProduct', :id => 'printProduct', style: "float: right;"%>
                     </div>

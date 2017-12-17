@@ -1,0 +1,12 @@
+{
+  "name": "jquery-highlight-bartaz",
+  "_cacheHeaders": {
+    "Last-Modified": "Mon, 04 Jul 2011 10:18:48 GMT",
+    "Content-Length": "1537",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "main": "index.js",
+  "_source": "https://bartaz.github.io/sandbox.js/jquery.highlight.js",
+  "_target": "*",
+  "_originalSource": "https://bartaz.github.io/sandbox.js/jquery.highlight.js"
+}

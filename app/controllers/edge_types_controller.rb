@@ -1,6 +1,7 @@
 class EdgeTypesController < ApplicationController
   before_action :require_admin
   before_action :set_edge_type, only: [:show, :edit, :update, :destroy]
+  before_action :api_login_status, only: [:available_types]
 
   def index
     @edge_types = EdgeType.all
@@ -15,6 +16,14 @@ class EdgeTypesController < ApplicationController
 
   def edit
   end
+
+  def available_types
+    @edge_types = EdgeType.all
+    
+    respond_to do |format|
+      format.json { render json: api_response(:success, nil, @edge_types)}
+    end
+  end  
 
   def create
     @edge_type = EdgeType.new(edge_type_params)

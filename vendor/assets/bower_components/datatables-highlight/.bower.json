@@ -1,0 +1,14 @@
+{
+  "name": "datatables.searchHighlight",
+  "_cacheHeaders": {
+    "ETag": "\"11215eb-383-55c4b43778fe0-gzip\"",
+    "Last-Modified": "Tue, 24 Oct 2017 13:53:27 GMT",
+    "Content-Length": "459",
+    "Content-Type": "application/javascript; charset=utf-8"
+  },
+  "_release": "e-tag:11215eb-3",
+  "main": "index.js",
+  "_source": "https://cdn.datatables.net/plug-ins/1.10.16/features/searchHighlight/dataTables.searchHighlight.min.js",
+  "_target": "*",
+  "_originalSource": "https://cdn.datatables.net/plug-ins/1.10.16/features/searchHighlight/dataTables.searchHighlight.min.js"
+}

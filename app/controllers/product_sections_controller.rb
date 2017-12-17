@@ -11,15 +11,31 @@ class ProductSectionsController < ApplicationController
   before_action :api_login_status, only: [:materials, :available_material_statuses, :update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
   
   def materials
-    @sections = ProductSection.where("product_id = ?", params[:product_id])
+    @sections = ProductSection.includes(:edge_type_a, :edge_type_b, :edge_type_c, :edge_type_d)
+                              .where("product_id = ?", params[:product_id])
     
     respond_to do |format|
-      result = @sections.collect {|sect| {id: sect.id, name: sect.name, status: sect.status, size_a: sect.size_a, fraction_size_a: sect.fraction_size_a, size_b: sect.size_b, fraction_size_b: sect.fraction_size_a, edge_type_a: sect.edge_type_a, edge_type_b: sect.edge_type_b, edge_type_c: sect.edge_type_c, edge_type_d: sect.edge_type_d}}
+      result = @sections.collect {|sect| {id: sect.id, name: sect.name, status: sect.status, size_a: sect.size_a, fraction_size_a: sect.fraction_size_a, size_b: sect.size_b, fraction_size_b: sect.fraction_size_a, edge_type_a_id: sect.edge_type_a_id, edge_type_a: sect.edge_type_a.to_s, edge_type_b_id: sect.edge_type_b_id, edge_type_b: sect.edge_type_b.to_s, edge_type_c_id: sect.edge_type_c_id, edge_type_c: sect.edge_type_c.to_s, edge_type_d_id: sect.edge_type_d_id, edge_type_d: sect.edge_type_d.to_s}}
       format.json {render json: api_response(:success, nil, result)}
     end  
   end  
   
   def size
+    set_edge_type
+    respond_to do |format|
+      format.html  { 
+        @remote = false
+        render :layout => "application"
+      }
+      format.js {
+        @remote = true
+        render layout: false
+      }
+    end
+  end
+
+  def size_index
+    @product_sections =ProductSection.where(product_id: params[:product_id])
     set_edge_type
     respond_to do |format|
       format.html  { 
@@ -67,22 +83,23 @@ class ProductSectionsController < ApplicationController
   def update
     respond_to do |format|
       params[:product_section][:audit_user_name] = current_user.full_name
+      @fo = @product_section.product.room.fabrication_order_id
       if @product_section.update(product_section_params)
 
-        format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Section was successfully updated.' }
+        format.html { redirect_to edit_fabrication_order_path(@fo), notice: 'Section was successfully updated.' }
         format.json do
           flash[:notice] = "status for #{@product_section.name} was successfully updated"
-          sects = {id: @product_section.id, name: @product_section.name, status: @product_section.status, size_a: @product_section.size_a, fraction_size_a: @product_section.fraction_size_a, size_b: @product_section.size_b, fraction_size_b: @product_section.fraction_size_a, edge_type_a: @product_section.edge_type_a, edge_type_b: @product_section.edge_type_b, edge_type_c: @product_section.edge_type_c, edge_type_d: @product_section.edge_type_d}
+          sects = {id: @product_section.id, name: @product_section.name, status: @product_section.status, size_a: @product_section.size_a, fraction_size_a: @product_section.fraction_size_a, size_b: @product_section.size_b, fraction_size_b: @product_section.fraction_size_a, edge_type_a_id: @product_section.edge_type_a_id, edge_type_a: @product_section.edge_type_a.to_s, edge_type_b: @product_section.edge_type_b.to_s, edge_type_b_id: @product_section.edge_type_b_id,  edge_type_c: @product_section.edge_type_c.to_s, edge_type_c_id: @product_section.edge_type_c_id, edge_type_d: @product_section.edge_type_d.to_s, edge_type_d_id: @product_section.edge_type_d_id}
           render json: api_response(:success, nil, sects)
         end  
-        format.js
+        format.js {render layout: false}
       else
         format.html {
           set_edge_type
           renderr = product_section_params.has_key?(:size_a) ? :size : :edit
           render renderr, :layout => "application" 
         }
-        format.json { render json: api_response(:failed, @product_section.errors.full_messages.join(' '), @product_section.errors)}
+        format.json { render json: api_response(:failed, @product_section.errors.full_messages.join(' '), @product_section.errors), status: :unprocessable_entity }
         format.js
       end
     end
@@ -250,7 +267,7 @@ class ProductSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_section_params
-      params.require(:product_section).permit(:name, :status, :audit_user_name, :size_a, :size_b, :fraction_size_a, :fraction_size_b, :edge_type_a, :edge_type_b, :edge_type_c, :edge_type_d)
+      params.require(:product_section).permit(:name, :status, :audit_user_name, :size_a, :size_b, :fraction_size_a, :fraction_size_b, :edge_type_a_id, :edge_type_b_id, :edge_type_c_id, :edge_type_d_id)
     end
 
 

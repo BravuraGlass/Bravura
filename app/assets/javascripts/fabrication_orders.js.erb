@@ -73,7 +73,7 @@ BRAVURA.saveCreateEditProductModal = function saveStatusChange(){
   })
   .done(function(data){
     $('#createEditRoomModal').modal('hide');
-    location.href =  "/fabrication_orders/"+fabrication_order_id+"/edit?new_product_id="+data.id;
+    location.href =  "/fabrication_orders/"+fabrication_order_id+"/rooms/"+data.room_id+"/products/"+data.id+"/product_sections/size_index";
   })
   .fail(function(response){
     alert('There was an error saving the product');
@@ -255,10 +255,7 @@ $(document).ready(function(){
 
 
   }).on('ajax:error',function(e, xhr, status, error){
-    var message = "";
-    Object.keys(xhr.responseJSON).forEach(function(key) {
-      message = message + ' ' + xhr.responseJSON[key];
-    });
+    var message = xhr.responseJSON.message;
     $(this).addClass("parsley-error");
     $( "<label class='error'><i style='color: #f05050'>"+message+" </i></p>" ).insertAfter($(this));
     alert('failed')

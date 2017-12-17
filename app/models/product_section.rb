@@ -2,42 +2,29 @@ class ProductSection < ApplicationRecord
     include AuditableModel
 
     validate :validate_minimum_edge_size, :if => :status_is_to_temper?
+    validates :size_a, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 9999}, allow_blank: true
+    validates :size_b, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 9999}, allow_blank: true
+
 
     validates :status, inclusion: { 
       in: Status.where(category: "products").map(&:name),
-      message: "%{value} is not a valid status. Available status are #{Status.where(category: "products").map(&:name).join(', ')}" 
+      message: "%{value} is not a valid status." 
     }
     validates :fraction_size_a, inclusion: { 
       in: FRACTION_TYPE,
-      message: "%{value} is not a valid fraction type a. Available fraction type are #{FRACTION_TYPE.join(', ')}" 
+      message: "Fraction size type A is not valid." 
     }, allow_blank: true
 
     validates :fraction_size_b, inclusion: { 
       in: FRACTION_TYPE,
-      message: "%{value} is not a valid fraction type b. Available fraction type are #{FRACTION_TYPE.join(', ')}" 
-    }, allow_blank: true
-
-    validates :edge_type_a, inclusion: {
-      in: EdgeType.all.map{|x| "#{x.id}"},
-      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
-    }, allow_blank: true
-
-    validates :edge_type_b, inclusion: {
-      in: EdgeType.all.map{|x| "#{x.id}"},
-      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
-    }, allow_blank: true
-
-    validates :edge_type_c, inclusion: {
-      in: EdgeType.all.map{|x| "#{x.id}"},
-      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
-    }, allow_blank: true
-
-    validates :edge_type_d, inclusion: {
-      in: EdgeType.all.map{|x| "#{x.id}"},
-      message: "%{value} is not a valid fraction type b. Available fraction type are #{EdgeType.all.map(&:id).join(', ')}" 
+      message: "Fraction size type B is not valid." 
     }, allow_blank: true
     
     belongs_to :product
+    belongs_to :edge_type_a, class_name: 'EdgeType', foreign_key: 'edge_type_a_id', optional: true
+    belongs_to :edge_type_b, class_name: 'EdgeType', foreign_key: 'edge_type_b_id', optional: true
+    belongs_to :edge_type_c, class_name: 'EdgeType', foreign_key: 'edge_type_c_id', optional: true
+    belongs_to :edge_type_d, class_name: 'EdgeType', foreign_key: 'edge_type_d_id', optional: true
     after_update :sync_status
     attr_accessor :audit_user_name
 

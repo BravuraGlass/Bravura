@@ -267,10 +267,59 @@ BRAVURA.checkStatus = function checkStatus(){
   $("form[id^=product_detail_job_]").submit()
 }
 
+BRAVURA.newDatatable = function newDatatable(){
+  var dataTableAdvancedSettings = {
+    searchHighlight: true,
+    'paging':   true,  // Table pagination
+    'ordering': true,  // Column ordering
+    'info':     true,  // Bottom left status text
+    'pageLength': 50,
+
+    // Text translation options
+    // Note the required keywords between underscores (e.g _MENU_)
+    oLanguage: {
+        sSearch:      'Search :',
+        sLengthMenu:  '_MENU_ records per page',
+        info:         'Showing page _PAGE_ of _PAGES_',
+        zeroRecords:  'Nothing found - sorry',
+        infoEmpty:    'No records available',
+        infoFiltered: '(filtered from _MAX_ total records)'
+    },
+    // Datatable Buttons setup
+    dom: '<"html5buttons"B>lTfgitp',
+    buttons: [
+        {extend: 'copy',  className: 'btn-sm' },
+        {extend: 'csv',   className: 'btn-sm' },
+        {extend: 'excel', className: 'btn-sm', title: 'XLS-File'},
+        {extend: 'pdf',   className: 'btn-sm', title: $('title').text() },
+        {extend: 'print', className: 'btn-sm' },
+        {
+            text: 'New',
+            className: 'btn-sm btn btn-primary',
+            action: function ( e, dt, node, conf ) {
+              window.location.href = '/jobs/new';
+            }
+        }
+    ],
+    columnDefs: [
+      { targets  : 'no-sort', orderable: false },
+      { visible: false, targets: 'hide' }
+    ],
+    order: []
+  };
+  var table = $('#jobs_datatable').DataTable(dataTableAdvancedSettings);
+  // table.on( 'draw', function () {
+  //   var body = $( table.table().body() );
+  //   body.unhighlight();
+  //   body.highlight( table.search() );   
+  // } );
+}
 
 // set the behavior on document ready
 $(document).ready(function(){
+  
   BRAVURA.onFocusStatus();
+  BRAVURA.newDatatable();
   BRAVURA.statusChangeValid = false;
   $('#statusChangeModalCancelButton').on('click', function() { BRAVURA.closeStatusChangeModal(); });
   $('#statusChangeModalSaveButton').on('click', function() { BRAVURA.saveStatusChangeModal(); });

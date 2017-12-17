@@ -31,6 +31,10 @@
 //= require datatables-responsive/js/dataTables.responsive
 //= require datatables-responsive/js/responsive.bootstrap
 
+//--- highlight
+//= require jquery-highlight-bartaz/index.js
+//= require datatables-highlight/index.js
+
 //--- jqGrid
 //= require jqgrid/js/jquery.jqGrid.js
 //= require jqgrid/js/i18n/grid.locale-en.js
