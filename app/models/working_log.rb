@@ -392,7 +392,7 @@ class WorkingLog < ApplicationRecord
       rs << {user_id: user.id, first_name: user.first_name, last_name: user.last_name, duration: 0, status: "manual"}
     end  
     
-    return rs.sort_by {|usr| usr[:last_name].downcase}
+    return rs.sort_by {|usr| usr[:last_name].downcase.to_i == 0 ? 1000 : usr[:last_name].downcase.to_i }
   end 
   
   def self.report_raw(wstart,wend)
