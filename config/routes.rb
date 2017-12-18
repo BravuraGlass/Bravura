@@ -38,9 +38,10 @@ Rails.application.routes.draw do
   resources :statuses
   resources :tasks
   resources :employees
-  resources :users, except: [:destroy] do
+  resources :users do
     member do
       get "revoke"
+      post "activate"
     end  
   end
   resources :customers

@@ -1,8 +1,8 @@
 <% @checked = room.id.to_s == params[:new_room_id] ? true : false %>
-<tr id="room_<%= room.id %>" data-associated-room-id=<%= room.id %>>
+<tr id="room_<%= room.id %>" class="yellow-dark" data-associated-room-id=<%= room.id %>>
   <td><%= master_formatting(room) %></td>
 <% if room.products.count && room.products.count > 0 %>
-  <td class="font-primary-dark"><em class="fa fa-minus pointer" id="room_<%= room.id %>"
+  <td class=""><em class="fa fa-minus pointer" id="room_<%= room.id %>"
   onclick="BRAVURA.toggleProductSections(this, 'room_<%= room.id %>')" ></em> <%= room.name %></td>
 <% else %>
   <td><%= room.name %></td>
@@ -26,16 +26,16 @@
 
 <% room.products.order("name asc").each do |product| %>
   <% @checked = (room.id.to_s == params[:new_room_id] or product.id.to_s == params[:new_product_id]) ? true : false %>
-  <tr class="" data-parent="room_<%= room.id %>" data-associated-room-id=<%= room.id %>>
+  <tr class="yellow-light" data-parent="room_<%= room.id %>" data-associated-room-id=<%= room.id %>>
     <td></td>
     <td></td>
     <% if product.product_sections.count && product.product_sections.count  > 0 %>
-    <td class="font-primary">
+    <td class="">
       <em class="fa fa-minus pointer" id="room_<%= room.id %>"
   onclick="BRAVURA.toggleProductSections(this, 'product_<%= product.id %>')" ></em>
   <%= product.name %> (<%= product.product_type.name %>)</td>
     <% else %>
-    <td class="font-primary"><%= product.name %> (<%= product.product_type.name %>)</td>
+    <td class=""><%= product.name %> (<%= product.product_type.name %>)</td>
     <% end %>
     <td><%= product.product_sections.count %></td>
     <td>
@@ -54,10 +54,10 @@
   </tr>
 
    <% product.product_sections.order("name asc").each do |section| %>
-    <tr class="" data-parent="product_<%= product.id %>" data-associated-room-id=<%= room.id %>>
+    <tr class="yellow-lighter" data-parent="product_<%= product.id %>" data-associated-room-id=<%= room.id %>>
       <td></td>
       <td></td>
-      <td class="font-primary-light" id="name-section-<%= section.id %>"><%= section.name_size %></td>
+      <td class="" id="name-section-<%= section.id %>"><%= section.name_size %></td>
       <td></td>
       <td>
         <%= collection_select :product_section, :status, @product_statuses, :name, :name,

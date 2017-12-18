@@ -1,8 +1,13 @@
 <% if @product_section.valid? %>
   $('#materialModal').modal('hide');
   $('#name-section-<%= @product_section.id %>').html('<%= @product_section.name_size %>');
+  alert("Material <%= @product_section.name %> is successfully updated");
   var el = document.getElementById('r_product_section_<%= @product_section.id %>');
   el.style.display = 'none';
+  var notice = document.getElementById('size_index_notice');
+  notice.innerHTML = "Material <%= @product_section.name %> is successfully updated";
+  notice.style.display = 'block';
+  
 <% else %>
   if($('#product_section_status').length){
     $('#product_section_status').addClass("parsley-error");

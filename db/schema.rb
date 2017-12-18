@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171216012327) do
+ActiveRecord::Schema.define(version: 20171216234735) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -217,6 +217,7 @@ ActiveRecord::Schema.define(version: 20171216012327) do
     t.text "access_token"
     t.datetime "token_expired"
     t.boolean "always_access", default: false
+    t.boolean "active", default: true, null: false
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 

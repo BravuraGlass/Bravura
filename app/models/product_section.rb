@@ -53,8 +53,8 @@ class ProductSection < ApplicationRecord
     def name_size
       name_size = self.name
       name_size << ", size: " if self.size_a.present? || self.size_b.present?
-      name_size << "#{self.size_a}#{self.fraction_size_a}" if self.size_a.present? || self.fraction_size_a.present? 
-      name_size << "x#{self.size_b}#{self.fraction_size_b}" if self.size_b.present? || self.fraction_size_b.present?
+      name_size << "#{self.size_a} #{self.fraction_size_a}" if self.size_a.present? || self.fraction_size_a.present? 
+      name_size << " x #{self.size_b} #{self.fraction_size_b}" if self.size_b.present? || self.fraction_size_b.present?
       name_size
     end
 

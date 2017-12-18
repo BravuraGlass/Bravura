@@ -36,8 +36,8 @@ Status.create(category: "products",name: "N/A", order: 11)
 Status.create(category: "products",name: "To Temper", order: 12)
 Status.create(category: "products",name: "FINISHED", order: 19)
 
-Customer.create(contact_firstname: "Satya", contact_lastname: "Nadella", email: "satya@microsoft.com", company_name: "Microsoft")
-Customer.create(contact_firstname: "Yukihiro", contact_lastname: "Mastsumoto", email: "matz@ruby.org", company_name: "Ruby")
+customer1 = Customer.create(contact_firstname: "Satya", contact_lastname: "Nadella", email: "satya@microsoft.com", company_name: "Microsoft")
+customer2 = Customer.create(contact_firstname: "Yukihiro", contact_lastname: "Mastsumoto", email: "matz@ruby.org", company_name: "Ruby")
 
 
 time_now = Time.now
@@ -51,8 +51,8 @@ Location.create(user: user2, latitude: 40.6937, longitude: -73.988, created_at: 
 Location.create(user: user3, latitude: 40.6715, longitude: -73.9476, created_at: Time.at(rand(time_now.to_i - start)) + start)
 
 
-Employee.create(first_name: "Edison", last_name: "Cavani", email_address: "edison@psg.com")
-Employee.create(first_name: "Leroy", last_name: "Sane", email_address: "leroy@mancity.com")
+employee1 = Employee.create(first_name: "Edison", last_name: "Cavani", email_address: "edison@psg.com")
+employee2 = Employee.create(first_name: "Leroy", last_name: "Sane", email_address: "leroy@mancity.com")
 
 ["Mirror","Window","Table"].each do |ptype|
   ProductType.create(name: ptype)
@@ -60,4 +60,42 @@ end
 
 ["PL", "BV", "PL45"].each do |etype|
   EdgeType.create(name: etype)
-end  
+end
+
+
+tomorrow = Date.today+1.days
+
+job1 = Job.create({customer: customer1, price: 30000, deposit: nil, priority: nil, status: "Proposal", appointment: "#{tomorrow} 17:00:00", installer: employee1, salesman: employee2, duration: nil, duedate: nil, paid: false, active: true, latitude: 40.7233, longitude: -74.003, address: "SoHo, New York, NY, USA", address2: "", notes: "", confirmed_appointment: false, balance: 30000, appointment_end: "#{tomorrow} 18:00:00"})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to Active", auditable_type: "Room", auditable_id: job1.id})
+
+job2 = Job.create({customer: customer2, price: 40000, deposit: nil, priority: nil, status: "Proposal", appointment: "#{tomorrow} 19:00:00", installer: employee1, salesman: employee2, duration: nil, duedate: nil, paid: false, active: true, latitude: 40.6199, longitude: -73.9427, address: "Avenue M, Brooklyn, NY, USA", address2: "", notes: "", confirmed_appointment: false, balance: 40000, appointment_end: "#{tomorrow} 20:00:00"})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to Proposal", auditable_type: "Job", auditable_id: job2.id})
+
+order1 = FabricationOrder.create({title: "SoHo, New York, NY, USA", description: "Fabrication order for Job on SoHo, New York, NY, USA", status: "In Progress", job: job1})
+order2 = FabricationOrder.create({title: "Avenue M, Brooklyn, NY, USA", description: "Fabrication order for Job on Avenue M, Brooklyn, NY, USA", status: "In Progress", job: job2})
+
+room1 = Room.create({name: "101", description: nil, fabrication_order: order1, master: nil, room_id: nil, status: "Active"})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to Active", auditable_type: "Room", auditable_id: room1.id})
+
+room2 = Room.create({name: "102", description: nil, fabrication_order: order2, master: nil, room_id: nil, status: "Active"})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to Active", auditable_type: "Room", auditable_id: room2.id})
+
+
+product1 = Product.create({product_type: ProductType.first, name: "Glass Board", description: nil, sku: nil, price: nil, room: room1, product_index: 1, status: "Measured"})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to Measured", auditable_type: "Product", auditable_id: product1.id})
+
+product2 = Product.create({product_type: ProductType.first, name: "Wall Mirror", description: nil, sku: nil, price: nil, room: room2, product_index: 1, status: "Measured"})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to Measured", auditable_type: "Product", auditable_id: product2.id})
+
+edge_type_pl = EdgeType.first
+
+section1 = ProductSection.create({product: product1, status: "In Fabrication", name: "1-101-1", section_index: 1, size_a: 200, size_b: 500, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to In Fabrication", auditable_type: "ProductSection", auditable_id: section1.id})
+
+section2 = ProductSection.create({product: product2, status: "To Temper", name: "2-102-1-1", section_index: 1, size_a: 200, size_b: 300, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to In Fabrication", auditable_type: "ProductSection", auditable_id: section2.id})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: nil, user_agent: nil, details: "updated material's status from In Fabrication to To Temper", auditable_type: "ProductSection", auditable_id: section2.id})
+
+section3 = ProductSection.create({product: product2, status: "Ordered", name: "2-102-1-2", section_index: 2, size_a: 400, size_b: 600, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to In Fabrication", auditable_type: "ProductSection", auditable_id: section3.id})
+AuditLog.create({user_name: "Kevin Admin", where: nil, ip: nil, user_agent: nil, details: "updated material's status from In Fabrication to Ordered", auditable_type: "ProductSection", auditable_id: section3.id})

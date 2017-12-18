@@ -9,6 +9,7 @@ class User < ApplicationRecord
   validates_uniqueness_of :email
   has_many :working_logs
   has_many :locations, -> { order(created_at: :desc) }
+  default_scope { where(active: true) }
 
   scope :last_locations, -> {
     joins(:locations)
@@ -43,7 +44,21 @@ class User < ApplicationRecord
   end  
 
   def destroy
-      raise DisabledDeletionException
+    if self.active?
+      self.active = false
+      self.save!
+    else 
+      raise FailedDeactivationException
+    end
+  end
+
+  def activate
+    unless self.active?
+      self.active = true
+      self.save!
+    else 
+      raise FailedActivationException
+    end
   end
 
   def delete
@@ -60,8 +75,14 @@ class User < ApplicationRecord
 
 end
 
-class DisabledDeletionException < Exception
+class FailedDeactivationException < Exception
   def message
-    "This entity is not deleteable"
+    "This user is already deactivated"
+  end
+end
+
+class FailedActivationException < Exception
+  def message
+    "This user is already activated"
   end
 end

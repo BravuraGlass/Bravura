@@ -6,9 +6,14 @@
 </h3>
 <div class="panel panel-default">
   <div class="panel-heading">
-  <%= link_to 'Skip Size Setup', edit_fabrication_order_path(params[:fabrication_order_id]), :class => 'btn btn-primary' %>
+    <%= link_to 'Skip Size Setup', edit_fabrication_order_path(params[:fabrication_order_id]), :class => 'btn btn-primary' %>
+    </br></br>
+    <div class="errors_panel">
+      <div class="notice" id="size_index_notice" style="display: none;"></div>
+    </div>
   </div>
 </div>
+
 <% @product_sections.each do |ps| %>
   <%= render :partial => 'form_size', locals: { product_section: ps, ajax: true } %>
 <% end %>

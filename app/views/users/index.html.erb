@@ -10,49 +10,99 @@
                <small></small>
             </div>
             <div class="panel-body">
-              <div class="errors_panel">
-                <% if flash[:notice] %>
-                  <div class="notice"><%= flash[:notice] %></div>
-                <% end %>
-                <% if flash[:alert] %>
-                  <div class="alert"><%= flash[:alert] %></div>
-                <% end %>
+              <div class="actions row">
+                <div class="col-xs-12">
+                  <div class="errors_panel">
+                    <% if flash[:notice] %>
+                      <div class="notice"><%= flash[:notice] %></div>
+                    <% end %>
+                    <% if flash[:alert] %>
+                      <div class="alert"><%= flash[:alert] %></div>
+                    <% end %>
+                  </div>
+                  <ul class="nav nav-tabs bv-side-panel">
+                    <li class="active"><a data-toggle="tab" href="#home">Active Users</a></li>
+                    <li><a data-toggle="tab" href="#inactive_users">Inactive Users</a></li>
+                  </ul>
+                      <div class="tab-content">
+                        <div id="home" class="tab-pane fade in active">
+                          <table class="datatable table table-striped table-hover responsive">
+                              <thead>
+                                <tr>
+                                  <th class="sort-alpha">First name</th>
+                                  <th class="sort-alpha">Last name</th>
+                                  <th class="sort-alpha">Phone number</th>
+                                  <th class="sort-alpha">Address</th>
+                                  <th class="sort-alpha">Type</th>
+                                  <th class="no-sort">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% @users.each do |user| %>
+                                    <tr>
+                                        <td><%= user.first_name %></td>
+                                        <td><%= user.last_name %></td>
+                                        <td><%= user.phonenumber %></td>
+                                        <td><%= user.address %></td>
+                                        <td><%= user_type_name(user.type_of_user) %></td>
+                                        <td>
+                                        <%= link_to 'Edit',
+                                                    edit_user_path(user), :class => 'btn btn-default btn-xs' %>
+                                        <% unless user.id == current_user.id %>
+                                        <%= link_to 'Revoke Access',
+                                                    revoke_user_path(user),
+                                                      :method => :get,
+                                                      :data => { :confirm => 'Are you sure you want to revoke access this user?' },
+                                                      :class => 'btn btn-xs btn-danger' %>   
+                                        <%= link_to 'Deactivate',		
+                                                    user_path(user),		
+                                                      :method => :delete,		
+                                                      :data => { :confirm => 'Are you sure you want to deactivate the user?' },	
+                                                      :class => 'btn btn-xs btn-danger' %>   
+                                        <% end %>      
+                                      </td>
+                                    </tr>
+                                  <% end %>
+                              </tbody>
+                          </table>
+                        </div>
+                        <div id="inactive_users" class="tab-pane fade in">
+                          <table class="datatable table table-striped table-hover responsive">
+                              <thead>
+                                <tr>
+                                  <th class="sort-alpha">First name</th>
+                                  <th class="sort-alpha">Last name</th>
+                                  <th class="sort-alpha">Phone number</th>
+                                  <th class="sort-alpha">Address</th>
+                                  <th class="sort-alpha">Type</th>
+                                  <th class="no-sort">Actions</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                <% @inactive_users.each do |user| %>
+                                    <tr>
+                                        <td><%= user.first_name %></td>
+                                        <td><%= user.last_name %></td>
+                                        <td><%= user.phonenumber %></td>
+                                        <td><%= user.address %></td>
+                                        <td><%= user_type_name(user.type_of_user) %></td>
+                                        <td>
+                                        <%= link_to 'Edit',
+                                                    edit_user_path(user), :class => 'btn btn-default btn-xs' %>
+                                        <%= link_to 'Activate',		
+                                                    activate_user_path(user),		
+                                                      :method => :post,		
+                                                      :data => { :confirm => 'Are you sure you want to re-acivate the user?' },		
+                                                      :class => 'btn btn-xs btn-primary' %>         
+                                      </td>
+                                    </tr>
+                                  <% end %>
+                              </tbody>
+                          </table>
+                        </div>
+                      </div>
+                </div>
               </div>
-               <table class="datatable table table-striped table-hover responsive">
-                  <thead>
-                    <tr>
-
-                                            <th class="sort-alpha">First name</th>
-                                            <th class="sort-alpha">Last name</th>
-                                            <th class="sort-alpha">Phone number</th>
-                                            <th class="sort-alpha">Address</th>
-                                            <th class="sort-alpha">Type</th>
-                                            <th class="no-sort">Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                     <% @users.each do |user| %>
-                        <tr>
-
-                                                    <td><%= user.first_name %></td>
-                                                    <td><%= user.last_name %></td>
-                                                    <td><%= user.phonenumber %></td>
-                                                    <td><%= user.address %></td>
-
-                                                    <td><%= user_type_name(user.type_of_user) %></td>
-                                                    <td>
-                            <%= link_to 'Edit',
-                                        edit_user_path(user), :class => 'btn btn-default btn-xs' %>
-                            <%= link_to 'Revoke Access',
-                                          revoke_user_path(user),
-                                                    :method => :get,
-                                                    :data => { :confirm => 'Are you sure you want to revoke access this user?' },
-                                                    :class => 'btn btn-xs btn-danger' %>            
-                          </td>
-                        </tr>
-                      <% end %>
-                  </tbody>
-               </table>
             </div>
          </div>
       </div>
@@ -63,6 +113,6 @@
 <%= link_to 'New User',
             new_user_path,
             :class => 'btn btn-primary' %>
-            <% else %>
-                <div> You're not allowed to reach this page</div>
-            <% end %>
+<% else %>
+    <div> You're not allowed to reach this page</div>
+<% end %>

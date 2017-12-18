@@ -5,6 +5,7 @@ class UsersController < ApplicationController
   # GET /users.json
   def index
     @users = User.all
+    @inactive_users = User.unscoped.where(active: false)
   end
 
   # GET /users/1
@@ -53,14 +54,22 @@ class UsersController < ApplicationController
 
   # DELETE /users/1
   # DELETE /users/1.json
-  # [disabled] avaoid user deletion on controller level
-  # def destroy
-  #   @user.destroy
-  #   respond_to do |format|
-  #     format.html { redirect_to users_url, notice: 'User was successfully destroyed.' }
-  #     format.json { head :no_content }
-  #   end
-  # end
+  def destroy
+    @user.destroy
+    respond_to do |format|
+      format.html { redirect_to users_url, notice: 'User was successfully deactivated.' }
+      format.json { head :no_content }
+    end
+  end
+
+  def activate
+    @user = User.unscoped.find(params[:id])
+    @user.activate
+    respond_to do |format|
+      format.html { redirect_to users_url, notice: 'User was successfully activated.' }
+      format.json { head :no_content }
+    end
+  end
   
   def revoke
     if current_user.admin?
