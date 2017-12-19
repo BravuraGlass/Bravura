@@ -1,6 +1,6 @@
 class ProductSection < ApplicationRecord
     include AuditableModel
-
+=begin
     validate :validate_minimum_edge_size, :if => :status_is_to_temper?
     validates :size_a, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 9999}, allow_blank: true
     validates :size_b, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 9999}, allow_blank: true
@@ -20,6 +20,7 @@ class ProductSection < ApplicationRecord
       in: FRACTION_TYPE,
       message: "Fraction size type B is not valid." 
     }, allow_blank: true
+=end    
     
     belongs_to :product
     belongs_to :edge_type_a, class_name: 'EdgeType', foreign_key: 'edge_type_a_id', optional: true
