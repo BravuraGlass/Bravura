@@ -48,7 +48,8 @@ class MapController < ApplicationController
       @show_workers = true
       all_workers = Location.last_user_checkins.count
       workers = Gmaps4rails.build_markers(all_workers) do |worker, marker|
-        title = "worker: #{worker[0][0]} #{worker[0][1]}"
+        old = (worker[0][4].to_time < 1.minutes.ago rescue false)
+        title = "#{worker[0][0]} #{worker[0][1]} - #{old} "
         marker.lat worker[0][2]
         marker.lng worker[0][3]
         marker.title title

@@ -27,6 +27,10 @@
               <fieldset>
                 <div class="form-group">
                   <label class="col-sm-2 control-label"><%= product_section.name %></label> </br>
+                </div>
+              </fieldset>
+              <fieldset>
+                <div class="form-group">
                    <label class="col-sm-2 control-label">Size</label>
                    <div class="col-sm-8">
                       <div class="row">
@@ -43,6 +47,14 @@
                             <%= f.select :fraction_size_b, options_for_select(FRACTION_TYPE, f.object.fraction_size_a) , {include_blank: true} ,{:class => 'form-control m-b select-bootstrap'}%>
                          </div>
                       </div>
+                   </div>
+                </div>
+             </fieldset>
+              <fieldset>
+                <div class="form-group">
+                   <label class="col-sm-2 control-label">Size Type</label>
+                   <div class="col-sm-3">
+                      <%= f.select :size_type, options_for_select(SIZE_TYPE, f.object.size_type), {include_blank: "-Size Type-"}, {class: 'form-control m-b select-bootstrap'} %>
                    </div>
                 </div>
              </fieldset>

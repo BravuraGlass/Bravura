@@ -35,3 +35,8 @@ FRACTION_TYPE = [
   "13/16",
   "15/16"
 ]
+
+SIZE_TYPE =[
+  "oval",
+  "box"
+]

@@ -13,9 +13,11 @@ function initMaps() {
    var addrField = document.getElementById('address');
    var field_id = "<%= address_field_id %>";
    console.log(field_id);
+
     if (addrField || field_id == "address"){
       initMapaddress();
     };
+
    var custField = document.getElementById('customer_address');
     if (custField){
       initMapcustomer_address();
@@ -125,12 +127,45 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
       var marker_data = markers[i];
       var content = marker_data.marker_title || '';
       var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-      var marker = new google.maps.Marker({
-        position: position,
-        map: map,
-        icon: icons[marker_data.type].icon,
-        title: content
-      });
+
+      if(marker_data.type == "worker"){
+        var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
+        var markerIcon = {
+          url: 'http://image.flaticon.com/icons/svg/252/252025.svg',
+          scaledSize: new google.maps.Size(16, 16),
+          origin: new google.maps.Point(0, 0),
+          anchor: new google.maps.Point(32,65),
+          labelOrigin:  new google.maps.Point(40,33),
+        };
+  
+        var markerLabel = marker_data.marker_title.split('-');
+        if(markerLabel[1] == 'true'){
+          var color = "#eb3a44"
+        }else{
+          var color = "#808080"
+        }
+        var marker = new google.maps.Marker({
+          map: map,
+          animation: google.maps.Animation.DROP,
+          position: position,
+          icon: markerIcon,
+          title: 'worker : '+ markerLabel[0],
+          label: {
+            text: markerLabel[0],
+            color: color,
+            fontSize: "16px",
+            fontWeight: "bold"
+          }
+        });
+      }else{
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map,
+          icon: icons[marker_data.type].icon,
+          title: content
+        });
+      }
+
       google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
           return function() {
               infoWindow.setContent(marker.getTitle());

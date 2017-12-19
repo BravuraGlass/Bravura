@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171216234735) do
+ActiveRecord::Schema.define(version: 20171218230213) do
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 20171216234735) do
     t.bigint "edge_type_b_id"
     t.bigint "edge_type_c_id"
     t.bigint "edge_type_d_id"
+    t.string "size_type"
     t.index ["edge_type_a_id"], name: "fk_rails_a7ba3c6e68"
     t.index ["edge_type_b_id"], name: "fk_rails_14e4375398"
     t.index ["edge_type_c_id"], name: "fk_rails_a2016fd8e2"

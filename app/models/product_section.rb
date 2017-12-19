@@ -5,7 +5,8 @@ class ProductSection < ApplicationRecord
     validates :size_a, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 9999}, allow_blank: true
     validates :size_b, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 9999}, allow_blank: true
 
-
+    validates :size_type, inclusion: { in: SIZE_TYPE, message: "Size Type not valid."}
+    
     validates :status, inclusion: { 
       in: Status.where(category: "products").map(&:name),
       message: "%{value} is not a valid status." 

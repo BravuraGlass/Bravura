@@ -267,7 +267,7 @@ class ProductSectionsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def product_section_params
-      params.require(:product_section).permit(:name, :status, :audit_user_name, :size_a, :size_b, :fraction_size_a, :fraction_size_b, :edge_type_a_id, :edge_type_b_id, :edge_type_c_id, :edge_type_d_id)
+      params.require(:product_section).permit(:name, :size_type,  :status, :audit_user_name, :size_a, :size_b, :fraction_size_a, :fraction_size_b, :edge_type_a_id, :edge_type_b_id, :edge_type_c_id, :edge_type_d_id)
     end
 
 
