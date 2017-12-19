@@ -52,8 +52,9 @@
                       <%= link_to '+ New Product', new_product_fabrication_order_path(@fabrication_order.id), :class => 'btn btn-primary'%>
                       <%= link_to '+ Clone From Master','#', :class => 'btn btn-primary cloneMasterButton'%> <%= raw next_room %>
                       <%= link_to 'Print','#', :class => 'btn btn-primary printProduct', :id => 'printProduct', style: "float: right;"%>
+                      </br></br>
                       <% if  @fabrication_order.rooms && @fabrication_order.rooms.size > 0 %>
-                      <table class="table table-hover responsive" id="productsList">
+                      <table class="datatable table table-hover responsive" id="productsList">
                           <thead>
                             <tr>
                               <th class="sort-alpha">Master</th>
