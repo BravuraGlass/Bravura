@@ -106,6 +106,7 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
   // Loop through our array of markers & place each one on the map
   var markers = <%=raw @markers.to_json || '{}' %>;
   var iconBase = '/assets/mapicons/';
+  var gMapMarkers = [];
   var icons = {
     job: {
       icon: iconBase + 'job.png'
@@ -173,8 +174,12 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
           }
       })(marker, i, infoWindowTask));
       marker.setVisible(true);
+      gMapMarkers.push(marker);
     }
   }
+  var markerCluster = new MarkerClusterer(map, gMapMarkers,
+    {gridSize: 20, maxZoom: 17, imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
 }
 
 function geocodeAddress(geocoder, map) {

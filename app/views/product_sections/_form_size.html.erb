@@ -35,16 +35,17 @@
                    <div class="col-sm-8">
                       <div class="row">
                          <div class="col-sm-2">
-                            <%= f.number_field :size_a, maxlength: "4", size: "4", min:"1", max: "9999", :class => 'form-control input-sm change-size', required: true, placeholder: 'width', :readonly => readonly %>
+                            <%= f.hidden_field :id , id: "product_section_id_#{product_section.id}", class: "product_section_id"%>
+                            <%= f.number_field :size_a, maxlength: "4", size: "4", min:"1", max: "9999", :class => "form-control input-sm change-size product_section_size_a_#{f.object.id}", id: "product_section_size_a_#{f.object.id}", data: {id: f.object.id}, required: true, placeholder: 'width', :readonly => readonly %>
                          </div>
                          <div class="col-sm-2">
-                            <%= f.select :fraction_size_a, options_for_select(FRACTION_TYPE, f.object.fraction_size_a) , {include_blank: true} ,{:class => 'form-control m-b select-bootstrap'}%>
+                            <%= f.select :fraction_size_a, options_for_select(FRACTION_TYPE, f.object.fraction_size_a) , {include_blank: true} ,{:class => "form-control m-b select-bootstrap"}%>
                          </div>
                          <div class="col-sm-2">
-                            <%= f.number_field :size_b, maxlength: "4", size: "4", min:"1", max: "9999", :class => 'form-control input-sm change-size', required: true, placeholder: 'height', :readonly => readonly %>
+                            <%= f.number_field :size_b, maxlength: "4", size: "4", min:"1", max: "9999", :class => "form-control input-sm change-size product_section_size_b_#{f.object.id}", id: "product_section_size_b_#{f.object.id}", data: {id: f.object.id}, required: true, placeholder: 'height', :readonly => readonly %>
                          </div>
                          <div class="col-sm-2">
-                            <%= f.select :fraction_size_b, options_for_select(FRACTION_TYPE, f.object.fraction_size_a) , {include_blank: true} ,{:class => 'form-control m-b select-bootstrap'}%>
+                            <%= f.select :fraction_size_b, options_for_select(FRACTION_TYPE, f.object.fraction_size_a) , {include_blank: true} ,{:class => "form-control m-b select-bootstrap"}%>
                          </div>
                       </div>
                    </div>
@@ -54,7 +55,7 @@
                 <div class="form-group">
                    <label class="col-sm-2 control-label">Size Type</label>
                    <div class="col-sm-3">
-                      <%= f.select :size_type, options_for_select(SIZE_TYPE, f.object.size_type), {include_blank: "-Size Type-"}, {class: 'form-control m-b select-bootstrap'} %>
+                      <%= f.select :size_type, options_for_select(SIZE_TYPE, f.object.size_type), {include_blank: "-Size Type-"}, {class: "form-control m-b select-bootstrap product_section_size_type_#{f.object.id}", id: "product_section_size_type_#{f.object.id}", data: {id: f.object.id}} %>
                    </div>
                 </div>
              </fieldset>
@@ -64,7 +65,7 @@
                    <div class="col-sm-8">
                       <div class="row">
                          <div class="col-sm-2">
-                            <%= check_box_tag "set_pl", @edge_pl_val %>
+                            <%= f.check_box :set_pl , val: @edge_pl_val, id: "set_pl_#{f.object.id}", data: {id: f.object.id} %>
                          </div>
                       </div>
                    </div>
@@ -79,7 +80,9 @@
                       </div>
                       <div class="col-sm-6">
                         <div class="col-sm-6 col-centered">
-                          <%= f.select :edge_type_a_id, options_for_select(@edge_type, f.object.edge_type_a_id) , {include_blank: "-Edge A-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
+                          <div>
+                          <%= f.select :edge_type_a_id, options_for_select(@edge_type, f.object.edge_type_a_id) , {include_blank: "-Edge A-"} ,{:required => true, :class => "e_product_section_id_#{f.object.id} product_section_edge_type_a_id_#{f.object.id} form-control m-b select-bootstrap", id: "product_section_edge_type_a_id_#{f.object.id}"}%>
+                          </div>
                         </div>
                       </div>
                       <div class="col-sm-3">
@@ -87,13 +90,21 @@
                     </div>
                     <div class="row">
                       <div class="col-sm-3 height_canvas">
-                        <%= f.select :edge_type_d_id, options_for_select(@edge_type, f.object.edge_type_d_id) , {include_blank: "-Edge D-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
+                        <div>
+                        <%= f.select :edge_type_d_id, options_for_select(@edge_type, f.object.edge_type_d_id) , {include_blank: "-Edge D-"} ,{:required => true, :class => "e_product_section_id_#{f.object.id} product_section_edge_type_d_id_#{f.object.id} form-control m-b select-bootstrap", id: "product_section_edge_type_d_id_#{f.object.id}"}%>
+                        </div>
                       </div>
                       <div class="col-sm-6 center" >
-                          <img  width="200" height="200" src="https://user-images.githubusercontent.com/116856/33920682-36c309e8-dffa-11e7-8979-7da6f97df992.jpg"/>
+                        <div class="wrapper-canvas" id="wrapper-canvas-<%= f.object.id %>">
+                          <canvas id="canvas-<%= f.object.id %>">
+                            <img  width="200" height="200" src="https://user-images.githubusercontent.com/116856/33920682-36c309e8-dffa-11e7-8979-7da6f97df992.jpg"/>
+                          </canvas>
+                        </div>
                       </div>
                       <div class="col-sm-3 height_canvas">
-                        <%= f.select :edge_type_b_id, options_for_select(@edge_type, f.object.edge_type_b_id) , {include_blank: "-Edge B-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
+                        <div>
+                        <%= f.select :edge_type_b_id, options_for_select(@edge_type, f.object.edge_type_b_id) , {include_blank: "-Edge B-"} ,{:required => true, :class => "e_product_section_id_#{f.object.id} product_section_edge_type_b_id_#{f.object.id} form-control m-b select-bootstrap", id: "product_section_edge_type_b_id_#{f.object.id}"}%>
+                        </div>
                       </div>
                     </div>
                     <div class="row">
@@ -101,7 +112,9 @@
                       </div>
                       <div class="col-sm-6">
                         <div class="col-sm-6 col-centered">
-                          <%= f.select :edge_type_c_id, options_for_select(@edge_type, f.object.edge_type_c_id) , {include_blank: "-Edge C-"} ,{:required => true, :class => 'form-control m-b select-bootstrap'}%>
+                          <div>
+                          <%= f.select :edge_type_c_id, options_for_select(@edge_type, f.object.edge_type_c_id) , {include_blank: "-Edge C-"} ,{:required => true, :class => "e_product_section_id_#{f.object.id} product_section_edge_type_c_id_#{f.object.id} form-control m-b select-bootstrap", id: "product_section_edge_type_c_id_#{f.object.id}"}%>
+                          </div>
                         </div>
                       </div>
                       <div class="col-sm-3">
@@ -113,8 +126,10 @@
              <fieldset>
                <div class="actions <%= 'hide' if readonly %>">
                   <%= f.submit nil, :class => 'btn btn-primary' %>
-                  <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                  <% if params[:fabrication_order_id] %>
+                    <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                        edit_fabrication_order_path(params[:fabrication_order_id]), :class => 'btn btn-default' unless ajax %>
+                  <% end %>
                 </div>
              </fieldset>
             <% end %>

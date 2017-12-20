@@ -15,7 +15,7 @@ class ProductSectionsController < ApplicationController
                               .where("product_id = ?", params[:product_id])
     
     respond_to do |format|
-      result = @sections.collect {|sect| {id: sect.id, name: sect.name, status: sect.status, size_a: sect.size_a, fraction_size_a: sect.fraction_size_a, size_b: sect.size_b, fraction_size_b: sect.fraction_size_a, edge_type_a_id: sect.edge_type_a_id, edge_type_a: sect.edge_type_a.to_s, edge_type_b_id: sect.edge_type_b_id, edge_type_b: sect.edge_type_b.to_s, edge_type_c_id: sect.edge_type_c_id, edge_type_c: sect.edge_type_c.to_s, edge_type_d_id: sect.edge_type_d_id, edge_type_d: sect.edge_type_d.to_s}}
+      result = @sections.collect {|sect| {id: sect.id, name: sect.name, status: sect.status, size_type: sect.size_type, size_a: sect.size_a, fraction_size_a: sect.fraction_size_a, size_b: sect.size_b, fraction_size_b: sect.fraction_size_a, edge_type_a_id: sect.edge_type_a_id, edge_type_a: sect.edge_type_a.to_s, edge_type_b_id: sect.edge_type_b_id, edge_type_b: sect.edge_type_b.to_s, edge_type_c_id: sect.edge_type_c_id, edge_type_c: sect.edge_type_c.to_s, edge_type_d_id: sect.edge_type_d_id, edge_type_d: sect.edge_type_d.to_s}}
       format.json {render json: api_response(:success, nil, result)}
     end  
   end  
@@ -89,7 +89,7 @@ class ProductSectionsController < ApplicationController
         format.html { redirect_to edit_fabrication_order_path(@fo), notice: 'Section was successfully updated.' }
         format.json do
           flash[:notice] = "status for #{@product_section.name} was successfully updated"
-          sects = {id: @product_section.id, name: @product_section.name, status: @product_section.status, size_a: @product_section.size_a, fraction_size_a: @product_section.fraction_size_a, size_b: @product_section.size_b, fraction_size_b: @product_section.fraction_size_a, edge_type_a_id: @product_section.edge_type_a_id, edge_type_a: @product_section.edge_type_a.to_s, edge_type_b: @product_section.edge_type_b.to_s, edge_type_b_id: @product_section.edge_type_b_id,  edge_type_c: @product_section.edge_type_c.to_s, edge_type_c_id: @product_section.edge_type_c_id, edge_type_d: @product_section.edge_type_d.to_s, edge_type_d_id: @product_section.edge_type_d_id}
+          sects = {id: @product_section.id, name: @product_section.name, status: @product_section.status, size_type: @product_section.size_type, size_a: @product_section.size_a, fraction_size_a: @product_section.fraction_size_a, size_b: @product_section.size_b, fraction_size_b: @product_section.fraction_size_a, edge_type_a_id: @product_section.edge_type_a_id, edge_type_a: @product_section.edge_type_a.to_s, edge_type_b: @product_section.edge_type_b.to_s, edge_type_b_id: @product_section.edge_type_b_id,  edge_type_c: @product_section.edge_type_c.to_s, edge_type_c_id: @product_section.edge_type_c_id, edge_type_d: @product_section.edge_type_d.to_s, edge_type_d_id: @product_section.edge_type_d_id}
           render json: api_response(:success, nil, sects)
         end  
         format.js {render layout: false}

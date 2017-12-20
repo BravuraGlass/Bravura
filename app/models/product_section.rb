@@ -20,15 +20,25 @@ class ProductSection < ApplicationRecord
       in: FRACTION_TYPE,
       message: "Fraction size type B is not valid." 
     }, allow_blank: true
-=end    
+  
     
+    validates_presence_of :edge_type_a
+    validates_presence_of :edge_type_b,  unless: :is_oval?
+    validates_presence_of :edge_type_c,  unless: :is_oval?
+    validates_presence_of :edge_type_d,  unless: :is_oval?
+=end  
     belongs_to :product
     belongs_to :edge_type_a, class_name: 'EdgeType', foreign_key: 'edge_type_a_id', optional: true
     belongs_to :edge_type_b, class_name: 'EdgeType', foreign_key: 'edge_type_b_id', optional: true
     belongs_to :edge_type_c, class_name: 'EdgeType', foreign_key: 'edge_type_c_id', optional: true
     belongs_to :edge_type_d, class_name: 'EdgeType', foreign_key: 'edge_type_d_id', optional: true
     after_update :sync_status
-    attr_accessor :audit_user_name
+    attr_accessor :audit_user_name, :set_pl
+
+
+    def is_oval?
+      self.size_type == "oval"  
+    end
 
     def as_json(options)
       super(include: {

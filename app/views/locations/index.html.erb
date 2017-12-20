@@ -67,6 +67,11 @@
       }
     }
 
+    var markerCluster = new MarkerClusterer(map, gMapMarkers,
+      {gridSize: 20, maxZoom: 17,imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
+
+    
+
     socket.on('update_positions', updatePositions);
   }
 

@@ -72,6 +72,7 @@
 </body>
 
 <%- if (@need_libs || []).include?('maps') %>
+<script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
 <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCHSbVfDBDr13syJSeZPwjxOXS8kssI0S4&libraries=places&callback=initMaps"></script>
 <% end -%>
 <%= yield :body_area %>
