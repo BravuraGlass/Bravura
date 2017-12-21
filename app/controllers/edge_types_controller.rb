@@ -42,7 +42,9 @@ class EdgeTypesController < ApplicationController
   def update
     respond_to do |format|
       if @edge_type.update(edge_type_params)
-        format.html { redirect_to @edge_type, notice: 'Edge type was successfully updated.' }
+        params_redirect = {id: @edge_type.id}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+        format.html { redirect_to edge_type_path(params_redirect), notice: 'Edge type was successfully updated.' }
         format.json { render :show, status: :ok, location: @edge_type }
       else
         format.html { render :edit }

@@ -43,7 +43,9 @@ class UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
-        format.html { redirect_to users_url, notice: 'User was successfully updated.' }
+        params_redirect = {}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+        format.html { redirect_to users_url(params_redirect), notice: 'User was successfully updated.' }
         format.json { render :index, status: :ok, location: @user }
       else
         format.html { render :edit }

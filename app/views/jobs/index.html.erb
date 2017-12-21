@@ -54,7 +54,7 @@
                     </tr>
                     <% else %>
                       <% @jobs.each do |job| %>
-                        <tr onclick="location.href = '<%=job_path(job)%>'" class="pointer" >
+                        <tr onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'" class="pointer" >
                           <td>
                             <%= l(job.appointment, format: '%Y/%m/%d') if job.appointment %>
                           </td>

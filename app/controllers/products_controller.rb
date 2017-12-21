@@ -114,7 +114,10 @@ class ProductsController < ApplicationController
       params[:product][:audit_user_name] = @current_user.try(:full_name) || @api_user.try(:full_name)
       if @product.update(product_params)
 
-        format.html { redirect_to edit_fabrication_order_path(params[:fabrication_order_id]), notice: 'Product was successfully updated.' }
+        params_redirect = {id: params[:fabrication_order_id]}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+
+        format.html { redirect_to edit_fabrication_order_path(params_redirect), notice: 'Product was successfully updated.' }
         format.json { render :show, status: :ok, location: @product }
       else
         format.html { render :edit }

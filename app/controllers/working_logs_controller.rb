@@ -110,7 +110,9 @@ class WorkingLogsController < ApplicationController
       redirect_to edit_report_detail_working_logs_path(ids: report_params[:ids], user_id: report_params[:user_id], week: report_params[:week])
     else
       flash[:notice] = "Working Log was sucessfully updated"
-      redirect_to report_detail_working_logs_path(user_id: report_params[:user_id], week: report_params[:week])
+      params_redirect = {user_id: report_params[:user_id], week: report_params[:week]}
+      params_redirect.merge!({scroll: true}) if params[:scroll]
+      redirect_to report_detail_working_logs_path(params_redirect)
     end    
   end  
   

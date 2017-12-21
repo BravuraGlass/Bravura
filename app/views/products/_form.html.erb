@@ -26,6 +26,7 @@
 
                 <div class="form-group">
                   <%= f.label :product_type_id %>
+                  <%= hidden_field_tag :scroll, params[:scroll] %>
                   <%= collection_select :product_type_id, :product_type_id, @product_types, :id, :name, { include_blank: false } , { class: 'form-control select-bootstrap', :readonly => readonly }  %>
                 </div>
 

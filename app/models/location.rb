@@ -8,4 +8,10 @@ class Location < ApplicationRecord
       .where('locations.latitude <> ""')
       .group(["users.first_name","users.last_name","locations.latitude","locations.longitude","locations.created_at"])
     }
+  scope :latest_ids, -> {
+    select('user_id, MAX(id) as id')
+    .where('locations.latitude is not null')
+    .where('locations.latitude <> ""')
+    .group(:user_id)
+  }
 end

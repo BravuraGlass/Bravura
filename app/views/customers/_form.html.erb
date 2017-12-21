@@ -25,6 +25,7 @@
                   <div class="<%= ajax ? 'col-md-6' : 'col-md-4' %>">
                     <div class="form-group">
                       <%= f.label "First Name" %>
+                      <%= hidden_field_tag :scroll, params[:scroll], class: 'set_offset' %>
                       <%= f.text_field :contact_firstname, :class => 'form-control', id: :customer_contact_firstname, :readonly => readonly %>
                     </div>
                     <div class="form-group">

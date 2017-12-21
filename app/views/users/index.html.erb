@@ -47,7 +47,7 @@
                                         <td><%= user_type_name(user.type_of_user) %></td>
                                         <td>
                                         <%= link_to 'Edit',
-                                                    edit_user_path(user), :class => 'btn btn-default btn-xs' %>
+                                                    edit_user_path(user, scroll: ''), :class => 'btn btn-default btn-xs' %>
                                         <% unless user.id == current_user.id %>
                                         <%= link_to 'Revoke Access',
                                                     revoke_user_path(user),
@@ -88,7 +88,7 @@
                                         <td><%= user_type_name(user.type_of_user) %></td>
                                         <td>
                                         <%= link_to 'Edit',
-                                                    edit_user_path(user), :class => 'btn btn-default btn-xs' %>
+                                                    edit_user_path(user, scroll: ''), :class => 'btn btn-default btn-xs' %>
                                         <%= link_to 'Activate',		
                                                     activate_user_path(user),		
                                                       :method => :post,		

@@ -27,6 +27,7 @@
               <div class="col-md-6 col-xs-6">
                 <div class="form-group">
                   <%= f.label :customer %>
+                    <%= hidden_field_tag :scroll, params[:scroll], class: 'set_offset' %>
                     <%= f.collection_select :customer_id, @customers, :id, :contact_info, { include_blank: true }, class: 'form-control select-bootstrap', :readonly => readonly  %>
                       <a id="create_customer_button" class="btn-link pointer"><i class="fa fa-plus"></i> New</a>
                 </div>

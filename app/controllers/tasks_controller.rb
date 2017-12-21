@@ -46,7 +46,9 @@ class TasksController < ApplicationController
   def update
     respond_to do |format|
       if @task.update(task_params)
-        format.html { redirect_to @task, notice: 'Task was successfully updated.' }
+        params_redirect = {id: @task.id}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+        format.html { redirect_to edit_task_path(params_redirect), notice: 'Task was successfully updated.' }
         format.json { render :show, status: :ok, location: @task }
       else
         format.html { render :edit }

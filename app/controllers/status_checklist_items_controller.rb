@@ -43,7 +43,9 @@ class StatusChecklistItemsController < ApplicationController
   def update
     respond_to do |format|
       if @status_checklist_item.update(status_checklist_item_params)
-        format.html { redirect_to @status_checklist_item, notice: 'Status checklist item was successfully updated.' }
+        params_redirect = {id: @status_checklist_item.id}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+        format.html { redirect_to status_checklist_item_path(params_redirect), notice: 'Status checklist item was successfully updated.' }
         format.json { render :show, status: :ok, location: @status_checklist_item }
       else
         format.html { render :edit }

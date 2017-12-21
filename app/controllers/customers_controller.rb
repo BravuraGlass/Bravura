@@ -48,7 +48,9 @@ class CustomersController < ApplicationController
   def update
     respond_to do |format|
       if @customer.update(customer_params)
-        format.html { redirect_to @customer, notice: 'Customer was successfully updated.' }
+        params_redirect = {id: @customer.id}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+        format.html { redirect_to customer_path(params_redirect), notice: 'Customer was successfully updated.' }
         format.json { render :show, status: :ok, location: @customer }
       else
         format.html { render :edit }

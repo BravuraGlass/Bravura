@@ -14,6 +14,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <%= label_tag :name %>
+                    <%= hidden_field_tag :scroll, params[:scroll], class: 'set_offset' %>
                     <%= text_field_tag :name, @working_logs[0].user.full_name, :class => 'form-control', readonly: true %>
                   </div>
                   <div class="form-group">
@@ -38,7 +39,6 @@
                   </div>  
                 </div>
               </div>
-              
               <%= hidden_field_tag "ids", params[:ids] %>
               <%= hidden_field_tag "user_id", params[:user_id] %>
               <%= hidden_field_tag "week", params[:week] %>

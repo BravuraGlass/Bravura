@@ -25,6 +25,7 @@
 
                                           <div class="form-group">
                   <%= f.label :name %>
+                  <%= hidden_field_tag :scroll, params[:scroll], class: 'set_offset' %>
                   <%= f.text_field :name, :class => 'form-control', id: :edge_type_name, :readonly => readonly %>
                 </div>
                                       <div class="actions <%= 'hide' if readonly %>">

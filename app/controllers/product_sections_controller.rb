@@ -86,7 +86,10 @@ class ProductSectionsController < ApplicationController
       @fo = @product_section.product.room.fabrication_order_id
       if @product_section.update(product_section_params)
 
-        format.html { redirect_to edit_fabrication_order_path(@fo), notice: 'Section was successfully updated.' }
+        params_redirect = {id: @fo}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+
+        format.html { redirect_to edit_fabrication_order_path(params_redirect), notice: 'Section was successfully updated.' }
         format.json do
           flash[:notice] = "status for #{@product_section.name} was successfully updated"
           sects = {id: @product_section.id, name: @product_section.name, status: @product_section.status, size_type: @product_section.size_type, size_a: @product_section.size_a, fraction_size_a: @product_section.fraction_size_a, size_b: @product_section.size_b, fraction_size_b: @product_section.fraction_size_a, edge_type_a_id: @product_section.edge_type_a_id, edge_type_a: @product_section.edge_type_a.to_s, edge_type_b: @product_section.edge_type_b.to_s, edge_type_b_id: @product_section.edge_type_b_id,  edge_type_c: @product_section.edge_type_c.to_s, edge_type_c_id: @product_section.edge_type_c_id, edge_type_d: @product_section.edge_type_d.to_s, edge_type_d_id: @product_section.edge_type_d_id}

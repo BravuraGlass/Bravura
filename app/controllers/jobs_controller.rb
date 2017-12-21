@@ -180,13 +180,16 @@ class JobsController < ApplicationController
         end
     
         @job.save!
-        format.html { redirect_to select_job_path(@job), notice: 'Job was successfully updated.' }
+        params_redirect = {id: @job.id}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+
+        format.html { redirect_to select_job_path(params_redirect), notice: 'Job was successfully updated.' }
         format.json do
           flash[:notice] = "status for #{@job.customer.contact_info} was successfully updated" 
           render json: @job, status: :ok, location: @job
         end  
       else
-        format.html { redirect_to select_job_path(@job) }
+        format.html { redirect_to select_job_path(params_redirect) }
       end
     end
   end

@@ -27,6 +27,7 @@
                 <div class="col-md-4">
                   <div class="form-group">
                     <%= f.label :first_name %>
+                    <%= hidden_field_tag :scroll, params[:scroll] %>
                     <%= f.text_field :first_name, :class => 'form-control', id: :user_first_name, :readonly => readonly %>
                   </div>
                   <div class="form-group">

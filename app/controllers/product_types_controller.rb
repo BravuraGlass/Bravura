@@ -42,7 +42,9 @@ class ProductTypesController < ApplicationController
   def update
     respond_to do |format|
       if @product_type.update(product_type_params)
-        format.html { redirect_to @product_type, notice: 'Product type was successfully updated.' }
+        params_redirect = {id: @product_type.id}
+        params_redirect.merge!({scroll: true}) if params[:scroll]
+        format.html { redirect_to product_type_path(params_redirect), notice: 'Product type was successfully updated.' }
         format.json { render :show, status: :ok, location: @product_type }
       else
         format.html { render :edit }

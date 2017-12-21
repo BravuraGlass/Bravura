@@ -1,5 +1,5 @@
 <div id="map-filters" class="row filter-container">
-  <div class="col-md-8">
+  <div class="col-md-12">
     <%= form_tag( map_index_path, {id: 'form-map', class: 'form-inline', method: 'get'}) do -%>
       <div class="form-group">
         <div class="checkbox c-checkbox">
@@ -36,7 +36,9 @@
       <div class="form-group">
         <%= date_field("", "date", value: (@show_all ? nil : @selected_date), data: {today: Time.zone.now.strftime("%Y-%m-%d") },class: 'btn btn-default' ) %>
       </div>
-      <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
+      <div class="form-group">
+        <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
+      </div>  
     <% end -%>
   </div>
 </div>
