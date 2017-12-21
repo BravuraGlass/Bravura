@@ -77,6 +77,17 @@
       $('[data-masked]').inputmask();
 
       // $('.date').datetimepicker();
+      var url = new URL(window.location.href);
+      var scrollTo = url.searchParams.get("scroll");
+
+      if(scrollTo){
+        $('html, body').animate({ scrollTop: scrollTo }, 0.5);
+      }
+
+      $( document ).scroll(function() {
+        var scrollTop = (window.pageYOffset !== undefined) ? window.pageYOffset : (document.documentElement || document.body.parentNode || document.body).scrollTop;
+        $('#content_wrapper').data('offset-top', scrollTop)
+      });
 
   });
 

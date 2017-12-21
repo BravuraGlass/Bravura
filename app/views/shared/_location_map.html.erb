@@ -130,42 +130,26 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
       var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
 
       if(marker_data.type == "worker"){
-        var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-        var markerIcon = {
-          url: 'http://image.flaticon.com/icons/svg/252/252025.svg',
-          scaledSize: new google.maps.Size(16, 16),
-          origin: new google.maps.Point(0, 0),
-          anchor: new google.maps.Point(32,65),
-          labelOrigin:  new google.maps.Point(40,33),
-        };
-  
         var markerLabel = marker_data.marker_title.split('-');
         if(markerLabel[1] == 'true'){
-          var color = "#eb3a44"
+          var color = "808080"
+          var bgcolor = "fff"
         }else{
-          var color = "#808080"
+          var color = "ff0000"
+          var bgcolor = "fff"
         }
-        var marker = new google.maps.Marker({
-          map: map,
-          animation: google.maps.Animation.DROP,
-          position: position,
-          icon: markerIcon,
-          title: 'worker : '+ markerLabel[0],
-          label: {
-            text: markerLabel[0],
-            color: color,
-            fontSize: "16px",
-            fontWeight: "bold"
-          }
-        });
+        // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
+        icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|bb|'+markerLabel[0]+'|'+color+'|'+bgcolor;
+        content = markerLabel[0]
       }else{
-        var marker = new google.maps.Marker({
-          position: position,
-          map: map,
-          icon: icons[marker_data.type].icon,
-          title: content
-        });
+        icon = icons[marker_data.type].icon
       }
+      var marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        icon: icon,
+        title: content
+      });
 
       google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
           return function() {

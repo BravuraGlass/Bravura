@@ -28,7 +28,7 @@
       };
 
       map = new google.maps.Map(document.getElementById('location-map'), {
-        zoom: 6,
+        zoom: 9,
         center: center
       });
 
@@ -40,9 +40,19 @@
         var marker_data = markers[i];
         var content = marker_data.marker_title || '';
         var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
+        if(marker_data.old == true){
+          var color = "808080"
+          var bgcolor = "fff"
+        }else{
+          var color = "ff0000"
+          var bgcolor = "fff"
+        }
+        // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
+        icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|bb|'+content+'|'+color+'|'+bgcolor;
         var marker = new google.maps.Marker({
           position: position,
           map: map,
+          icon: icon,
           title: content
         });
         marker.setVisible(true);
@@ -137,6 +147,9 @@
                   infoWindow.open(map,marker);
                 };
             })(marker,content,infoWindow)); 
+
+            var markerCluster = new MarkerClusterer(map, gMapMarkers,
+              {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
           }
         }
 

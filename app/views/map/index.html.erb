@@ -39,6 +39,8 @@
       <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
     <% end -%>
   </div>
+</div>
+<div class="row" id="legends">
   <div class="col-md-1 center">
     Job: <br/><%= image_tag  "/assets/mapicons/job.png" %>
   </div>
@@ -48,8 +50,11 @@
   <div class="col-md-1 center">
     Task: <br/><%= image_tag  "/assets/mapicons/task.png" %>
   </div>
-  <div class="col-md-1 center">
-    Worker: <br/><%= image_tag  "/assets/mapicons/worker.png" %>
+  <div class="col-md-2 center">
+    Active Worker: <br/><%= image_tag  "/assets/mapicons/worker.png" %>
+  </div>
+  <div class="col-md-2 center">
+    Inactive Worker: <br/><%= image_tag  "/assets/mapicons/worker.png" , class: "grayscale" %>
   </div>
 </div>
 <div id="map" class="full-map">
