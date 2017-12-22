@@ -53,7 +53,7 @@ class MapController < ApplicationController
         marker.lat worker[0][2]
         marker.lng worker[0][3]
         marker.title title
-        marker.json({:type => :worker})
+        marker.json({:type => :worker, created_at: worker[0][4].try(:strftime, '%d %B %Y %H:%M')})
       end
     end
 

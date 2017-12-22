@@ -140,9 +140,10 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
         }
         // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
         icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|bb|'+markerLabel[0]+'|'+color+'|'+bgcolor;
-        content = markerLabel[0]
+        content = marker_data.created_at
       }else{
         icon = icons[marker_data.type].icon
+        var content = marker_data.marker_title || '';
       }
       var marker = new google.maps.Marker({
         position: position,
@@ -151,12 +152,29 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
         title: content
       });
 
+      var infoWindow = new google.maps.InfoWindow( {
+        content: content
+      });
+
       google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
           return function() {
               infoWindow.setContent(marker.getTitle());
               infoWindow.open(map, marker);
           }
-      })(marker, i, infoWindowTask));
+      })(marker, i, infoWindow));
+
+      google.maps.event.addListener(marker,'mouseover', (function(marker,content,infoWindow){ 
+          return function() {
+            infoWindow.open(map,marker);
+          };
+      })(marker,content,infoWindow)); 
+
+      google.maps.event.addListener(marker,'mouseout', (function(marker,content,infoWindow){ 
+          return function() {
+            infoWindow.close();
+          };
+      })(marker,content,infoWindow)); 
+
       marker.setVisible(true);
       gMapMarkers.push(marker);
     }

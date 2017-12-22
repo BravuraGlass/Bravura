@@ -38,6 +38,7 @@
     if(markers && markers.length > 0) {
       for( var i = 0; i < markers.length; i++ ) {
         var marker_data = markers[i];
+        var created_at = marker_data.created_at;
         var content = marker_data.marker_title || '';
         var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
         if(marker_data.old == true){
@@ -53,7 +54,7 @@
           position: position,
           map: map,
           icon: icon,
-          title: content
+          title: created_at
         });
         marker.setVisible(true);
         gMapMarkers.push(marker);
@@ -61,14 +62,26 @@
         console.log(marker_data.user_id + ": " + content);
 
         var infoWindow = new google.maps.InfoWindow( {
-          content: content
+          content: created_at
         });
 
-        google.maps.event.addListener(marker,'click', (function(marker,content,infoWindow){ 
+        google.maps.event.addListener(marker,'click', (function(marker,created_at,infoWindow){ 
             return function() {
               infoWindow.open(map,marker);
             };
-        })(marker,content,infoWindow)); 
+        })(marker,created_at,infoWindow)); 
+
+        google.maps.event.addListener(marker,'mouseover', (function(marker,created_at,infoWindow){ 
+            return function() {
+              infoWindow.open(map,marker);
+            };
+        })(marker,created_at,infoWindow)); 
+
+        google.maps.event.addListener(marker,'mouseout', (function(marker,created_at,infoWindow){ 
+            return function() {
+              infoWindow.close();
+            };
+        })(marker,created_at,infoWindow)); 
 
         console.log("Markers: ", markers);
         console.log("Real Markers: ", gMapMarkers);
@@ -107,6 +120,7 @@
                 var marker_data = markers[i];
                 var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
                 var content = marker_data.marker_title || '';
+                var created_at = marker_data.created_at;
         
                 var marker = gMapMarkers[i];
         
@@ -119,6 +133,8 @@
     
           if(isExist != true) {
             var content = data.marker_title || '';
+            // should change from socket
+            var created_at = markers[index].created_at || content;
             var position = new google.maps.LatLng(data.lat, data.lng);
             var color = "ff0000"
             var bgcolor = "fff"
@@ -128,7 +144,7 @@
               position: position,
               map: map,
               icon: icon,
-              title: content
+              title: created_at
             });
   
             marker.setVisible(true);
@@ -138,24 +154,37 @@
               user_id: data.user_id,
               lat: data.lat,
               lng: data.lng,
-              marker_title: content
+              marker_title: created_at
             });
 
             var infoWindow = new google.maps.InfoWindow( {
-              content: content
+              content: created_at
             });
 
-            console.log(data.user_id + ": " + content);
+            console.log(data.user_id + ": " + created_at);
     
-            google.maps.event.addListener(marker,'click', (function(marker,content,infoWindow){ 
+            google.maps.event.addListener(marker,'click', (function(marker,created_at,infoWindow){ 
                 return function() {
                   infoWindow.open(map,marker);
                 };
-            })(marker,content,infoWindow)); 
+            })(marker,created_at,infoWindow)); 
+
+            google.maps.event.addListener(marker,'mouseover', (function(marker,created_at,infoWindow){ 
+              return function() {
+                infoWindow.open(map,marker);
+              };
+            })(marker,created_at,infoWindow)); 
+
+            google.maps.event.addListener(marker,'mouseout', (function(marker,created_at,infoWindow){ 
+                return function() {
+                  infoWindow.close();
+                };
+            })(marker,created_at,infoWindow)); 
 
             var markerCluster = new MarkerClusterer(map, gMapMarkers,
               {imagePath: 'https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/m'});
           }
+          index = index+1;
         }
 
         /*

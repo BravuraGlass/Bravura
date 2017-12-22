@@ -11,8 +11,7 @@ class LocationsController < ApplicationController
       marker.lat location.latitude
       marker.lng location.longitude
       marker.title title
-      marker.json({:old => old})
-      marker.json({:user_id => location.user_id})
+      marker.json({:user_id => location.user_id, :old => old,  :created_at => location.created_at.try(:strftime, '%d %B %Y %H:%M') })
     end
   end
 end
