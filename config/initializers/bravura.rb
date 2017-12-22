@@ -40,3 +40,8 @@ SIZE_TYPE =[
   "oval",
   "box"
 ]
+
+DEVICE_TYPE =[
+  "ios",
+  "android"
+]

@@ -1,5 +1,7 @@
 Rails.application.routes.draw do
   
+  resources :notifications, only: [:create]
+
   get 'locations/index'
 
   resources :working_logs, only: :index do
