@@ -13,7 +13,10 @@ module Printable
     fo.rooms.each do |room|
       room.products.each do |product|
         product.product_sections.each do |sect|
-          @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]
+          img_size = calc_img_size(sect)
+          @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt, 
+                    sect.size, sect.edge_type_a.name, sect.edge_type_b.name, sect.edge_type_c.name, sect.edge_type_d.name,
+                    sect.size_type, img_size[0], img_size[1] ]
         end        
       end
     end     
@@ -44,7 +47,10 @@ module Printable
 
     room.products.each do |product|
       product.product_sections.each do |sect|
-        @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]
+        img_size = calc_img_size(sect)
+        @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt,
+                  sect.size, sect.edge_type_a.name, sect.edge_type_b.name, sect.edge_type_c.name, sect.edge_type_d.name,
+                  sect.size_type, img_size[0], img_size[1] ]
       end        
     end      
   end  
@@ -71,7 +77,10 @@ module Printable
     apt  = product.room.fabrication_order.job.address2
 
     product.product_sections.each do |sect|
-      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]   
+      img_size = calc_img_size(sect)
+      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt,
+                sect.size, sect.edge_type_a.name, sect.edge_type_b.name, sect.edge_type_c.name, sect.edge_type_d.name,
+                sect.size_type, img_size[0], img_size[1] ]
     end  
   end  
 
@@ -92,8 +101,10 @@ module Printable
     sect = ProductSection.find(id)
     addr = sect.product.room.fabrication_order.job.address
     apt  = sect.product.room.fabrication_order.job.address2
-
-    @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]    
+    img_size = calc_img_size(sect)
+    @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt,
+              sect.size, sect.edge_type_a.name, sect.edge_type_b.name, sect.edge_type_c.name, sect.edge_type_d.name,
+              sect.size_type, img_size[0], img_size[1] ] 
   end  
 
   def convert_section_orders_to_qr id
@@ -113,8 +124,27 @@ module Printable
     sections.each do |sect|
       addr = sect.product.room.fabrication_order.job.address
       apt  = sect.product.room.fabrication_order.job.address2
-      
-      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]  
+      img_size = calc_img_size(sect)
+      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt,
+                sect.size, sect.edge_type_a.name, sect.edge_type_b.name, sect.edge_type_c.name, sect.edge_type_d.name,
+                sect.size_type, img_size[0], img_size[1] ]
     end  
   end  
+
+  private
+    def calc_img_size(sect)
+      if sect.size_a.present? && sect.size_b.present?
+        if sect.size_a > sect.size_b
+          width  = 100
+          height = ((sect.size_b.to_f / sect.size_a.to_f ) * 100)
+        else
+          height  = 100
+          width = ((sect.size_a.to_f  / sect.size_b.to_f ) * 100)
+        end
+      else
+        width = 100
+        height = 100
+      end
+      img_size = [width, height]
+    end
 end

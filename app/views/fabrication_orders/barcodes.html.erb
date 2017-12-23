@@ -19,6 +19,18 @@
     font-size: x-large;
   }
 
+  .barcode_edge_type {
+    margin-top: 10px;
+    width: 250px; 
+    display: inline-table;
+    text-align: center;
+    font-size: large;
+  }
+
+  .barcode_edge_type td {
+   border-left: none;
+  }
+
   table {
     margin: auto;
     border-width: 0;
@@ -53,7 +65,34 @@
         <div class="address">
           <div><%= qr[2] %></div>
           <br/> Apt# <br/>
-          <div><%= qr[3] %></div>
+          <div><%= qr[3] %></div><br/>
+          <div>Size : <%= qr[4] %></div><br/>
+          <div>Edge Type : </div>
+          <% if qr[9].present? %>
+          <table class="barcode_edge_type"><tbody>
+            <tr>
+              <td colspan="3"><%= qr[5] %></td>
+            </tr>
+            <% if qr[9] == "oval" %>
+            <tr>
+              <td colspan="3">
+                <img  width="<%= qr[10] %>" height="<%= qr[11] %>" src="https://user-images.githubusercontent.com/5506768/34172350-53625e12-e524-11e7-9dec-71be74dfb9b2.png"/>
+              </td>
+            </tr>
+            <% else %>
+            <tr>
+              <td><%= qr[8] %></td>
+              <td>
+                <img  width="<%= qr[10] %>" height="<%= qr[11] %>" src="https://user-images.githubusercontent.com/116856/33920682-36c309e8-dffa-11e7-8979-7da6f97df992.jpg"/>
+              </td>
+              <td><%= qr[6] %></td>
+            </tr>
+            <tr>
+              <td colspan="3"><%= qr[7] %></td>
+            </tr>
+            <% end %>
+          </tbody></table>
+          <% end %>
         </div>
       </div>
     </div>
