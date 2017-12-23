@@ -111,7 +111,10 @@ module Printable
     sections = ProductSection.where("product_sections.id IN (?)", ids.split(",")).includes(:product => :room).order("rooms.name ASC, products.name ASC, product_sections.name ASC")
     
     sections.each do |sect|
-      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png")]  
+      addr = sect.product.room.fabrication_order.job.address
+      apt  = sect.product.room.fabrication_order.job.address2
+      
+      @qrs << [sect.name, barcode_product_section_url(id: sect.id,format: "png"), addr, apt]  
     end  
   end  
 end

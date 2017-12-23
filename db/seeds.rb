@@ -60,7 +60,7 @@ employee2 = Employee.create(first_name: "Leroy", last_name: "Sane", email_addres
   ProductType.create(name: ptype)
 end
 
-["PL", "BV", "PL45"].each do |etype|
+["PL", "BV", "PL45", "SEAM"].each do |etype|
   EdgeType.create(name: etype)
 end
 

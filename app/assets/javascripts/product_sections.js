@@ -68,25 +68,36 @@ BRAVURA.setPlAll = function setPlAll(id){
 
 BRAVURA.changeSizeType = function changeSizeType(id){
   size = $('#product_section_size_type_'+id).val();
+  seam_id = $('#seam_id').val()
+
   if(size == ''){
     $('#product_section_edge_type_a_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_a_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_a_id_'+id).val() == null){$('#product_section_edge_type_a_id_'+id).select2('val',seam_id);}
     $('#product_section_edge_type_b_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_b_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_b_id_'+id).val() == null){$('#product_section_edge_type_b_id_'+id).select2('val',seam_id);}
     $('#product_section_edge_type_c_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_c_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_c_id_'+id).val() == null){$('#product_section_edge_type_c_id_'+id).select2('val',seam_id);}
     $('#product_section_edge_type_d_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_d_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_d_id_'+id).val() == null){$('#product_section_edge_type_d_id_'+id).select2('val',seam_id);}
   }else if(size == 'box'){
     $('#product_section_edge_type_a_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_a_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_a_id_'+id).val() == null){$('#product_section_edge_type_a_id_'+id).select2('val',seam_id);}
     $('#product_section_edge_type_b_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_b_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_b_id_'+id).val() == null){$('#product_section_edge_type_b_id_'+id).select2('val',seam_id);}
     $('#product_section_edge_type_c_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_c_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_c_id_'+id).val() == null){$('#product_section_edge_type_c_id_'+id).select2('val',seam_id);}
     $('#product_section_edge_type_d_id_'+id).parent().removeClass('hidden')
     $('#product_section_edge_type_d_id_'+id).attr("required", true)
+    if($('#product_section_edge_type_d_id_'+id).val() == null){$('#product_section_edge_type_d_id_'+id).select2('val',seam_id);}
   }else if(size == 'oval'){
+    if($('#product_section_edge_type_a_id_'+id).val() == null){$('#product_section_edge_type_a_id_'+id).select2('val',seam_id);}
     $('#product_section_edge_type_b_id_'+id).select2("val", ' '); 
     $('#product_section_edge_type_b_id_'+id).attr('required', false)
     $('#product_section_edge_type_b_id_'+id).parent().addClass('hidden')
@@ -102,10 +113,13 @@ BRAVURA.changeSizeType = function changeSizeType(id){
 BRAVURA.initSizeType = function initSizeType(id){
   size = $('#product_section_size_type_'+id).val();
   if(size == 'oval'){
+    if($('#product_section_edge_type_b_id_'+id).val() == null){$('#product_section_edge_type_b_id_'+id).select2('val',seam_id)}
     $('#product_section_edge_type_b_id_'+id).attr('required', false)
     $('#product_section_edge_type_b_id_'+id).parent().addClass('hidden')
+    if($('#product_section_edge_type_c_id_'+id).val() == null){$('#product_section_edge_type_c_id_'+id).select2('val',seam_id)}
     $('#product_section_edge_type_c_id_'+id).attr('required', false)
     $('#product_section_edge_type_c_id_'+id).parent().addClass('hidden')
+    if($('#product_section_edge_type_d_id_'+id).val() == null){$('#product_section_edge_type_d_id_'+id).select2('val',seam_id)}
     $('#product_section_edge_type_d_id_'+id).attr('required', false)
     $('#product_section_edge_type_d_id_'+id).parent().addClass('hidden')
   }

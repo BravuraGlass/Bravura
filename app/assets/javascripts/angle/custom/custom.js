@@ -107,6 +107,11 @@
       $('.select-bootstrap').select2({
         theme: 'bootstrap'
       });
+      $(".select-bootstrap").each(function (e) {
+        $(".select-bootstrap").eq(e).next(".select2").find(".select2-selection").focus(function() {
+           $(".select-bootstrap").eq(e).select2("open");
+        })
+      })
 
       $('[data-masked]').inputmask();
 

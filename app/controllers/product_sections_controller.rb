@@ -9,6 +9,7 @@ class ProductSectionsController < ApplicationController
      :update_status, :edit_section_status, :size]
   skip_before_action :require_login, only: [:materials, :available_material_statuses, :edit_section_status, :update_status], if: -> { request.format.json? }   
   before_action :api_login_status, only: [:materials, :available_material_statuses, :update_status,:edit_section_status, :multiple_edit_section_status], if: -> { request.format.json? }   
+  before_action :set_seam_id, only: [:size,:size_index]
   
   def materials
     @sections = ProductSection.includes(:edge_type_a, :edge_type_b, :edge_type_c, :edge_type_d)
@@ -266,6 +267,10 @@ class ProductSectionsController < ApplicationController
     def set_product_section
       @product_section = ProductSection.find(params[:id])
       @statuses ||= Status.where(:category => Status.categories[:products]).order(:order)
+    end
+
+    def set_seam_id
+      @seam_id = EdgeType.find_or_create_by(name: 'SEAM').try(:id)
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

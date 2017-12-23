@@ -1,5 +1,6 @@
 class ProductSection < ApplicationRecord
     include AuditableModel
+
 =begin
     validate :validate_minimum_edge_size, :if => :status_is_to_temper?
     validates :size_a, numericality: {only_integer: true, greater_than_or_equal_to: 1, less_than_or_equal_to: 9999}, allow_blank: true
@@ -35,6 +36,15 @@ class ProductSection < ApplicationRecord
     after_update :sync_status
     attr_accessor :audit_user_name, :set_pl
 
+    after_initialize :init
+
+    def init
+      seam = EdgeType.find_or_create_by(name: "SEAM") rescue nil
+      self.edge_type_a ||= seam
+      self.edge_type_b ||= seam
+      self.edge_type_c ||= seam
+      self.edge_type_d ||= seam
+    end
 
     def is_oval?
       self.size_type == "oval"  
