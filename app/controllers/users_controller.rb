@@ -80,7 +80,7 @@ class UsersController < ApplicationController
         flash[:alert] = "failed, you can't revoke access yourself"
         
       else  
-        user.update_attributes(password: "br4vur4n3w", token_expired: Date.today.prev_day, access_token: nil)
+        user.update_attributes(password: "br4vur4n3w", token_expired: Date.today.prev_day, access_token: nil, device_type: nil, device_token: nil)
         
         if user.errors.size > 0
           flash[:alert] = user.errors.full_messages.join(",")
