@@ -65,6 +65,7 @@ Rails.application.routes.draw do
       get 'audit_product'
       get 'audit_section'
       get 'new_product'
+      get 'same_size'
     end
     
     resources :rooms, only: [:new, :edit, :update, :destroy, :clone] do

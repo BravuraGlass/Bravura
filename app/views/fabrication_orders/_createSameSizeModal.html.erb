@@ -1,0 +1,70 @@
+<div id="createSameSizeModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" class="modal fade">
+  <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+            <button type="button" data-dismiss="modal" aria-label="Close" class="close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+            <h4 id="myModalLabel" class="modal-title">Material Size Info for <%= @fabrication_order.title %></h4>
+        </div>
+        <div class="modal-body">
+            
+          <% readonly ||= false %>
+
+          <!-- START row-->
+          <div class="row" id="same_size<%= @fabrication_order.id %>">
+             <div class="col-sm-12 col-xs-12 col-lg-12 col-md-12">
+                <!-- START panel-->
+                <div class="panel panel-default">
+                   <div class="panel-heading"></div>
+                   <div class="panel-body">
+
+                      <%= form_for @fabrication_order, url: same_size_fabrication_order_path(@fabrication_order), method: :get, :html => { :id => "same_size_fabrication_order_#{@fabrication_order.id}",:class => "fabrication_order form-horizontal", :role => 'form' } do |f| %>
+                        <% if @fabrication_order.errors.any? %>
+                          <div id="error_expl" class="panel panel-danger">
+                            <div class="panel-heading">
+                              <h3 class="panel-title"><%= pluralize(fabrication_order.errors.count, "error") %> prohibited this fabrication_order from being saved:</h3>
+                            </div>
+                            <div class="panel-body">
+                              <ul>
+                              <% @fabrication_order.errors.full_messages.each do |msg| %>
+                                <li><%= msg %></li>
+                              <% end %>
+                              </ul>
+                            </div>
+                          </div>
+                        <% end %>
+                        <%= render :partial => 'shared/flash_messages' %>
+                        <table class="table table-striped table-hover responsive">
+                          <thead>
+                            <tr>
+                              <th class="sort-alpha">Material Name</th>
+                              <th width="10%" class="no-sort"><%= check_box_tag "cb_material_all", 1,true %></th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <% @fabrication_order.product_sections.each do |ps| %>
+                              <tr class="cb_material" data-id="<%= ps.id %>">
+                                <td><%= ps.name %></td>
+                                <td><%= check_box_tag "check_product_section_#{ps.id}", ps.id, true, name: "fabrication_order[same_size_ids][]", class: "size-section check_product_section_#{ps.id}" %></td>
+                              </tr>
+                            <% end %>
+                          </tbody>
+                        </table>
+                      </div>
+                        
+                          
+                      <% end %>
+
+                   </div>
+                </div>
+             </div>
+          </div>
+
+
+        <div class="modal-footer">
+          <button type="button" id="createSameSizeModalSaveButton" class="btn btn-primary">+ Input Size</button>
+        </div>
+      </div>
+  </div>
+</div>

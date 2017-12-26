@@ -13,14 +13,16 @@ class NotificationsController < ApplicationController
 
   private
   def notifications_params
-    params.permit(:device_type)
+    params.permit(:device_type, :device_token)
   end
 
   def set_notifications
-    notifications = Notification.new(notifications_params)
-    if notifications.valid?
-      @notifications = @api_user.as_json(only: [:id, :email, :first_name, :last_name])
-                                .merge({device_type: notifications_params[:device_type]})
+    notification = Notification.new(notifications_params)
+    
+    if notification.valid?
+      user = notification.submit(@api_user)
+      @notifications = user.as_json(only: [:id, :email, :first_name, :last_name, :device_type, :device_token])
+                                
     else
       render json: api_response(:failed, notifications.errors.full_messages.join(', '), nil) and return
     end

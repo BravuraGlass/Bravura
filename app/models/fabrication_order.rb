@@ -8,6 +8,8 @@ class FabricationOrder < ApplicationRecord
 
   accepts_nested_attributes_for :rooms
 
+  attr_accessor :same_size_ids
+
   def self.statuses
     Status.where(:category => Status.categories[:fabrication_orders]).order(:order)
   end

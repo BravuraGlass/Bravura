@@ -26,7 +26,9 @@
                 <%= render :partial => 'shared/flash_messages' %>
               <fieldset>
                 <div class="form-group">
-                  <label class="col-sm-2 control-label"><%= product_section.name %></label> </br>
+                  <label class="col-sm-12">
+                    <%= !product_section.same_size_ids.present? ? product_section.name : product_section.same_size_names %>
+                  </label> </br>
                 </div>
               </fieldset>
               <fieldset>
@@ -37,6 +39,11 @@
                          <div class="col-sm-2">
                             <%= hidden_field_tag :scroll, params[:scroll] %>
                             <%= hidden_field_tag :seam_id, @seam_id %>
+                            <% if f.object.same_size_ids.present? %>
+                              <% f.object.same_size_ids.each do |s| %>
+                                <%= f.hidden_field :same_size_ids, multiple: true, value: s %>
+                              <% end %>
+                            <% end %>
                             <%= f.hidden_field :id , id: "product_section_id_#{product_section.id}", class: "product_section_id"%>
                             <%= f.number_field :size_a, maxlength: "4", size: "4", min:"1", max: "9999", :class => "form-control input-sm change-size product_section_size_a_#{f.object.id}", id: "product_section_size_a_#{f.object.id}", data: {id: f.object.id}, required: true, placeholder: 'width', :readonly => readonly %>
                          </div>

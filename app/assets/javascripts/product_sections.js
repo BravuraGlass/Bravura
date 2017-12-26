@@ -54,13 +54,14 @@ BRAVURA.draw = function draw(id){
 
 
 BRAVURA.setPlAll = function setPlAll(id){
+  seam_id = $('#seam_id').val()
   if($('#set_pl_'+id).prop('checked')){
     $('.e_product_section_id_'+id).each(function(e){
       $(this).select2("val", $('#set_pl_'+id).val()); 
     })
   }else{
     $('.e_product_section_id_'+id).each(function(e){
-      $(this).select2("val", ' '); 
+      $(this).select2("val", seam_id); 
     })
   }
 

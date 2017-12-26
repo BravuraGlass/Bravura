@@ -91,13 +91,13 @@ AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "M
 
 edge_type_pl = EdgeType.first
 
-section1 = ProductSection.create({product: product1, status: "In Fabrication", name: "1-101-1", section_index: 1, size_a: 200, size_b: 500, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl})
+section1 = ProductSection.create({product: product1, status: "In Fabrication", name: "1-101-1", section_index: 1, size_a: 200, size_b: 500, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl, size_type: 'box'})
 AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to In Fabrication", auditable_type: "ProductSection", auditable_id: section1.id})
 
-section2 = ProductSection.create({product: product2, status: "To Temper", name: "2-102-1-1", section_index: 1, size_a: 200, size_b: 300, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl})
+section2 = ProductSection.create({product: product2, status: "To Temper", name: "2-102-1-1", section_index: 1, size_a: 200, size_b: 300, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl, size_type: 'box'})
 AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to In Fabrication", auditable_type: "ProductSection", auditable_id: section2.id})
 AuditLog.create({user_name: "Kevin Admin", where: nil, ip: nil, user_agent: nil, details: "updated material's status from In Fabrication to To Temper", auditable_type: "ProductSection", auditable_id: section2.id})
 
-section3 = ProductSection.create({product: product2, status: "Ordered", name: "2-102-1-2", section_index: 2, size_a: 400, size_b: 600, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl})
+section3 = ProductSection.create({product: product2, status: "Ordered", name: "2-102-1-2", section_index: 2, size_a: 400, size_b: 600, fraction_size_a: "", fraction_size_b: "", edge_type_a: edge_type_pl, edge_type_b: edge_type_pl, edge_type_c: edge_type_pl, edge_type_d: edge_type_pl, size_type: 'box'})
 AuditLog.create({user_name: "Kevin Admin", where: nil, ip: "::1", user_agent: "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/63.0.3239.84 Safari/537.36", details: "Newly created data, set status to In Fabrication", auditable_type: "ProductSection", auditable_id: section3.id})
 AuditLog.create({user_name: "Kevin Admin", where: nil, ip: nil, user_agent: nil, details: "updated material's status from In Fabrication to Ordered", auditable_type: "ProductSection", auditable_id: section3.id})

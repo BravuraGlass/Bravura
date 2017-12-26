@@ -51,7 +51,8 @@
                     <div class="panel-body">
                       <%= link_to '+ New Product', new_product_fabrication_order_path(@fabrication_order.id), :class => 'btn btn-primary'%>
                       <%= link_to '+ Clone From Master','#', :class => 'btn btn-primary cloneMasterButton'%> <%= raw next_room %>
-                      <%= link_to 'Print','#', :class => 'btn btn-primary printProduct', :id => 'printProduct', style: "float: right;"%>
+                      <%= link_to 'Print','#', :class => 'btn btn-primary printProduct', :id => 'printProduct', style: "float: right;"%>&nbsp;
+                      <%= link_to 'Same Size', 'javascript:void(0)', :class => 'btn btn-primary same-size', :id => 'sameSizeButton', style: "float: right; margin-right: 5px;" if @fabrication_order.product_sections.any? %>
                       </br></br>
                       <% if  @fabrication_order.rooms && @fabrication_order.rooms.size > 0 %>
                       <table class="datatable-fo table table-hover responsive" id="productsList">
@@ -77,7 +78,8 @@
                       <% end %>
                       <%= link_to '+ New Product', new_product_fabrication_order_path(@fabrication_order.id), :class => 'btn btn-primary' if (@fabrication_order.rooms && @fabrication_order.rooms.size > 2)%>
                       <%= link_to '+ Clone From Master','#', :class => 'btn btn-primary cloneMasterButton'%> <%= raw next_room %>
-                      <%= link_to 'Print','#', :class => 'btn btn-primary printProduct', :id => 'printProduct', style: "float: right;"%>
+                      <%= link_to 'Print','#', :class => 'btn btn-primary printProduct', :id => 'printProduct', style: "float: right;"%>&nbsp;
+                      <%= link_to 'Same Size', 'javascript:void(0)', :class => 'btn btn-primary same-size', :id => 'sameSizeButton', style: "float: right; margin-right: 5px;" if @fabrication_order.product_sections.any? %>
                     </div>
                   </div>
                 </div>
@@ -94,6 +96,7 @@
    </div>
 </div>
 <%= render :partial => 'createEditProductModal' %>
+<%= render :partial => 'createSameSizeModal' %>
 <%= render :partial => 'cloneMasterModal' %>
 <div id="modal_container"></div>
 <%= form_tag barcodes_print_product_sections_path, method: :post, id: "form_prints_product", target: "_blank" do -%>

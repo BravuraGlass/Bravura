@@ -34,7 +34,8 @@ class ProductSection < ApplicationRecord
     belongs_to :edge_type_c, class_name: 'EdgeType', foreign_key: 'edge_type_c_id', optional: true
     belongs_to :edge_type_d, class_name: 'EdgeType', foreign_key: 'edge_type_d_id', optional: true
     after_update :sync_status
-    attr_accessor :audit_user_name, :set_pl
+    before_save :set_same_size, if: :same_size_ids_present?
+    attr_accessor :audit_user_name, :set_pl, :same_size_ids
 
     after_initialize :init
 
@@ -44,6 +45,39 @@ class ProductSection < ApplicationRecord
       self.edge_type_b ||= seam
       self.edge_type_c ||= seam
       self.edge_type_d ||= seam
+    end
+
+  def set_same_size
+      if self.valid?
+        same_sizes.each do |ps|
+          next if ps.id == self.id
+          ps.update_attributes(
+            size_a: self.size_a,
+            size_b: self.size_b,
+            fraction_size_a: self.fraction_size_a,
+            fraction_size_b: self.fraction_size_b,
+            edge_type_a_id: self.edge_type_a_id,
+            size_type: self.size_type,
+            edge_type_b_id: self.edge_type_b_id,
+            edge_type_c_id: self.edge_type_c_id,
+            edge_type_d_id: self.edge_type_d_id
+          )
+        end
+      end
+    end
+
+    def same_size_ids_present?
+      self.same_size_ids.present?
+    end
+
+    def same_sizes
+      ProductSection.where(id: self.same_size_ids) rescue []
+    end
+
+    def same_size_names
+      if self.same_size_ids.present?
+        same_sizes.map(&:name).join(', ') rescue self.name
+      end
     end
 
     def is_oval?
@@ -76,6 +110,8 @@ class ProductSection < ApplicationRecord
       name_size = self.name
       name_size << ", size: " if self.size_a.present? || self.size_b.present?
       name_size << self.size
+      name_size << " (#{self.size_type})" if self.size_type.present?
+      name_size
     end
 
     def size

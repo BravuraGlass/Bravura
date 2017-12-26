@@ -1,6 +1,6 @@
 include Printable
 class FabricationOrdersController < ApplicationController
-  before_action :set_fabrication_order, only: [:show, :edit, :update, :destroy, :new_product]
+  before_action :set_fabrication_order, only: [:show, :edit, :update, :destroy, :new_product, :same_size]
   before_action :load_common_data, except: [:addresses]
   
   skip_before_action :require_login, only: [:addresses], if: -> { request.format.json? }
@@ -181,6 +181,14 @@ class FabricationOrdersController < ApplicationController
     end
   end
 
+  def same_size
+    @product_sections = ProductSection.where(id: fabrication_order_params[:same_size_ids])
+    @product_section  = @product_sections.first
+    @product_section.same_size_ids = fabrication_order_params[:same_size_ids]
+    @edge_type = EdgeType.all.map{|x| [x.name, x.id]} rescue []
+    @seam_id = EdgeType.find_or_create_by(name: 'SEAM').try(:id)
+  end
+
   private
     # Loads the common required data for all forms
     def load_common_data
@@ -198,6 +206,6 @@ class FabricationOrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def fabrication_order_params
-      params.require(:fabrication_order).permit(:title, :description, :status, :job_id)
+      params.require(:fabrication_order).permit(:title, :description, :status, :job_id, same_size_ids: [])
     end
 end
