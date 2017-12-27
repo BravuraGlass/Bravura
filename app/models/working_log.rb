@@ -54,6 +54,10 @@ class WorkingLog < ApplicationRecord
     return wlog    
     
   end  
+
+  def checkin_or_checkout?
+    self.checkin_or_checkout == "checkin"
+  end
   
   def get_location
     if self.location.blank? and self.latitude and self.longitude

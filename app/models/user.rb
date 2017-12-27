@@ -30,6 +30,13 @@ class User < ApplicationRecord
     
     return {status: (rs.size > 0 ? true : false), user: rs[0]}        
   end  
+
+  # clock in
+  def checkin_status
+    last_log_today = self.working_logs.where("submit_date=?", Time.zone.now.strftime("%Y%m%d"))
+                         .order("submit_time DESC")[0]
+    last_log_today.blank? ? false : last_log_today.checkin_or_checkout?
+  end
   
   def full_name
     "#{self.first_name} #{self.last_name}"

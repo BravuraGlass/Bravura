@@ -140,7 +140,7 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
         }
         // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
         icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|bb|'+markerLabel[0]+'|'+color+'|'+bgcolor;
-        content = marker_data.created_at
+        content = marker_data.updated_at
       }else{
         icon = icons[marker_data.type].icon
         var content = marker_data.marker_title || '';

@@ -18,6 +18,7 @@ Rails.application.routes.draw do
       post 'update_report_detail'
       get 'new_report_detail'
       post 'create_report_detail'
+      get 'user_checkin_status'
     end
   end
   
