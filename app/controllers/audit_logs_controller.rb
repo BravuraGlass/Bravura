@@ -17,10 +17,8 @@ class AuditLogsController < ApplicationController
       end  
     end  
     
-    if params[:category] == "material" or params[:category].blank?
-      @statuses = Status.where(category: Status.categories[:products])
-    elsif params[:category] == "task"
-      @statuses = Status.where(category: Status.categories[:tasks])
+    if params[:category] == "material" or params[:category].blank? or params[:category] == "task"
+      @statuses = Status.where(category: Status.products_and_tasks).order(:category)
     else
       @statuses = Status.where(category: Status.categories[params[:category].pluralize])
     end    

@@ -14,14 +14,11 @@ module SearchParameter
   end 
 
   def category_filter params
-    if params[:category].blank? or params[:category] == "material"
-      @conditions[:auditable_type] = "ProductSection"    
-      @conditions[:auditable_id] = ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active = ?", true).collect {|sect| sect.id}
-            
-    elsif params[:category] == "task"
-      @conditions[:auditable_type] = "Product"
-      @conditions[:auditable_id] = Product.joins(:room => {:fabrication_order => :job}).where("jobs.active = ?", true).collect {|prod| prod.id}
-      
+    if params[:category].blank? or params[:category] == "material" or params[:category] == "task"
+      @conditions[:auditable_type] = ["ProductSection", "Product"]
+      @conditions[:auditable_id] = ProductSection.joins(:product => {:room => {:fabrication_order => :job}})
+                                                 .where("jobs.active = ?", true)
+                                                 .collect {|sect| sect.id}
     elsif params[:category] == "room"
       @conditions[:auditable_type] = params[:category].titleize
       @conditions[:auditable_id] = Room.joins(:fabrication_order => :job).where("jobs.active = ?", true).collect {|room| room.id}

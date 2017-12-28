@@ -33,6 +33,10 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
       lng: -73.9344151
     }
   });
+
+  var trafficLayer = new google.maps.TrafficLayer();
+  trafficLayer.setMap(map);
+
   <% address_field_id = address_field_id || "address" %>
   var addressField = document.getElementById('<%= address_field_id %>');
   var latitudeField = document.getElementById('latitude');
@@ -139,7 +143,7 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
           var bgcolor = "fff"
         }
         // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
-        icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|bb|'+markerLabel[0]+'|'+color+'|'+bgcolor;
+        icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+markerLabel[0]+'  |'+color+'|'+bgcolor;
         content = marker_data.updated_at
       }else{
         icon = icons[marker_data.type].icon

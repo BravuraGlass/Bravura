@@ -41,7 +41,7 @@
                               <label>Status:</label>
                             </div>
                             <div class="col-sm-9">
-                              <%= select_tag "status", options_for_select(@statuses.collect {|sta| [sta.name, sta.name]},params[:status]), include_blank: "All",class: 'form-control '%>
+                              <%= select_tag "status", options_for_select(@statuses.collect {|sta| [sta.name_alias, sta.name]},params[:status]), include_blank: "All",class: 'form-control '%>
                             </div>
                           </div>
                         </div>
@@ -74,7 +74,10 @@
                     <th>User</th>
                     <th>Time</th>
                     <th>Description</th>
-                    <th><%= params[:category].blank? ? "Material" : params[:category].titleize %> Name</th>
+                    <th><%= params[:category].blank? || params[:category] == "material" || params[:category] == "task" ? "Material/Task " : params[:category].titleize %> Name</th>
+                    <% if params[:category].blank? || params[:category] == "material" || params[:category] == "task" %>
+                    <th>Category</th>
+                    <% end %>
                 </thead>
                 <tbody>
                   <% @audit_logs.each do |alog| %>
@@ -83,6 +86,9 @@
                       <td><%= alog.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
                       <td><%= alog.details %></td>
                       <td><%= alog.item_name %></td>
+                      <% if params[:category].blank? || params[:category] == "material" || params[:category] == "task" %>
+                      <td><%= alog.category %></td>
+                      <% end %>
                     </tr>  
                   <% end %>   
                 </tbody>
