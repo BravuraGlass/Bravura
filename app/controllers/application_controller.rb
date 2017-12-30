@@ -7,7 +7,6 @@ class ApplicationController < ActionController::Base
   protected
   
   def api_login_status
-    
     api_login =  User.api_login(params)
     
     if api_login [:status] == false
@@ -19,8 +18,26 @@ class ApplicationController < ActionController::Base
        render json: result  
     else
       @api_user = api_login[:user]        
+      should_checkin_first
     end  
-  end  
+  end
+
+  def should_checkin_first
+    if (controller_name == "working_logs" && action_name == "checkin") ||
+       (controller_name == "sessions" && ["create","destroy"].include?(action_name))
+    else
+      unless @api_user.nil?
+        if @api_user.checkin_status == false && !@api_user.always_access
+          result = {
+            status: :failed,
+            message: "access denied, please clock in first",
+            data: nil,
+          }
+          render json: result  
+        end
+      end
+    end
+  end
   
   def api_response(status, message, data)
     return {

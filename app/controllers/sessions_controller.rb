@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
-  skip_before_action :require_login, except: [:destroy]
+  before_action :api_login_status, only: [:destroy], if: -> { request.format.json? }  
+  skip_before_action :restrict_delete, only: [:destroy]
+  skip_before_action :require_login, if: :check_destroy?
   before_action :use_unsafe_params, only: [:create]
 
   def new
@@ -8,6 +10,10 @@ class SessionsController < ApplicationController
     else
       render :layout => 'pages'
     end
+  end
+
+  def check_destroy?
+    return params[:action] == "destroy" ? (request.format.json? ? true : false) : true
   end
 
   def create
@@ -56,8 +62,16 @@ class SessionsController < ApplicationController
   end
   
   def destroy
-    logout
-    redirect_to root_url, :notice => "Logged out!"
+    respond_to do |format|
+      format.json do
+        @api_user.update_attributes(token_expired: nil)
+        render json: {status: :success, data: nil, message: "Logged out!"} 
+      end
+      format.html do
+        logout
+        redirect_to root_url, :notice => "Logged out!"
+      end
+    end
   end
   
   private
