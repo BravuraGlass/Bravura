@@ -23,7 +23,7 @@ class ApplicationController < ActionController::Base
   end
 
   def should_checkin_first
-    if (controller_name == "working_logs" && action_name == "checkin") ||
+    if (controller_name == "working_logs" && (action_name == "checkin" or action_name == "checkout")) ||
        (controller_name == "sessions" && ["create","destroy"].include?(action_name))
     else
       unless @api_user.nil?
