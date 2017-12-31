@@ -14,4 +14,15 @@ class Location < ApplicationRecord
     .where('locations.latitude <> ""')
     .group(:user_id)
   }
+	
+	def address
+		if self.latitude and self.longitude
+			begin
+				result = Geocoder.search("#{self.latitude},#{self.longitude}").first.try(:address)
+			rescue
+				result = ""
+			end  
+		end
+		return result
+	end  
 end
