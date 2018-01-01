@@ -22,18 +22,18 @@
 
   function initMapWithMarkers(markers) {
   
-      var center = markers.length > 0 ? markers[0] : {
-        lat: 40.6179997,
-        lng: -73.9344151
-      };
+    var center = {
+      lat: 40.6179997,
+      lng: -73.9344151
+    };
 
-      map = new google.maps.Map(document.getElementById('location-map'), {
-        zoom: 9,
-        center: center
-      });
+    map = new google.maps.Map(document.getElementById('location-map'), {
+      zoom: 11,
+      center: center
+    });
 
-      var trafficLayer = new google.maps.TrafficLayer();
-      trafficLayer.setMap(map);
+    var trafficLayer = new google.maps.TrafficLayer();
+    trafficLayer.setMap(map);
 
     gMapMarkers = [];
     infoWindowList = [];
