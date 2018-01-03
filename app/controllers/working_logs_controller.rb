@@ -9,7 +9,7 @@ class WorkingLogsController < ApplicationController
   before_action :require_admin, only: [:report, :report_detail, :index] 
   
   def index
-    @working_logs = WorkingLog.order("submit_time DESC") 
+    @working_logs = WorkingLog.order("submit_time DESC").joins(:user).where("users.id IS NOT NULL") 
     @need_libs = ['maps']
   end  
   

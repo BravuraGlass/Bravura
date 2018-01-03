@@ -359,6 +359,7 @@ class WorkingLog < ApplicationRecord
     status = "automatic"
     
     data.each_with_index do |wlog,idx|
+      
       if idx > 0
         if newrow == false
           if data[idx].submit_date == data[idx-1].submit_date 
@@ -400,7 +401,7 @@ class WorkingLog < ApplicationRecord
   end 
   
   def self.report_raw(wstart,wend)
-    return WorkingLog.where("submit_date >= ? AND submit_date <= ?", wstart, wend).order("user_id ASC, submit_time ASC")
+    return WorkingLog.joins(:user).where("submit_date >= ? AND submit_date <= ? AND users.id IS NOT NULL", wstart, wend).order("user_id ASC, submit_time ASC")
   end   
         
 end
