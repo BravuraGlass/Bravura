@@ -134,8 +134,19 @@
           if(isExist != true) {
             var content = data.marker_title || '';
             // should change from socket
-            var created_at = markers[index].created_at || content;
-            var updated_at = markers[index].updated_at || content;
+            var created_at = data.created_at || content;
+            var updated_str = data.updated_at.trim();
+            if( updated_str.indexOf(" ") !== -1 ){
+              var date = updated_str.split(" ")[0];
+              var time = updated_str.split(" ")[1];
+              var updated_at_utc = new Date(date+"T"+time+"Z");
+            }else{
+              var updated_at_utc = updated_str;
+            }
+            var time_update = new Date(updated_at_utc);
+
+            var updated_at = time_update.toLocaleString("en-us", { timeZone: "America/New_York", hour12: false, 
+            year: "numeric", month: "long", day: "2-digit", hour: "2-digit", minute: "2-digit"})
             var position = new google.maps.LatLng(data.lat, data.lng);
             var color = "ff0000"
             var bgcolor = "fff"

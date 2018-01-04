@@ -36,6 +36,9 @@ class Room < ApplicationRecord
           splitname = sect.name.split("-") 
           if splitname.size == 3
             newname = "#{splitname[0]}-#{new_room.name}-#{splitname[2]}"
+          elsif splitname.size == 4
+            splitname[1] = new_room.name
+            newname = splitname.join('-')
           else
             newname = sect.name
           end    
@@ -71,16 +74,31 @@ class Room < ApplicationRecord
     if last_room.name.blank?
       "new room"
     elsif last_room.name.is_int?
+      # example 101 -> 102
       last_room.name.to_i + 1
     elsif name_rev.size > 1
+      # example 101a -> 101b
       if ((name_rev[0].is_int? == false and name_rev[1].is_int?) || 
            !!last_room.name.match(/(^.*[^0-9])([\s0-9]*?[\d]$)/) )
         arr_name_rev = name_rev.split("")
         arr_name_rev[0] = arr_name_rev[0].next
-        return arr_name_rev.join("").reverse
       else
-        "copy of #{self.name}"  
-      end   
+        arr_name_rev = name_rev.split("")
+        case "#{arr_name_rev[0].try(:upcase)}"
+        # example 10Z -> 10AA
+        when "Z"
+          arr_name_rev[0] = "A"
+          arr_name_rev = arr_name_rev.unshift("A")
+        # example 109 -> 110
+        when "9"
+          arr_name_rev[0] = "1"
+          arr_name_rev = arr_name_rev.unshift("0")
+        # example abc -> abcd
+        else
+          arr_name_rev = arr_name_rev.unshift(arr_name_rev[0].next)
+        end
+      end
+      return arr_name_rev.join("").reverse
     elsif last_room.name.size == 1    
       return last_room.name.next 
     else
