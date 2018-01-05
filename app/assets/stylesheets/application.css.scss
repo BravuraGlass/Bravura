@@ -325,3 +325,20 @@ td.font-primary-light{
   filter: url(resources.svg#desaturate); /* older Firefox */
   filter: grayscale(100%);
 }
+fieldset.search-map {
+  padding-bottom: 0px;
+  border-bottom: 1px dashed #eee;
+  margin-bottom: 10px;
+}
+
+#form-map {
+  font-size: 12px;
+}
+
+.menu-line {
+  line-height: 1.1;
+}
+
+.nav-heading {
+  margin-top: 30px;
+}

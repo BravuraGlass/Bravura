@@ -12,10 +12,10 @@ BRAVURA.checkAllCheked = function checkAllCheked(){
   var count_checked = $('input[class=bj-filter-map]:checkbox:checked').length == 3 ;
   if(count_checked){
     BRAVURA.toggleShowAll(true)
-    BRAVURA.clearDate()
+    // BRAVURA.clearDate()
   }else{
     BRAVURA.toggleShowAll(false)
-    BRAVURA.defaultDate()
+    // BRAVURA.defaultDate()
   }
 };
 

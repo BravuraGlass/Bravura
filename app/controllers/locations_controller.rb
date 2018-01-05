@@ -7,7 +7,8 @@ class LocationsController < ApplicationController
     @latest_ids = Location.latest_ids
     ids = @latest_ids.map {|i| i.id }
     @allLocations = Location.where(id: ids)
-    @workers = User.all.map{|x| [x.full_name, x.id]}
+    user_ids = @allLocations.map(&:user_id)
+    @workers = User.where(id: user_ids).map{|x| [x.try(:full_name), x.try(:id)]} rescue []
     if params[:show_worker].present?
       exclude_workers = params[:show_worker]
     else

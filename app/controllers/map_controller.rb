@@ -3,13 +3,7 @@ class MapController < ApplicationController
     tasks = []
     jobs = []
     workers = []
-    @workers = User.all.map{|x| [x.full_name, x.id]}
-    if params[:show_worker].present?
-      exclude_workers = params[:show_worker]
-    else
-      redirect_to map_index_path(params.as_json.merge({show_worker: @workers.map{|x,y|y}}))
-      return
-    end
+    @workers = []
     @selected_date = Time.zone.now.to_date
     @need_libs = ['maps']
     @show_all = params[:show_all].present?
@@ -51,9 +45,21 @@ class MapController < ApplicationController
       end
     end
 
+    all_workers = Location.last_user_checkins.count
+    @workers = all_workers.map{|x,y| ["#{x[0]} #{x[1]}",x[6].to_s]} rescue []
+
+    if params[:show_worker].present?
+      exclude_workers = params[:show_worker]
+    else
+      if @show_all
+        redirect_to map_index_path(params.as_json.merge({show_worker: @workers.map{|x,y|y}}))
+        return
+      end
+    end
+    
+
     if params[:show_workers]
       @show_workers = true
-      all_workers = Location.last_user_checkins.count
       all_workers.delete_if{|x,y| params[:show_worker].exclude?(x[6].to_s)} 
       workers = Gmaps4rails.build_markers(all_workers) do |worker, marker|
         old = (worker[0][5].to_time < 1.minutes.ago rescue false)

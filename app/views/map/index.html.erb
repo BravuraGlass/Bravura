@@ -1,77 +1,80 @@
-<div id="map-filters" class="row filter-container">
-  <div class="col-md-12">
-    <%= form_tag( map_index_path, {id: 'form-map', class: 'form-inline', method: 'get'}) do -%>
-      <div class="form-group">
-        <div class="checkbox c-checkbox">
-          <label>
-            <input type="checkbox" name="show_all" id="show_all" <%= "checked" if @show_all %>/>
-            <span class="fa fa-check"></span>All
-          </label>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="checkbox c-checkbox">
-          <label>
-            <input class="bj-filter-map" type="checkbox" name="show_tasks" id="show_tasks" <%= "checked" if @show_tasks %>/>
-            <span class="fa fa-check"></span>Show Tasks
-          </label>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="checkbox c-checkbox">
-          <label>
-            <input class="bj-filter-map" type="checkbox" name="show_jobs" id="show_jobs" <%= "checked" if @show_jobs %> />
-            <span class="fa fa-check"></span>Show Jobs
-          </label>
-        </div>
-      </div>
-      <div class="form-group">
-        <div class="checkbox c-checkbox">
-          <label>
-            <input class="bj-filter-map" type="checkbox" name="show_workers" id="show_workers" <%= "checked" if @show_workers %> />
-            <span class="fa fa-check"></span>Show Workers
-          </label>
-        </div>
-      </div>
-      <div class="form-group">
-        <%= date_field("", "date", value: (@show_all ? nil : @selected_date), data: {today: Time.zone.now.strftime("%Y-%m-%d") },class: 'btn btn-default' ) %>
-      </div>
-      <div class="form-group">
-        <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
-      </div>  
-      <% if @workers %>
-        <br/>
-        <% @workers.each_with_index do |worker, id| %>
-          <div class="form-group">
+<div class="panel panel-default">
+   <div class="panel-body">
+      <%= form_tag( map_index_path, {id: 'form-map', class: 'form-inline', method: 'get'}) do -%>
+        <fieldset class="search-map">
+          <div class="form-group col-md-2">
             <div class="checkbox c-checkbox">
               <label>
+                <input type="checkbox" name="show_all" id="show_all" <%= "checked" if @show_all %>/>
+                <span class="fa fa-check"></span>All
+              </label>
+            </div>
+          </div>
+          <div class="form-group col-md-2">
+            <div class="checkbox c-checkbox">
+              <label>
+                <input class="bj-filter-map" type="checkbox" name="show_tasks" id="show_tasks" <%= "checked" if @show_tasks %>/>
+                <span class="fa fa-check"></span>Show Tasks
+              </label>
+            </div>
+          </div>
+          <div class="form-group  col-md-2">
+            <div class="checkbox c-checkbox">
+              <label>
+                <input class="bj-filter-map" type="checkbox" name="show_jobs" id="show_jobs" <%= "checked" if @show_jobs %> />
+                <span class="fa fa-check"></span>Show Jobs
+              </label>
+            </div>
+          </div>
+          <div class="form-group  col-md-2">
+            <div class="checkbox c-checkbox">
+              <label>
+                <input class="bj-filter-map" type="checkbox" name="show_workers" id="show_workers" <%= "checked" if @show_workers %> />
+                <span class="fa fa-check"></span>Show Workers
+              </label>
+            </div>
+          </div>
+          <div class="form-group  col-md-2">
+            <%= date_field("", "date", value: (@show_all ? nil : @selected_date), data: {today: Time.zone.now.strftime("%Y-%m-%d") },class: 'btn btn-default' ) %>
+          </div>
+        </fieldset>
+        <fieldset class="search-map">
+        <% @workers.each_with_index do |worker, id| %>
+          <div class="form-group col-md-2">
+            <div class="checkbox c-checkbox ">
+              <label>
                 <input class="bj-filter-map-worker" value="<%= worker[1] %>" type="checkbox" name="show_worker[]" id="show_worker_<%= worker[1] %>"  <%= "checked" if params[:show_worker].present? && params[:show_worker].include?(worker[1].to_s) %> />
-                <span class="fa fa-check"></span><%= worker[0] %>
+                <span class="fa fa-check"></span><a href="javascript:void(0)" onclick="$(this).parent().click()" style="text-decoration: none;" title="<%= worker[0] %>"><%= worker[0].truncate(17) %></a>
               </label>
             </div>
           </div>
         <% end %>
+        </fieldset>
+        <fieldset>
+            <div class="form-group col-md-2 ">
+              <%= image_tag  "/assets/mapicons/job.png", style: 'margin-left: 12px' %>Job 
+            </div>
+            <div class="form-group col-md-2 ">
+              <%= image_tag  "/assets/mapicons/confirmed_appointment.png", style: 'margin-left: 12px' %>Confirmed 
+            </div>
+            <div class="form-group col-md-2 ">
+              <%= image_tag  "/assets/mapicons/task.png", style: 'margin-left: 12px' %>Task 
+            </div>
+            <div class="form-group col-md-2 ">
+              <%= image_tag  "/assets/mapicons/worker.png", style: 'margin-left: 12px' %>Active Worker
+            </div>
+            <div class="form-group col-md-2 ">
+              <%= image_tag  "/assets/mapicons/worker.png" , class: "grayscale", style: 'margin-left: 12px' %>Inactive Worker
+            </div>
+
+            <div class="form-group col-md-2">
+              <button class="btn btn-primary" type="submit">Filter</button>
+            </div>
+        </fieldset>
       <% end %>
-    <% end -%>
-  </div>
-</div>
-<div class="row" id="legends">
-  <div class="col-md-1 center">
-    Job: <br/><%= image_tag  "/assets/mapicons/job.png" %>
-  </div>
-  <div class="col-md-1 center">
-    Confirmed: <br/><%= image_tag  "/assets/mapicons/confirmed_appointment.png" %>
-  </div>
-  <div class="col-md-1 center">
-    Task: <br/><%= image_tag  "/assets/mapicons/task.png" %>
-  </div>
-  <div class="col-md-2 center">
-    Active Worker: <br/><%= image_tag  "/assets/mapicons/worker.png" %>
-  </div>
-  <div class="col-md-2 center">
-    Inactive Worker: <br/><%= image_tag  "/assets/mapicons/worker.png" , class: "grayscale" %>
-  </div>
-</div>
-<div id="map" class="full-map">
-  <%= render :partial => 'shared/location_map', :locals => {hidemap: false, address_field_id: 'address'} %>
+
+      <div id="map" class="full-map">
+        <%= render :partial => 'shared/location_map', :locals => {hidemap: false, address_field_id: 'address'} %>
+      </div>
+   </div>
 </div>

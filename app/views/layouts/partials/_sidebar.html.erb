@@ -7,44 +7,44 @@
          <li class="nav-heading">
             <span>Main Menu</span>
          </li>
-         <li class="<%= 'active' if current_controller == 'dashboard' %>">
+         <li class="<%= 'active' if current_controller == 'dashboard' %> menu-line">
             <a href="<%= dashboard_path %>" title="Dashboard">
                <em class="icon-speedometer"></em>
                <span>Dashboard</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'jobs' %>">
+         <li class="<%= 'active' if current_controller == 'jobs' %> menu-line">
             <a href="<%= jobs_path(filter: 'all') %>" title="Jobs">
                <em class="icon-energy"></em>
                <span>Jobs</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'fabrication_orders' %>">
+         <li class="<%= 'active' if current_controller == 'fabrication_orders' %> menu-line">
             <a href="<%= fabrication_orders_path %>" title="Fabrication Orders">
                <em class="icon-briefcase"></em>
                <span>Fabrication Orders</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'customers' %>">
+         <li class="<%= 'active' if current_controller == 'customers' %> menu-line">
             <a href="<%= customers_path %>" title="Customers">
                <em class="icon-user"></em>
                <span>Customers</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'tasks' %>">
+         <li class="<%= 'active' if current_controller == 'tasks' %> menu-line">
             <a href="<%= tasks_path %>" title="Tasks">
                <em class="icon-pencil"></em>
                <span>Tasks</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'maps' %>">
+         <li class="<%= 'active' if current_controller == 'maps' %> menu-line">
             <a href="<%= map_index_path(show_all: 'on', show_tasks: 'on', show_jobs: 'on', show_workers: 'on', date: '') %>" title="Map">
                <em class="icon-map"></em>
                <span>Map</span>
             </a>
          </li>
          <% if current_user.type_of_user.in?(["0","1"]) %>
-         <li class="<%= 'active' if current_controller == 'audit_logs' %>">
+         <li class="<%= 'active' if current_controller == 'audit_logs' %> menu-line">
             <a href="<%= audit_logs_path %>" title="Audit Logs">
                <em class="icon-pencil"></em>
                <span>Audit Logs</span>
@@ -58,7 +58,7 @@
          <li class="nav-heading">
             <span>Admin</span>
          </li>
-         <li class="<%= 'active' if current_controller == 'users' %>">
+         <li class="<%= 'active' if current_controller == 'users' %> menu-line">
             <a href="<%= users_path %>" title="Users">
                <em class="icon-people"></em>
                <span>Users</span>
@@ -71,39 +71,39 @@
                <span>Employees</span>
             </a>
          </li>  -->
-         <li class="<%= 'active' if current_controller == 'statuses' %>">
+         <li class="<%= 'active' if current_controller == 'statuses' %> menu-line">
             <a href="<%= statuses_path %>" title="Status">
                <em class="icon-check"></em>
                <span>Status</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'status_checklist_item' %>">
+         <li class="<%= 'active' if current_controller == 'status_checklist_item' %> menu-line">
             <a href="<%= status_checklist_items_path %>" title="Checklist Items">
                <em class="icon-list"></em>
                <span>Checklist Items</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'product_types' %>">
+         <li class="<%= 'active' if current_controller == 'product_types' %> menu-line">
             <a href="<%= product_types_path %>" title="Product Types">
                <em><i class="fa fa-cube"></i></em>
                <span>Product Types</span>
             </a>
          </li>
-         <li class="<%= 'active' if current_controller == 'edge_types' %>">
+         <li class="<%= 'active' if current_controller == 'edge_types' %> menu-line">
             <a href="<%= edge_types_path %>" title="Edge Types">
                <em><i class="fa fa-cube"></i></em>
                <span>Edge Types</span>
             </a>
          </li>
          <% if current_user.type_of_user == "0" %>
-         <li class="<%= 'active' if current_controller == 'working_logs' %>">
+         <li class="<%= 'active' if current_controller == 'working_logs' %> menu-line">
             <a href="<%= report_working_logs_path %>" title="Product Types">
                <em><i class="icon-check"></i></em>
                <span>Working Logs</span>
             </a>
          </li> 
          
-         <li class="<%= 'active' if current_controller == 'locations' %>">
+         <li class="<%= 'active' if current_controller == 'locations' %> menu-line">
             <a href="<%= locations_index_path %>" title="Locations">
                <em><i class="icon-check"></i></em>
                <span>Locations</span>
@@ -119,7 +119,7 @@
          <li class="nav-heading">
            <span>Utilities</span>
          </li>
-         <li>
+         <li class="<%= 'active' if current_controller == 'utilities' %> menu-line">
             <a href="/utilities/data_backup" title="Data Backup">
                <em><i class="fa fa-cube"></i></em>
                <span>Data Backup</span>
@@ -128,10 +128,10 @@
          <% end %>
 
 
-         <li class="nav-heading">
+         <li class="nav-heading menu-line">
             <span>Hi <%= current_user.first_name %></span>
          </li>
-         <li>
+         <li class="menu-line">
             <a href="/logout" title="Logout">
                <em class="icon-user"></em>
                <span>Logout</span>

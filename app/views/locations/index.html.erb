@@ -1,35 +1,37 @@
-<div id="map-filters" class="row filter-container">
-  <div class="col-md-12">
+<div class="panel panel-default">
+  <div class="panel-body">
     <%= form_tag( locations_index_path, {id: 'form-map', class: 'form-inline', method: 'get'}) do -%>
-     <div class="form-group">
+    <fieldset>
+      <div class="form-group col-md-2">
         <div class="checkbox c-checkbox">
           <label>
             <input class="bj-filter-map" type="checkbox" name="show_workers" id="show_workers" <%= "checked" if @show_workers %> />
-            <span class="fa fa-check"></span>Show Workers
+            <span class="fa fa-check"></span><b>Show Workers</b>
           </label>
         </div>
       </div>
       <% if @workers %>
         <% @workers.each_with_index do |worker, id| %>
-          <div class="form-group">
+          <div class="form-group col-md-2">
             <div class="checkbox c-checkbox">
               <label>
                 <input class="bj-filter-map-worker" value="<%= worker[1] %>" type="checkbox" name="show_worker[]" id="show_worker_<%= worker[1] %>"  <%= "checked" if params[:show_worker].present? && params[:show_worker].include?(worker[1].to_s) %> />
-                <span class="fa fa-check"></span><%= worker[0] %>
+                <span class="fa fa-check"></span><a href="javascript:void(0)" onclick="$(this).parent().click()" style="text-decoration: none;" title="<%= worker[0] %>"><%= worker[0].truncate(17) %></a>
               </label>
             </div>
           </div>
         <% end %>
       <% end %>
-      <div class="form-group">
+      <div class="form-group col-md-2 right">
         <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
       </div>  
+    </fieldset>
     <% end -%>
-  </div>
-</div>
 
-<div id="map" class="full-map">
-	<div id="location-map"></div>
+    <div id="map" class="full-map">
+      <div id="location-map"></div>
+    </div>
+  </div>
 </div>
 
 <script>
