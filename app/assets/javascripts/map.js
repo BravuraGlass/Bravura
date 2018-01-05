@@ -19,6 +19,15 @@ BRAVURA.checkAllCheked = function checkAllCheked(){
   }
 };
 
+BRAVURA.checkWorkerCheked = function checkWorkerCheked(){
+  var count = $('input[class=bj-filter-map-worker]:checkbox').length;
+  var count_checked = $('input[class=bj-filter-map-worker]:checkbox:checked').length ;
+  if(count_checked == 0){
+    BRAVURA.toggleCheckWorkers(false)
+  }else{
+    BRAVURA.toggleCheckWorkers(true)
+  }
+};
 
 BRAVURA.toggleShowAll = function toggleShowAll(value){
   $('#show_all').prop('checked', value);
@@ -33,12 +42,18 @@ BRAVURA.toggleCheckJob = function toggleCheckJob(value){
 };
 
 
-BRAVURA.toggleCheckWorker = function toggleCheckWorker(value){
+BRAVURA.toggleCheckWorkers = function toggleCheckWorkers(value){
   $('#show_workers').prop('checked', value);
 };
 
 BRAVURA.submitForm = function submitForm(){
   $('#form-map').submit()
+};
+
+BRAVURA.toggleCheckWorker = function toggleCheckWorker(value){
+  $('.bj-filter-map-worker').each(function(){
+    $(this).prop('checked', value);
+  });
 };
 
 // set the behavior on document ready
@@ -48,12 +63,18 @@ $(document).ready(function(){
       BRAVURA.clearDate()
       BRAVURA.toggleCheckTask(true)
       BRAVURA.toggleCheckJob(true)
-      BRAVURA.toggleCheckWorker(true)
+      BRAVURA.toggleCheckWorkers(true)
+      $('.bj-filter-map-worker').each(function(){
+        BRAVURA.toggleCheckWorker(true)
+      });
     }else{
       BRAVURA.toggleCheckTask(false)
       BRAVURA.toggleCheckJob(false)
-      BRAVURA.toggleCheckWorker(false)
+      BRAVURA.toggleCheckWorkers(false)
       BRAVURA.defaultDate()
+      $('.bj-filter-map-worker').each(function(){
+        BRAVURA.toggleCheckWorker(false)
+      });
     }
   });
 
@@ -67,5 +88,17 @@ $(document).ready(function(){
 
   $('#show_workers').on('click', function() { 
     BRAVURA.checkAllCheked()
+    if($('#show_workers').is(':checked')){
+      BRAVURA.toggleCheckWorker(true)
+    }else{
+      BRAVURA.toggleCheckWorker(false)
+    }
   });
+
+  $('.bj-filter-map-worker').each(function(){
+    $(this).on('click', function(){
+      BRAVURA.checkWorkerCheked()
+    })
+  });
+
 });

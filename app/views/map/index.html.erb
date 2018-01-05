@@ -39,6 +39,19 @@
       <div class="form-group">
         <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
       </div>  
+      <% if @workers %>
+        <br/>
+        <% @workers.each_with_index do |worker, id| %>
+          <div class="form-group">
+            <div class="checkbox c-checkbox">
+              <label>
+                <input class="bj-filter-map-worker" value="<%= worker[1] %>" type="checkbox" name="show_worker[]" id="show_worker_<%= worker[1] %>"  <%= "checked" if params[:show_worker].present? && params[:show_worker].include?(worker[1].to_s) %> />
+                <span class="fa fa-check"></span><%= worker[0] %>
+              </label>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
     <% end -%>
   </div>
 </div>

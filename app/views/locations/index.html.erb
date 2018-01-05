@@ -1,3 +1,33 @@
+<div id="map-filters" class="row filter-container">
+  <div class="col-md-12">
+    <%= form_tag( locations_index_path, {id: 'form-map', class: 'form-inline', method: 'get'}) do -%>
+     <div class="form-group">
+        <div class="checkbox c-checkbox">
+          <label>
+            <input class="bj-filter-map" type="checkbox" name="show_workers" id="show_workers" <%= "checked" if @show_workers %> />
+            <span class="fa fa-check"></span>Show Workers
+          </label>
+        </div>
+      </div>
+      <% if @workers %>
+        <% @workers.each_with_index do |worker, id| %>
+          <div class="form-group">
+            <div class="checkbox c-checkbox">
+              <label>
+                <input class="bj-filter-map-worker" value="<%= worker[1] %>" type="checkbox" name="show_worker[]" id="show_worker_<%= worker[1] %>"  <%= "checked" if params[:show_worker].present? && params[:show_worker].include?(worker[1].to_s) %> />
+                <span class="fa fa-check"></span><%= worker[0] %>
+              </label>
+            </div>
+          </div>
+        <% end %>
+      <% end %>
+      <div class="form-group">
+        <%= submit_tag 'Filter', :class => 'btn btn-primary' %>
+      </div>  
+    <% end -%>
+  </div>
+</div>
+
 <div id="map" class="full-map">
 	<div id="location-map"></div>
 </div>

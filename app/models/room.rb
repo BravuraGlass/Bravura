@@ -99,11 +99,9 @@ class Room < ApplicationRecord
         end
       end
       return arr_name_rev.join("").reverse
-    elsif last_room.name.size == 1    
+    else   
       return last_room.name.next 
-    else
-      "copy of #{self.name}"
-    end    
+    end
   end
 
   private

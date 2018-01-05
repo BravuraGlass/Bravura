@@ -1,11 +1,21 @@
 class LocationsController < ApplicationController
 	before_action :require_admin, only: [:index] 
   def index
+    @show_workers = true
+    @workers = []
     @need_libs = ['maps']
     @latest_ids = Location.latest_ids
     ids = @latest_ids.map {|i| i.id }
     @allLocations = Location.where(id: ids)
+    @workers = User.all.map{|x| [x.full_name, x.id]}
+    if params[:show_worker].present?
+      exclude_workers = params[:show_worker]
+    else
+      redirect_to locations_index_path(params.as_json.merge({show_worker: @workers.map{|x,y|y}}))
+      return
+    end
     @markers = Gmaps4rails.build_markers(@allLocations) do |location, marker|
+      next unless exclude_workers.include?(location.user_id.to_s)
       title = "#{location.user.try(:first_name)} #{location.user.try(:last_name)}"
       old = (location.updated_at < 1.minutes.ago rescue false)
       marker.lat location.latitude
