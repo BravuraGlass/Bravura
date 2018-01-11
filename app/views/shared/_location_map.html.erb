@@ -8,6 +8,12 @@
   </div>
 </div>
 <script>
+var markers = <%=raw @markers.to_json || '{}' %>;
+var user_id = '<%=raw current_user.id %>';
+var gMapMarkers = [];
+var map = null;
+var socket = io('http://52.15.199.76:8080',{query: {uid: user_id}});
+// var socket = io('http://localhost:8080', {query: {uid: user_id}});
 
 function initMaps() {
    var addrField = document.getElementById('address');
@@ -33,7 +39,7 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
       lng: -73.9344151
     }
   });
-
+  // var gMapMarkers = [];
   var trafficLayer = new google.maps.TrafficLayer();
   trafficLayer.setMap(map);
 
@@ -108,9 +114,7 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
   }
 
   // Loop through our array of markers & place each one on the map
-  var markers = <%=raw @markers.to_json || '{}' %>;
   var iconBase = '/assets/mapicons/';
-  var gMapMarkers = [];
   var icons = {
     job: {
       icon: iconBase + 'job.png'
@@ -127,65 +131,79 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
   };
 
   if(markers && markers.length > 0) {
+    // gMapMarkers = []
     var infoWindowTask = new google.maps.InfoWindow();
     for( var i = 0; i < markers.length; i++ ) {
       var marker_data = markers[i];
-      var content = marker_data.marker_title || '';
-      var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
 
-      if(marker_data.type == "worker"){
-        var markerLabel = marker_data.marker_title.split('-');
-        if(markerLabel[1] == 'true'){
-          var color = "808080"
-          var bgcolor = "fff"
-        }else{
-          var color = "ff0000"
-          var bgcolor = "fff"
-        }
-        // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
-        icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+markerLabel[0]+'  |'+color+'|'+bgcolor;
-        content = marker_data.updated_at
-      }else{
-        icon = icons[marker_data.type].icon
+      if(marker_data.type){
+
         var content = marker_data.marker_title || '';
-      }
-      var marker = new google.maps.Marker({
-        position: position,
-        map: map,
-        icon: icon,
-        title: content
-      });
+        var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
 
-      var infoWindow = new google.maps.InfoWindow( {
-        content: content
-      });
-
-      google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
-          return function() {
-              infoWindow.setContent(marker.getTitle());
-              infoWindow.open(map, marker);
+        if(marker_data.type == "worker"){
+          var markerLabel = marker_data.marker_title.split('-');
+          if(markerLabel[1] == 'true'){
+            var color = "808080"
+            var bgcolor = "fff"
+          }else{
+            var color = "ff0000"
+            var bgcolor = "fff"
           }
-      })(marker, i, infoWindow));
+          // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
+          icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+markerLabel[0]+'  |'+color+'|'+bgcolor;
+          content = marker_data.updated_at
+        }else{
+          icon = icons[marker_data.type].icon
+          var content = marker_data.marker_title || '';
+        }
+        var marker = new google.maps.Marker({
+          position: position,
+          map: map,
+          icon: icon,
+          title: content
+        });
 
-      google.maps.event.addListener(marker,'mouseover', (function(marker,content,infoWindow){ 
-          return function() {
-            infoWindow.open(map,marker);
-          };
-      })(marker,content,infoWindow)); 
+        var infoWindow = new google.maps.InfoWindow( {
+          content: content
+        });
 
-      google.maps.event.addListener(marker,'mouseout', (function(marker,content,infoWindow){ 
-          return function() {
-            infoWindow.close();
-          };
-      })(marker,content,infoWindow)); 
+        marker.setVisible(true);
+        if(marker_data.type == "worker"){
+          gMapMarkers.push(marker);
+        }
+        console.log('-------gMapMarkers2------',gMapMarkers.length)
 
-      marker.setVisible(true);
-      gMapMarkers.push(marker);
+        google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
+            return function() {
+                infoWindow.setContent(marker.getTitle());
+                infoWindow.open(map, marker);
+            }
+        })(marker, i, infoWindow));
+
+        google.maps.event.addListener(marker,'mouseover', (function(marker,content,infoWindow){ 
+            return function() {
+              infoWindow.open(map,marker);
+            };
+        })(marker,content,infoWindow)); 
+
+        google.maps.event.addListener(marker,'mouseout', (function(marker,content,infoWindow){ 
+            return function() {
+              infoWindow.close();
+            };
+        })(marker,content,infoWindow)); 
+
+        
+      }
     }
   }
 
+  socket.on('update_positions', updatePositions);
 }
 
+function isUserId(data,user_id) { 
+    return data.user_id === user_id;
+}
 function geocodeAddress(geocoder, map) {
   geocoder.geocode({
     componentRestrictions: {
@@ -205,6 +223,127 @@ function geocodeAddress(geocoder, map) {
         status);
     }
   });
+}
+
+function updatePositions(positions) {
+  // console.log('---------updated positions -----------', positions);
+
+  var index = 0;
+
+  for(item in positions) {
+  //positions.forEach((item, index) => {
+    data = positions[item];
+
+    var isExist = false;
+    for(var i=0; i<markers.length; i++) {
+      if(parseInt(markers[i].user_id) == parseInt(data.user_id)) {
+
+        isExist = true;
+
+        // console.log('--------- data -----------', data);
+        if (data && data.lat != markers[i].lat || data.lng != markers[i].lng) {
+          markers[i].lat = data.lat;
+          markers[i].lng = data.lng;
+  
+          var marker_data = markers[i];
+          var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
+          var content = marker_data.marker_title || '';
+          var created_at = marker_data.created_at;
+          var updated_at = marker_data.updated_at;
+          var color = "ff0000";
+          var bgcolor = "fff";
+          icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+content+'  |'+color+'|'+bgcolor;
+          var ii = markers.findIndex( function(item) {
+              return (item.type == undefined && item.user_id === parseInt(data.user_id));
+          });
+          ii = 1
+          var marker = gMapMarkers[ii];
+          // gMapMarkers[2].setPosition(new google.maps.LatLng(40,648,-74,000222))
+          // debugger
+          if(marker){
+            marker.icon = icon
+            marker.setPosition(position);
+          }else{
+            // debugger
+            console.log('-------gMapMarkers3------',gMapMarkers.length)
+          }
+        }
+
+        break;
+      }
+    }
+    
+    // console.log('---------exist -----------', isExist);
+
+    if(isExist != true) {
+      var content = data.marker_title || '';
+      // should change from socket
+      var created_at = data.created_at || content;
+      var updated_str = data.updated_at.trim();
+      if( updated_str.indexOf(" ") !== -1 ){
+        var date = updated_str.split(" ")[0];
+        var time = updated_str.split(" ")[1];
+        var updated_at_utc = new Date(date+"T"+time+"Z");
+      }else{
+        var updated_at_utc = updated_str;
+      }
+      var time_update = new Date(updated_at_utc);
+
+      var updated_at = time_update.toLocaleString("en-us", { timeZone: "America/New_York", hour12: false, 
+      year: "numeric", month: "long", day: "2-digit", hour: "2-digit", minute: "2-digit"})
+      var position = new google.maps.LatLng(data.lat, data.lng);
+      var color = "ff0000"
+      var bgcolor = "fff"
+
+      // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
+      icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+content+'  |'+color+'|'+bgcolor;
+      var marker = new google.maps.Marker({
+        position: position,
+        map: map,
+        icon: icon,
+        title: updated_at
+      });
+
+      marker.setVisible(true);
+      if(data.user_id){
+        gMapMarkers.push(marker);
+      }
+      console.log('-------gMapMarkers------',gMapMarkers.length)
+
+      markers.push({
+        user_id: data.user_id,
+        lat: data.lat,
+        lng: data.lng,
+        marker_title: updated_at
+      });
+
+      var infoWindow = new google.maps.InfoWindow( {
+        content: updated_at
+      });
+
+      // console.log(data.user_id + ": " + updated_at);
+
+      google.maps.event.addListener(marker,'click', (function(marker,updated_at,infoWindow){ 
+          return function() {
+            infoWindow.open(map,marker);
+          };
+      })(marker,updated_at,infoWindow)); 
+
+      google.maps.event.addListener(marker,'mouseover', (function(marker,updated_at,infoWindow){ 
+        return function() {
+          infoWindow.open(map,marker);
+        };
+      })(marker,updated_at,infoWindow)); 
+
+      google.maps.event.addListener(marker,'mouseout', (function(marker,updated_at,infoWindow){ 
+          return function() {
+            infoWindow.close();
+          };
+      })(marker,updated_at,infoWindow)); 
+
+    }
+    index = index+1;
+  }
 }
 
 var BRAVURA = BRAVURA || {};

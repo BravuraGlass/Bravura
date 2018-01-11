@@ -45,13 +45,14 @@ class MapController < ApplicationController
       end
     end
 
-    all_workers = Location.last_user_checkins.count
+    # get 6 hours last checkin
+    all_workers = Location.last_user_checkins_in(6).count
     @workers = all_workers.map{|x,y| ["#{x[0]} #{x[1]}",x[6].to_s]} rescue []
 
     if params[:show_worker].present?
       exclude_workers = params[:show_worker]
     else
-      if @show_all
+      if @show_all && all_workers.present?
         redirect_to map_index_path(params.as_json.merge({show_worker: @workers.map{|x,y|y}}))
         return
       end
@@ -62,16 +63,18 @@ class MapController < ApplicationController
       @show_workers = true
       all_workers.delete_if{|x,y| params[:show_worker].exclude?(x[6].to_s)} 
       workers = Gmaps4rails.build_markers(all_workers) do |worker, marker|
-        old = (worker[0][5].to_time < 1.minutes.ago rescue false)
-        title = "#{worker[0][0]} #{worker[0][1]}-#{old}"
-        marker.lat worker[0][2]
-        marker.lng worker[0][3]
-        marker.title title
-        marker.json({
-          :type => :worker, 
-          :created_at => worker[0][4].try(:strftime, '%d %B %Y %H:%M'),
-          :updated_at => worker[0][5].try(:strftime, '%d %B %Y %H:%M')
-        })
+        if worker[0][5].to_time > 6.hours.ago
+          old = (worker[0][5].to_time < 1.minutes.ago rescue false)
+          title = "#{worker[0][0]} #{worker[0][1]}-#{old}"
+          marker.lat worker[0][2]
+          marker.lng worker[0][3]
+          marker.title title
+          marker.json({
+            :type => :worker, 
+            :created_at => worker[0][4].try(:strftime, '%d %B %Y %H:%M'),
+            :updated_at => worker[0][5].try(:strftime, '%d %B %Y %H:%M')
+          })
+        end
       end
     end
 

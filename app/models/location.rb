@@ -8,6 +8,16 @@ class Location < ApplicationRecord
       .where('locations.latitude <> ""')
       .group(["users.first_name","users.last_name","locations.latitude","locations.longitude","locations.created_at","locations.updated_at","users.id"])
     }
+
+  scope :last_user_checkins_in, -> (hour=1){
+    checkins_in(hour)
+      .last_user_checkins
+  }
+
+  scope :checkins_in, -> (hour=1){
+    where(updated_at: (Time.now-hour.hours)..Time.now)
+  }
+
   scope :latest_ids, -> {
     select('user_id, MAX(id) as id')
     .where('locations.latitude is not null')

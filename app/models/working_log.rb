@@ -12,6 +12,7 @@ end
 
 class WorkingLog < ApplicationRecord
   belongs_to :user
+  after_create :update_location
   
   def self.submit(data, checkin_or_checkout = "checkin")
     wlog_hash = {
@@ -57,6 +58,16 @@ class WorkingLog < ApplicationRecord
 
   def checkin_or_checkout?
     self.checkin_or_checkout == "checkin"
+  end
+
+  def update_location
+    if self.latitude.present? && self.longitude.present? && self.user_id.present? && self.checkin_or_checkout?
+      location = Location.where(user_id: self.user_id, created_at: Time.now.beginning_of_day..Time.now.end_of_day).order(created_at: :desc).last
+      location = Location.new(user_id: self.user_id) if !location.present?
+      location.latitude   = self.latitude
+      location.longitude  = self.longitude
+      location.save
+    end
   end
   
   def get_location

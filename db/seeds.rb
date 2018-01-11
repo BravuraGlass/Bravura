@@ -43,14 +43,14 @@ customer2 = Customer.create(contact_firstname: "Yukihiro", contact_lastname: "Ma
 
 
 time_now = Time.now
-start = (time_now - 1.week).to_i
+start = (time_now - 3.hours).to_i
 
-Location.create(user: user1 , latitude: 40.7233, longitude: -74.003, created_at: Time.now)
-Location.create(user: user2, latitude: 40.852, longitude: -74.0753, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user: user1 , latitude: 40.7233, longitude: -74.003)
+Location.create(user: user2, latitude: 40.852, longitude: -74.0753)
 Location.create(user: user3, latitude: 40.7233, longitude: -74.003, created_at: Time.at(rand(time_now.to_i - start)) + start)
 Location.create(user: user1, latitude: 40.6488, longitude: -73.9464, created_at: Time.at(rand(time_now.to_i - start)) + start)
-Location.create(user: user2, latitude: 40.6937, longitude: -73.988, created_at: Time.at(rand(time_now.to_i - start)) + start)
-Location.create(user: user3, latitude: 40.6715, longitude: -73.9476, created_at: Time.at(rand(time_now.to_i - start)) + start)
+Location.create(user: user2, latitude: 40.6937, longitude: -73.988)
+Location.create(user: user3, latitude: 40.6715, longitude: -73.9476)
 
 
 employee1 = Employee.create(first_name: "Edison", last_name: "Cavani", email_address: "edison@psg.com")

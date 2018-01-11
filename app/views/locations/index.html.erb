@@ -50,7 +50,8 @@
   var gMapMarkers = [];
   var infoWindowList = [];
   var map = null;
-  var socket = io('http://52.15.199.76:8080');
+  var socket = io('http://52.15.199.76:8080', {query: {uid: user_id}});
+  // var socket = io('http://localhost:8080', {query: {uid: user_id}});
 
   function initMapWithMarkers(markers) {
   
@@ -134,6 +135,7 @@
         console.log('---------updated positions -----------', positions);
     
         var index = 0;
+
         for(item in positions) {
         //positions.forEach((item, index) => {
           data = positions[item];
@@ -144,6 +146,8 @@
     
               isExist = true;
 
+              console.log('--------- data -----------', data);
+
               if (data.lat != markers[i].lat || data.lng != markers[i].lng) {
                 markers[i].lat = data.lat;
                 markers[i].lng = data.lng;
@@ -153,16 +157,21 @@
                 var content = marker_data.marker_title || '';
                 var created_at = marker_data.created_at;
                 var updated_at = marker_data.updated_at;
+                var color = "ff0000";
+                var bgcolor = "fff";
+                icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+content+'  |'+color+'|'+bgcolor;
         
                 var marker = gMapMarkers[i];
-        
+                marker.icon = icon
                 marker.setPosition(position);
               }
 
               break;
             }
           }
-    
+          
+          console.log('---------exist -----------', isExist);
+
           if(isExist != true) {
             var content = data.marker_title || '';
             // should change from socket
@@ -182,6 +191,7 @@
             var position = new google.maps.LatLng(data.lat, data.lng);
             var color = "ff0000"
             var bgcolor = "fff"
+
             // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
             icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+content+'  |'+color+'|'+bgcolor;
             var marker = new google.maps.Marker({
