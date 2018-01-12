@@ -7,12 +7,13 @@
     <span id="place-detail"></span>
   </div>
 </div>
+
 <script>
 var markers = <%=raw @markers.to_json || '{}' %>;
 var user_id = '<%=raw current_user.id %>';
 var gMapMarkers = [];
 var map = null;
-var socket = io('http://52.15.199.76:8080',{query: {uid: user_id}});
+var socket = io("<%= GEORSERVER_ADDRESS %>",{query: {uid: user_id}});
 // var socket = io('http://localhost:8080', {query: {uid: user_id}});
 
 function initMaps() {

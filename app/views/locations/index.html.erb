@@ -50,7 +50,7 @@
   var gMapMarkers = [];
   var infoWindowList = [];
   var map = null;
-  var socket = io('http://52.15.199.76:8080', {query: {uid: user_id}});
+  var socket = io("<%= GEORSERVER_ADDRESS %>", {query: {uid: user_id}});
   // var socket = io('http://localhost:8080', {query: {uid: user_id}});
 
   function initMapWithMarkers(markers) {

@@ -43,3 +43,5 @@ end
 
 CHECKIN_BARCODE = "4h30pkkv1b"
 CHECKOUT_BARCODE = "6gj6bcc23"
+
+GEORSERVER_ADDRESS = "http://localhost:8080"
