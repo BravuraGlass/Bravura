@@ -41,17 +41,7 @@ Status.create(category: "products",name: "FINISHED", order: 19)
 customer1 = Customer.create(contact_firstname: "Satya", contact_lastname: "Nadella", email: "satya@microsoft.com", company_name: "Microsoft")
 customer2 = Customer.create(contact_firstname: "Yukihiro", contact_lastname: "Mastsumoto", email: "matz@ruby.org", company_name: "Ruby")
 
-
-time_now = Time.now
-start = (time_now - 3.hours).to_i
-
-Location.create(user: user1 , latitude: 40.7233, longitude: -74.003)
-Location.create(user: user2, latitude: 40.852, longitude: -74.0753)
-Location.create(user: user3, latitude: 40.7233, longitude: -74.003, created_at: Time.at(rand(time_now.to_i - start)) + start)
-Location.create(user: user1, latitude: 40.6488, longitude: -73.9464, created_at: Time.at(rand(time_now.to_i - start)) + start)
-Location.create(user: user2, latitude: 40.6937, longitude: -73.988)
-Location.create(user: user3, latitude: 40.6715, longitude: -73.9476)
-
+Location.reseed(user1, user2, user3, user4)
 
 employee1 = Employee.create(first_name: "Edison", last_name: "Cavani", email_address: "edison@psg.com")
 employee2 = Employee.create(first_name: "Leroy", last_name: "Sane", email_address: "leroy@mancity.com")

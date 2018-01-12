@@ -35,4 +35,24 @@ class Location < ApplicationRecord
 		end
 		return result
 	end  
+	
+	#for development only
+	def self.reseed(user1= "", user2 = "", user3 = "", user4 = "")
+		user1 = User.first if user1.blank?
+		user2 = User.second if user2.blank?
+		user3 = User.third if user3.blank?
+		user4 = User.fourth if user4.blank?
+		
+		if Rails.env.to_s == "development"
+			time_now = Time.now
+			start = (time_now - 3.hours).to_i
+      
+			Location.destroy_all
+			Location.create(user: user1 , latitude: 40.7233, longitude: -74.003)
+			Location.create(user: user2, latitude: 40.6937, longitude: -73.988)
+			Location.create(user: user3, latitude: 40.6715, longitude: -73.9476)
+			Location.create(user: user4, latitude: 40.852, longitude: -74.0753)	
+			Location.create(user: user3, latitude: 40.7233, longitude: -74.003, created_at: Time.at(rand(time_now.to_i - start)) + start)
+		end	
+	end	
 end
