@@ -70,6 +70,7 @@ class MapController < ApplicationController
           marker.lng worker[0][3]
           marker.title title
           marker.json({
+            :user_id => worker[0][6],
             :type => :worker, 
             :created_at => worker[0][4].try(:strftime, '%d %B %Y %H:%M'),
             :updated_at => worker[0][5].try(:strftime, '%d %B %Y %H:%M')

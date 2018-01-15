@@ -173,7 +173,6 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
         if(marker_data.type == "worker"){
           gMapMarkers.push(marker);
         }
-        console.log('-------gMapMarkers2------',gMapMarkers.length)
 
         google.maps.event.addListener(marker, 'click', (function(marker, i, infoWindow) {
             return function() {
@@ -230,10 +229,10 @@ function updatePositions(positions) {
   // console.log('---------updated positions -----------', positions);
 
   var index = 0;
-
   for(item in positions) {
   //positions.forEach((item, index) => {
     data = positions[item];
+
 
     var isExist = false;
     for(var i=0; i<markers.length; i++) {
@@ -241,32 +240,30 @@ function updatePositions(positions) {
 
         isExist = true;
 
-        // console.log('--------- data -----------', data);
         if (data && data.lat != markers[i].lat || data.lng != markers[i].lng) {
           markers[i].lat = data.lat;
           markers[i].lng = data.lng;
   
           var marker_data = markers[i];
           var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-          var content = marker_data.marker_title || '';
+          var content = marker_data.marker_title|| '';
+          var markerLabel = content.split('-');
           var created_at = marker_data.created_at;
           var updated_at = marker_data.updated_at;
           var color = "ff0000";
           var bgcolor = "fff";
-          icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+content+'  |'+color+'|'+bgcolor;
-          var ii = markers.findIndex( function(item) {
-              return (item.type == undefined && item.user_id === parseInt(data.user_id));
+          icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+markerLabel[0]+'  |'+color+'|'+bgcolor;
+
+          var ii = gMapMarkers.findIndex( function(m) {
+            re = new RegExp(markerLabel[0]);
+            found = re.exec(m.icon) != null;
+            return found;
           });
-          ii = 1
           var marker = gMapMarkers[ii];
-          // gMapMarkers[2].setPosition(new google.maps.LatLng(40,648,-74,000222))
-          // debugger
+          if(data.user_id == 2) { console.log(ii)};
           if(marker){
             marker.icon = icon
             marker.setPosition(position);
-          }else{
-            // debugger
-            console.log('-------gMapMarkers3------',gMapMarkers.length)
           }
         }
 
@@ -309,7 +306,7 @@ function updatePositions(positions) {
       if(data.user_id){
         gMapMarkers.push(marker);
       }
-      console.log('-------gMapMarkers------',gMapMarkers.length)
+
 
       markers.push({
         user_id: data.user_id,
