@@ -10,7 +10,11 @@ class LocationsController < ApplicationController
     # get all checkin in 6 hours ago
     @allLocations = Location.checkins_in(6).where(id: ids)
     user_ids = @allLocations.map(&:user_id)
-    @workers = User.where(id: user_ids).map{|x| [x.try(:full_name), x.try(:id)]} rescue []
+		
+		all_workers = Location.last_user_checkins_in(6).count
+		@workers = all_workers.map{|x,y| ["#{x[0]} #{x[1]}",x[6].to_s]} rescue []
+		
+    #@workers = User.where(id: user_ids).map{|x| [x.try(:full_name), x.try(:id)]} rescue []
     if params[:show_worker].present?
       exclude_workers = params[:show_worker]
     else
