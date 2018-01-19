@@ -12,7 +12,8 @@ end
 
 class WorkingLog < ApplicationRecord
   belongs_to :user
-  after_create :update_location
+  # temporary disable
+  #after_create :update_location
   
   def self.submit(data, checkin_or_checkout = "checkin")
     wlog_hash = {
