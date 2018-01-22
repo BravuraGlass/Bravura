@@ -39,7 +39,7 @@
                           <% end %>
                           <td><%= file.description %></td>
                           <td><%= file.data.url.split('/').last rescue "" %></td>
-                          <td><%= file.created_at.strftime('%d/%m/%Y %H:%M') %></td>
+                          <td><%= file.created_at.strftime('%b %d, %Y %I:%M %p') %></td>
                           <td><%= file.user.try(:full_name) %></td>
                           <td>
                             <% if file.image? %>
