@@ -58,6 +58,9 @@ GEM
       activemodel (>= 4.0.0)
       activesupport (>= 4.0.0)
       mime-types (>= 1.16)
+    carrierwave-base64 (2.6.1)
+      carrierwave (>= 0.8.0)
+      mime-types (~> 3.0)
     childprocess (0.7.1)
       ffi (~> 1.0, >= 1.0.11)
     chunky_png (1.3.8)
@@ -247,6 +250,7 @@ DEPENDENCIES
   byebug
   capybara (~> 2.13.0)
   carrierwave (= 1.2.0)
+  carrierwave-base64
   clockwork
   coffee-rails (~> 4.2)
   daemons

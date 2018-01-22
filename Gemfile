@@ -6,6 +6,7 @@ git_source(:github) do |repo_name|
 end
 # Document uploading
 gem 'carrierwave', '1.2.0'
+gem 'carrierwave-base64'
 gem 'mini_magick', '4.8.0'
 # Google map integration
 gem 'gmaps4rails'

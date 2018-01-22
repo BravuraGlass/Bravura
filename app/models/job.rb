@@ -4,6 +4,7 @@ class Job < ApplicationRecord
   has_many :comments, dependent: :destroy
   has_one :fabrication_order, dependent: :destroy
   has_many :pictures
+  has_many :measurements, -> { where(owner_type: "Job")}, dependent:  :destroy, as:         :owner
 
   belongs_to :customer
   belongs_to :salesman, foreign_key: 'salesman_id', class_name: 'Employee', optional: true

@@ -145,6 +145,17 @@ Rails.application.routes.draw do
     resources :fabrication_orders, only: [:create, :show]
   end
 
+  resources :files do
+    collection do
+      get :measurements
+      get :new_measurement
+      post :create_measurement
+    end
+    member do
+      delete :destroy_measurement
+    end
+  end
+
   delete 'jobs/:id/image/:picture_id' => "jobs#destroy_image", :as => 'delete_image'
   post 'jobs/:id/image/' => "jobs#add_image", :as => 'add_image'
 

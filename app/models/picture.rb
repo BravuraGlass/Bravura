@@ -1,7 +1,13 @@
 class Picture < ApplicationRecord
 
   belongs_to :job
+  belongs_to :user
 
-  mount_uploader :image, ImageUploader
+  delegate :full_name, to: :user
 
+  mount_base64_uploader :image, ImageUploader
+
+  def data
+    image
+  end
 end

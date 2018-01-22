@@ -1,0 +1,8 @@
+<div class="btn-group">
+  <div class="btn btn-default <%= 'active' if params[:action] == 'index'  %>">
+    <%= link_to "Pictures", files_url({}.merge(params.except(:action, :controller).as_json)) %>
+  </div>
+  <div class="btn btn-default <%= 'active' if params[:action] == 'measurements' %>">
+    <%= link_to "Measurements", measurements_files_url({}.merge(params.except(:action, :controller).as_json)) %>
+  </div>  
+</div>

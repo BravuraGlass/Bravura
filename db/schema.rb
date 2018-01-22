@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20171226013537) do
+ActiveRecord::Schema.define(version: 20180120090311) do
+
+  create_table "assets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string "type"
+    t.integer "owner_id"
+    t.string "owner_type"
+    t.string "data_file_name"
+    t.string "data_content_type"
+    t.integer "data_file_size"
+    t.datetime "data_updated_at"
+    t.integer "order"
+    t.text "description"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "data"
+    t.bigint "user_id"
+    t.index ["user_id"], name: "index_assets_on_user_id"
+  end
 
   create_table "audit_logs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "user_name"
@@ -118,7 +135,10 @@ ActiveRecord::Schema.define(version: 20171226013537) do
     t.bigint "job_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.text "description"
+    t.bigint "user_id"
     t.index ["job_id"], name: "index_pictures_on_job_id"
+    t.index ["user_id"], name: "index_pictures_on_user_id"
   end
 
   create_table "product_sections", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -237,6 +257,7 @@ ActiveRecord::Schema.define(version: 20171226013537) do
     t.integer "submit_date"
   end
 
+  add_foreign_key "assets", "users"
   add_foreign_key "comments", "jobs"
   add_foreign_key "comments", "users"
   add_foreign_key "fabrication_orders", "jobs"
@@ -244,6 +265,7 @@ ActiveRecord::Schema.define(version: 20171226013537) do
   add_foreign_key "jobs", "employees", column: "installer_id"
   add_foreign_key "jobs", "employees", column: "salesman_id"
   add_foreign_key "pictures", "jobs"
+  add_foreign_key "pictures", "users"
   add_foreign_key "product_sections", "edge_types", column: "edge_type_a_id"
   add_foreign_key "product_sections", "edge_types", column: "edge_type_b_id"
   add_foreign_key "product_sections", "edge_types", column: "edge_type_c_id"

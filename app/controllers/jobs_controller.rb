@@ -206,7 +206,7 @@ class JobsController < ApplicationController
 
   # POST /jobs/1/image
   def add_image
-    picture = Picture.create(picture_params)
+    picture = Picture.create(picture_params.merge({user_id: current_user.try(:id)}))
     picture.job = @job
     if picture.save
       render json: picture, status: :created, location: picture.image.url
@@ -261,7 +261,7 @@ class JobsController < ApplicationController
     end
 
     def picture_params
-      params.require(:picture).permit(:image)
+      params.require(:picture).permit(:image, :user_id)
     end
 
     # Sets the audit log data
