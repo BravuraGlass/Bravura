@@ -32,3 +32,6 @@
 /bin/push_*
 /bin/commit_*
 /bin/deploy_to_production.sh
+
+/public/uploads/measurement
+/public/uploads/picture
