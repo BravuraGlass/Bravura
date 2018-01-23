@@ -72,8 +72,9 @@ class MapController < ApplicationController
           marker.json({
             :user_id => worker[0][6],
             :type => :worker, 
-            :created_at => worker[0][4].try(:strftime, '%d %B %Y %H:%M'),
-            :updated_at => worker[0][5].try(:strftime, '%d %B %Y %H:%M')
+            :created_at => worker[0][4].try(:strftime, '%Y-%m-%d %H:%M:%S'),
+            :updated_at_text => worker[0][5].try(:strftime, '%Y-%m-%d %H:%M:%S'),
+            :updated_at => worker[0][5],
           })
         end
       end

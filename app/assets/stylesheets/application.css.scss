@@ -348,3 +348,20 @@ fieldset.search-map {
   padding: 5px 12px;
 }
 
+
+
+img[src="https://maps.gstatic.com/mapfiles/api-3/images/mapcnt6.png"] {
+    display: none;
+    cursor:none;
+    z-index: -999999;
+}
+
+.gm-style .white{
+  background-color: #fff !important;
+  color: #000 !important;
+}
+
+.gm-style .red{
+  background-color: #ff0000 !important;
+  color: #fff !important;
+}

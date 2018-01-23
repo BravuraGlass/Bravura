@@ -84,7 +84,8 @@
     "socket.io-client": "latest",
     "typeahead.js": "0.11.1",
     "jquery-highlight-bartaz": "https://bartaz.github.io/sandbox.js/jquery.highlight.js",
-    "datatables-highlight": "https://cdn.datatables.net/plug-ins/1.10.16/features/searchHighlight/dataTables.searchHighlight.min.js"
+    "datatables-highlight": "https://cdn.datatables.net/plug-ins/1.10.16/features/searchHighlight/dataTables.searchHighlight.min.js",
+    "timeago.js": "3.0.0"
   },
   "resolutions": {
     "jquery": "2.2.4"

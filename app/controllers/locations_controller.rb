@@ -35,7 +35,8 @@ class LocationsController < ApplicationController
           :user_id => location.user_id, 
           :old => old,
           :created_at => location.created_at.try(:strftime, '%d %B %Y %H:%M'),
-          :updated_at => location.updated_at.try(:strftime, '%d %B %Y %H:%M') 
+          :updated_at => location.updated_at,
+          :updated_at_text => location.updated_at.try(:strftime, '%d %B %Y %H:%M') 
         })
       end
     end

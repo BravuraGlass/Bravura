@@ -46,6 +46,10 @@
 //= require typeahead.js/dist/bloodhound
 //= require typeahead.js/dist/typeahead.jquery
 
+// ---- timeago.js
+//= require timeago.js/dist/timeago.js
+
+
 // --- Input Mask
 
 //= require jquery.inputmask/dist/jquery.inputmask.bundle.js
