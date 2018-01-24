@@ -79,6 +79,7 @@
                 </thead>
                 <tbody>
                   <% @audit_logs.each do |alog| %>
+                    <% next if alog.auditable_id.nil? %>
                     <tr>
                       <td><%= alog.user_name %></td>
                       <td><%= alog.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
