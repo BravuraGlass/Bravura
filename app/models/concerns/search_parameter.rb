@@ -8,14 +8,24 @@ module SearchParameter
   
   def status_filter params
     if params && params[:status].present?
-      @plain_condition << " AND " if @conditions.present? or @plain_condition.present?
-      @plain_condition << " details LIKE '%to #{params[:status]}%'"
+      if params[:status].include?(',')
+        category = params[:status].split(',').last
+        puts "::::#{category}:::"
+        category_filter({category: category}) if category.present?
+      else
+        @plain_condition << " AND " if @conditions.present? or @plain_condition.present?
+        @plain_condition << " details LIKE '%to #{params[:status]}%'"
+      end
     end  
   end 
 
   def category_filter params
-    if params[:category].blank? or params[:category] == "material" or params[:category] == "task"
-      @conditions[:auditable_type] = ["ProductSection", "Product"]
+    if params[:category] == "task" 
+      @conditions[:auditable_type] = ["Product"]
+      @conditions[:auditable_id] = Product.joins(:room => {:fabrication_order => :job})
+                                          .where("jobs.active = ?", true).collect {|sect| sect.id}
+    elsif params[:category] == "material"
+      @conditions[:auditable_type] = ["ProductSection"]
       @conditions[:auditable_id] = ProductSection.joins(:product => {:room => {:fabrication_order => :job}})
                                                  .where("jobs.active = ?", true)
                                                  .collect {|sect| sect.id}

@@ -17,7 +17,7 @@ class Status < ApplicationRecord
     when "tasks"
       name_with_category
     else
-      name
+      name_with_category
     end
   end
 

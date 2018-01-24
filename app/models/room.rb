@@ -2,6 +2,7 @@ class Room < ApplicationRecord
   include AuditableModel
 
   belongs_to :fabrication_order
+  has_one :job, through: :fabrication_order
 
   has_many :products, :dependent => :destroy
   belongs_to :room, class_name: "Room", optional: true
@@ -19,6 +20,18 @@ class Room < ApplicationRecord
   def self.statuses
     Status.where(:category => Status.categories[:rooms]).order(:order)
   end
+  
+  def to_li
+    li = "<ul>"
+    li << "<li>Room: #{self.name}</li>"
+    li << "<li>Address: #{self.job.try(:address)}</li>"
+    li << "</ul>" 
+    li.html_safe
+  end
+  
+  def external_name
+    "Room"
+  end  
   
   def master_clone(new_room_name)
     if self.master.blank?

@@ -160,6 +160,13 @@ class FabricationOrdersController < ApplicationController
   def new_product
   end
 
+  def audit_job
+    @job = Job.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+
   def audit_room
     @room = Room.find(params[:id])
     respond_to do |format|

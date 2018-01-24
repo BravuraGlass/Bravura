@@ -25,7 +25,7 @@ class AdvancedSearch
     initialize_conditions
     date_filter(params)
     status_filter(params)
-    category_filter(params)
+    # category_filter(params)
     user_filter(params)
     address_filter(params)    
   end

@@ -14,6 +14,19 @@ class Product < ApplicationRecord
     Status.where(:category => Status.categories[:products]).order(:order)
   end
   
+  def external_name
+    "Task"
+  end  
+
+  def to_li
+    li = "<ul>"
+    li << "<li>Task: #{self.name}</li>"
+    li << "<li>Room: #{self.room.try(:name)}</li>"
+    li << "<li>Address: #{self.room.try(:job).try(:address)}</li>"
+    li << "</ul>" 
+    li.html_safe
+  end
+  
   def name_with_section_count
     sect_count = self.product_sections.size
     "#{self.name} (#{sect_count} section#{sect_count > 1 ? 's' : ''})"

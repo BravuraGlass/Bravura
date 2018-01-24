@@ -5,7 +5,7 @@
 <div class="container-fluid">
    <div class="row">
       <div class="col-lg-12">
-         <%= render partial: "audit_menu" %>
+         <%#= render partial: "audit_menu" %>
          <div class="panel panel-default">
             <div class="panel-heading">
             </div>
@@ -22,7 +22,7 @@
                         <label class="btn btn-default <%= @filter_yesterday ? 'active': '' %>">
                         <input type="radio" class="filter-button" name="filter" id='filter-yesterday' value="yesterday" <%= @filter_yesterday ? 'checked="true"': '' %>>Yesterday</label>
                         
-                        <%= hidden_field_tag "category", params[:category] %>
+                        <%#= hidden_field_tag "category", params[:category] %>
                         <%= date_field("", "date", value: @selected_date, class: 'btn btn-default' ) %>
                         <%= link_to "Go", "#", {class: "btn btn-default filter-button"} %> <br /><br />
                       </div>
@@ -41,7 +41,7 @@
                               <label>Status:</label>
                             </div>
                             <div class="col-sm-9">
-                              <%= select_tag "status", options_for_select(@statuses.collect {|sta| [sta.name_alias, sta.name]},params[:status]), include_blank: "All",class: 'form-control '%>
+                              <%= select_tag "status", options_for_select(@statuses_collection,params[:status]), include_blank: "All",class: 'form-control '%>
                             </div>
                           </div>
                         </div>
@@ -74,10 +74,8 @@
                     <th>User</th>
                     <th>Time</th>
                     <th>Description</th>
-                    <th><%= params[:category].blank? || params[:category] == "material" || params[:category] == "task" ? "Material/Task " : params[:category].titleize %> Name</th>
-                    <% if params[:category].blank? || params[:category] == "material" || params[:category] == "task" %>
+                    <th>Name</th>
                     <th>Category</th>
-                    <% end %>
                 </thead>
                 <tbody>
                   <% @audit_logs.each do |alog| %>
@@ -85,10 +83,18 @@
                       <td><%= alog.user_name %></td>
                       <td><%= alog.created_at.strftime("%Y-%m-%d %H:%M:%S") %></td>
                       <td><%= alog.details %></td>
-                      <td><%= alog.item_name %></td>
-                      <% if params[:category].blank? || params[:category] == "material" || params[:category] == "task" %>
+                      <td>
+                        <% if alog.category == "Room" %>
+                          <%= link_to alog.item_name, audit_room_audit_log_path(alog.auditable_id), remote: true, class: "btn btn-default btn-xs"%>    
+                        <% elsif alog.category == "Task" %>
+                          <%= link_to alog.item_name, audit_product_audit_log_path(alog.auditable_id), remote: true, class: "btn btn-default btn-xs"%>
+                        <% elsif alog.category == "Material" %>
+                          <%= link_to alog.item_name, audit_section_audit_log_path(alog.auditable_id), remote: true, class: "btn btn-default btn-xs"%>
+                        <% elsif alog.category == "Job" %>
+                          <%= link_to alog.item_name, audit_job_audit_log_path(alog.auditable_id), remote: true, class: "btn btn-default btn-xs"%>
+                        <% end %>
+                      </td>
                       <td><%= alog.category %></td>
-                      <% end %>
                     </tr>  
                   <% end %>   
                 </tbody>
@@ -104,3 +110,4 @@
 <%= hidden_field_tag "today_str", Time.zone.now.strftime("%Y-%m-%d") %>
 <%= hidden_field_tag "yesterday_str", (Time.zone.now - 1.day).strftime("%Y-%m-%d")  %>
 
+<div id="modal_container"></div>

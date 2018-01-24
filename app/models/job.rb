@@ -14,6 +14,21 @@ class Job < ApplicationRecord
   scope :active_job, -> { where(active: true) }
   
   after_update :sync_status
+
+  def name
+    self.address
+  end
+  
+  def external_name
+    "Job"
+  end  
+
+  def to_li
+    li = "<ul>"
+    li << "<li>Address: #{self.address}</li>"
+    li << "</ul>" 
+    li.html_safe
+  end
   
   def self.all_active_data
     result = []

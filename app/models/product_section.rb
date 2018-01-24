@@ -39,13 +39,27 @@ class ProductSection < ApplicationRecord
 
     after_initialize :init
 
-    def init
-      seam = EdgeType.find_or_create_by(name: "SEAM") rescue nil
-      self.edge_type_a ||= seam
-      self.edge_type_b ||= seam
-      self.edge_type_c ||= seam
-      self.edge_type_d ||= seam
-    end
+  def init
+    seam = EdgeType.find_or_create_by(name: "SEAM") rescue nil
+    self.edge_type_a ||= seam
+    self.edge_type_b ||= seam
+    self.edge_type_c ||= seam
+    self.edge_type_d ||= seam
+  end
+
+  def to_li
+    li = "<ul>"
+    li << "<li>Material: #{self.name_size}</li>"
+    li << "<li>Task: #{self.product.try(:name)}</li>"
+    li << "<li>Room: #{self.product.try(:room).try(:name)}</li>"
+    li << "<li>Address: #{self.product.try(:room).try(:job).try(:address)}</li>"
+    li << "</ul>" 
+    li.html_safe
+  end
+  
+  def external_name
+    "Material"
+  end  
 
   def set_same_size
       if self.valid?

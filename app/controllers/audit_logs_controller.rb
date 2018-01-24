@@ -16,16 +16,21 @@ class AuditLogsController < ApplicationController
         @jobs << job unless job.fabrication_order.nil?
       end  
     end  
+    @status = Status.where(category: [:products,:tasks,:rooms,:jobs]).order(:category)
+    @statuses_product = @status.map{|x| x if x.category == "products"}.compact
+    @statuses_collection = [["ALL Materials", "category,material"]]
+    @statuses_collection += @statuses_product.collect {|sta| [sta.name_alias, sta.name]}
+    @statuses_task = @status.map{|x| x if x.category == "tasks"}.compact
+    @statuses_collection += [["ALL Tasks", "category,task"]]
+    @statuses_collection += @statuses_task.collect {|sta| [sta.name_alias, sta.name]}
+    @statuses_rooms = @status.map{|x| x if x.category == "rooms"}.compact
+    @statuses_collection += [["ALL Rooms", "category,room"]]
+    @statuses_collection += @statuses_rooms.collect {|sta| [sta.name_alias, sta.name]}
+    @statuses_jobs = @status.map{|x| x if x.category == "jobs"}.compact
+    @statuses_collection += [["ALL Jobs", "category,job"]]
+    @statuses_collection += @statuses_jobs.collect {|sta| [sta.name_alias, sta.name]}
     
-    if params[:category] == "material" or params[:category].blank? or params[:category] == "task"
-      @statuses = Status.where(category: Status.products_and_tasks).order(:category)
-    else
-      @statuses = Status.where(category: Status.categories[params[:category].pluralize])
-    end    
     
-    unless @statuses.collect {|sta| sta.name}.include?(params[:status])
-      params[:status] = nil    
-    end  
     
     @audit_logs = AdvancedSearch.new.audit_logs(params, 1, 1000)
   end
@@ -41,6 +46,34 @@ class AuditLogsController < ApplicationController
     
     @selected_date = params[:date]
     
+  end
+
+  def audit_job
+    @job = Job.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+
+  def audit_room
+    @room = Room.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+  
+  def audit_product
+    @product = Product.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
+  end
+
+  def audit_section
+    @section = ProductSection.find(params[:id])
+    respond_to do |format|
+      format.js {render layout: false}
+    end
   end
 
 end

@@ -62,6 +62,7 @@ Rails.application.routes.draw do
     end
 
     member do
+      get 'audit_job'
       get 'audit_room'
       get 'audit_product'
       get 'audit_section'
@@ -131,7 +132,16 @@ Rails.application.routes.draw do
     end  
   end   
   
-  resources :audit_logs, only: [:index]
+  resources :audit_logs, only: [:index] do
+    member do
+      get 'audit_job'
+      get 'audit_room'
+      get 'audit_product'
+      get 'audit_section'
+      get 'new_product'
+      get 'same_size'
+    end
+  end
 
   resources :jobs, only: [:index, :new, :create, :update, :destroy, :show] do
     member do
