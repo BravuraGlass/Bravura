@@ -244,8 +244,13 @@
               marker_title: updated_at
             });
 
+            if(updated_at){
+              var timeago = window.timeago().format(updated_at)
+            }else{
+              var timeago = ''
+            }
             var infoWindow = new google.maps.InfoWindow( {
-              content: "<div id='"+marker_data.user_id+"' class='google-popup'><b>"+content+"</b><br/><small style='float:right'>"+timeago+"</small></div>",
+              content: "<div id='"+data.user_id+"' class='google-popup'><b>"+content+"</b><br/><small style='float:right'>"+timeago+"</small></div>",
               color: color2,
               id: marker_data.user_id
             });

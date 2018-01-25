@@ -19,7 +19,41 @@ module SearchParameter
     end  
   end 
 
+  def set_default_category params
+    if @conditions[:auditable_type].blank?
+      @conditions[:auditable_type] = ["Product","ProductSection","Room","Job"]
+    end
+
+    if params[:category].blank?
+      @plain_condition << " AND " if @plain_condition.present?
+      product_ids = Product.joins(:room => {:fabrication_order => :job}).where("jobs.active = ?", true).collect {|sect| sect.id}
+      section_ids = ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active = ?", true).collect {|sect| sect.id}
+      room_ids = Room.joins(:fabrication_order => :job).where("jobs.active = ?", true).collect {|room| room.id}
+      job_ids = Job.where("active = ?", true).collect {|job| job.id}
+      @plain_condition << " ( "
+      if product_ids.present?
+        @plain_condition << " (auditable_type = 'Product' and auditable_id in (#{product_ids.join(',')})) or"
+      end
+      if section_ids.present?
+        @plain_condition << " (auditable_type = 'ProductSection' and auditable_id in (#{section_ids.join(',')})) or"
+      end
+      if room_ids.present?
+        @plain_condition << " (auditable_type = 'Room' and auditable_id in (#{room_ids.join(',')})) or"
+      end
+      if job_ids.present?
+        @plain_condition << " (auditable_type = 'Job' and auditable_id in (#{job_ids.join(',')}))"
+      end
+      @plain_condition << " ) "
+    end
+  end
+
+  def set_auditable_id params
+    @plain_condition << " AND " if @plain_condition.present?
+    @plain_condition << " auditable_id is not null"
+  end
+
   def category_filter params
+    puts "::::::::#{params[:category]}:::::::::::::"
     if params[:category] == "task" 
       @conditions[:auditable_type] = ["Product"]
       @conditions[:auditable_id] = Product.joins(:room => {:fabrication_order => :job})

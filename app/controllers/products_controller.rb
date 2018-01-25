@@ -111,7 +111,7 @@ class ProductsController < ApplicationController
   # PATCH/PUT /products/1.json
   def update
     respond_to do |format|
-      params[:product][:audit_user_name] = @current_user.try(:full_name) || @api_user.try(:full_name)
+      params[:product][:audit_user_name] = current_user.try(:full_name) || @current_user.try(:full_name) || @api_user.try(:full_name)
       if @product.update(product_params)
 
         params_redirect = {id: params[:fabrication_order_id]}
