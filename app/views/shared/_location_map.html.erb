@@ -185,7 +185,8 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
           var infoWindow = new google.maps.InfoWindow( {
             id: marker_data.user_id,
             content: "<div id='"+marker_data.user_id+"' class='google-popup'><b>"+markerLabel[0]+"</b><br/><small style='float:right'>"+timeago+"</small></div>",
-            color: color2
+            color: color2,
+            disableAutoPan: true
           });
 
           google.maps.event.addListener(infoWindow,'domready',function(){ 
@@ -206,7 +207,8 @@ function initMap<%= address_field_id ? address_field_id : '' %>() {
           console.log(marker_data.user_id + ": " + marker_data.marker_title, markerLabel[1]);
         }else{
           var infoWindow = new google.maps.InfoWindow( {
-            content: content
+            content: content,
+            disableAutoPan: true
           });
         }
 
@@ -375,7 +377,8 @@ function updatePositions(positions) {
         var infoWindow = new google.maps.InfoWindow( {
           id: data.user_id,
           content: "<div id='"+data.user_id+"' class='google-popup'><b>"+content+"</b><br/><small style='float:right'>"+timeago+"</small></div>",
-          color: color2
+          color: color2,
+          disableAutoPan: true
         });
 
         google.maps.event.addListener(infoWindow,'domready',function(){ 
@@ -396,7 +399,8 @@ function updatePositions(positions) {
         console.log(data.user_id + ": " + data.marker_title, markerLabel[1]);
       }else{
         var infoWindow = new google.maps.InfoWindow( {
-          content: updated_at
+          content: updated_at,
+          disableAutoPan: true
         });
       }
 

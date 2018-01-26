@@ -51,7 +51,7 @@
   var infoWindowList = [];
   var map = null;
   var socket = io("<%= GEORSERVER_ADDRESS %>", {query: {uid: user_id}});
-  // var socket = io('http://localhost:8080', {query: {uid: user_id}});
+
 
   function initMapWithMarkers(markers) {
   
@@ -73,82 +73,86 @@
 
     if(markers && markers.length > 0) {
       for( var i = 0; i < markers.length; i++ ) {
-        var marker_data = markers[i];
-        var created_at = marker_data.created_at;
-        var updated_at = marker_data.updated_at_text;
-        if(marker_data.updated_at){
-          var timeago = window.timeago().format(marker_data.updated_at)
-        }else{
-          var timeago = ''
+        if(markers[i].user_id != undefined){
+          var marker_data = markers[i];
+          var created_at = marker_data.created_at;
+          var updated_at = marker_data.updated_at_text;
+          if(marker_data.updated_at){
+            var timeago = window.timeago().format(marker_data.updated_at)
+          }else{
+            var timeago = ''
+          }
+          var content = marker_data.marker_title || '';
+          var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
+          if(marker_data.old == true){
+            var color = "808080"
+            var color2 = "white"
+            var bgcolor = "fff"
+          }else{
+            var color = "ff0000"
+            var color2 = "red"
+            var bgcolor = "fff"
+          }
+          // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
+          icon = 'https://chart.googleapis.com/chart?chst=d_bubble_texts_big&chld=edge_bc|'+color+'|'+bgcolor+'| |'+content+'|'+timeago;
+          icon = "http://www.1x1px.me/FFFFFF-0.1.png"
+          var marker = new google.maps.Marker({
+            position: position,
+            map: map,
+            icon: icon,
+            title: updated_at,
+            id: marker_data.user_id,
+            color: color2
+          });
+          marker.setVisible(true);
+          gMapMarkers.push(marker);
+
+          console.log(marker_data);
+          console.log(marker_data.user_id + ": " + content);
+
+          var infoWindow = new google.maps.InfoWindow( {
+            content: "<div id='"+marker_data.user_id+"' class='google-popup'><b>"+content+"</b><br/><small style='float:right'>"+timeago+"</small></div>",
+            color: color2,
+            id: marker_data.user_id,
+            disableAutoPan: true
+          });
+
+          google.maps.event.addListener(infoWindow,'domready',function(){ 
+            var gm_iw = $('#'+marker_data.user_id).parent().parent().parent();
+            $('#'+marker_data.user_id).addClass(color2)
+            gm_iw.prev('div').addClass(color2)
+            gm_iw.prev('div').children().eq(3).addClass(color2)
+            gm_iw.prev('div').children().eq(2).children().each(function(){
+              $(this).children().addClass(color2)
+            })
+            gm_iw.addClass(color2);
+          });
+
+          google.maps.event.addListener(marker,'click', (function(marker,updated_at,infoWindow){ 
+            infoWindow.open(map,marker)
+              return function() {
+                infoWindow.open(map,marker);
+              };
+          })(marker,updated_at,infoWindow)); 
+
+          google.maps.event.addListener(marker,'mouseover', (function(marker,updated_at,infoWindow){ infoWindow.open(map,marker)
+              return function() {
+                infoWindow.open(map,marker);
+              };
+          })(marker,updated_at,infoWindow)); 
+
+          google.maps.event.addListener(marker,'mouseout', (function(marker,updated_at,infoWindow){ 
+            infoWindow.open(map,marker)
+              return function() {
+                infoWindow.close();
+              };
+          })(marker,updated_at,infoWindow)); 
+
+          console.log("Markers: ", markers);
+          console.log("Real Markers: ", gMapMarkers);
+
+          //infoWindowList.push(infoWindow);
         }
-        var content = marker_data.marker_title || '';
-        var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-        if(marker_data.old == true){
-          var color = "808080"
-          var color2 = "white"
-          var bgcolor = "fff"
-        }else{
-          var color = "ff0000"
-          var color2 = "red"
-          var bgcolor = "fff"
-        }
-        // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
-        icon = 'https://chart.googleapis.com/chart?chst=d_bubble_texts_big&chld=edge_bc|'+color+'|'+bgcolor+'| |'+content+'|'+timeago;
-        icon = "http://www.1x1px.me/FFFFFF-0.1.png"
-        var marker = new google.maps.Marker({
-          position: position,
-          map: map,
-          icon: icon,
-          title: updated_at,
-          id: marker_data.user_id,
-          color: color2
-        });
-        marker.setVisible(true);
-        gMapMarkers.push(marker);
-
-        console.log(marker_data.user_id + ": " + content);
-
-        var infoWindow = new google.maps.InfoWindow( {
-          content: "<div id='"+marker_data.user_id+"' class='google-popup'><b>"+content+"</b><br/><small style='float:right'>"+timeago+"</small></div>",
-          color: color2,
-          id: marker_data.user_id
-        });
-
-        google.maps.event.addListener(infoWindow,'domready',function(){ 
-          var gm_iw = $('#'+marker_data.user_id).parent().parent().parent();
-          $('#'+marker_data.user_id).addClass(color2)
-          gm_iw.prev('div').addClass(color2)
-          gm_iw.prev('div').children().eq(3).addClass(color2)
-          gm_iw.prev('div').children().eq(2).children().each(function(){
-            $(this).children().addClass(color2)
-          })
-          gm_iw.addClass(color2);
-        });
-
-        google.maps.event.addListener(marker,'click', (function(marker,updated_at,infoWindow){ 
-          infoWindow.open(map,marker)
-            return function() {
-              infoWindow.open(map,marker);
-            };
-        })(marker,updated_at,infoWindow)); 
-
-        google.maps.event.addListener(marker,'mouseover', (function(marker,updated_at,infoWindow){ infoWindow.open(map,marker)
-            return function() {
-              infoWindow.open(map,marker);
-            };
-        })(marker,updated_at,infoWindow)); 
-
-        google.maps.event.addListener(marker,'mouseout', (function(marker,updated_at,infoWindow){ 
-          infoWindow.open(map,marker)
-            return function() {
-              infoWindow.close();
-            };
-        })(marker,updated_at,infoWindow)); 
-
-        console.log("Markers: ", markers);
-        console.log("Real Markers: ", gMapMarkers);
-
-        //infoWindowList.push(infoWindow);
       }
     }    
 
@@ -167,13 +171,11 @@
 
           var isExist = false;
           for(var i=0; i<markers.length; i++) {
-            if(parseInt(markers[i].user_id) == parseInt(data.user_id)) {
+            if(markers[i].user_id != undefined && parseInt(markers[i].user_id) == parseInt(data.user_id)) {
     
               isExist = true;
-
               console.log('--------- data -----------', data);
-
-              if (data.lat != markers[i].lat || data.lng != markers[i].lng) {
+              if (parseInt(data.lat) != 0 && parseInt(data.lng) != 0 && (data.lat != markers[i].lat || data.lng != markers[i].lng)) {
                 markers[i].lat = data.lat;
                 markers[i].lng = data.lng;
         
@@ -202,9 +204,9 @@
             }
           }
           
-          console.log('---------exist -----------', isExist);
 
-          if(isExist != true) {
+
+          if(data.user_id != undefined && parseInt(data.lat) != 0 && parseInt(data.lng) != 0 && isExist != true) {
             var content = data.marker_title || '';
             // should change from socket
             var created_at = data.created_at || content;
@@ -244,15 +246,16 @@
               marker_title: updated_at
             });
 
-            if(updated_at){
-              var timeago = window.timeago().format(updated_at)
+            if(data.updated_at){
+              var timeago = window.timeago().format(data.updated_at)
             }else{
               var timeago = ''
             }
             var infoWindow = new google.maps.InfoWindow( {
               content: "<div id='"+data.user_id+"' class='google-popup'><b>"+content+"</b><br/><small style='float:right'>"+timeago+"</small></div>",
               color: color2,
-              id: marker_data.user_id
+              id: data.user_id,
+              disableAutoPan: true
             });
 
             google.maps.event.addListener(infoWindow,'domready',function(){ 
@@ -292,23 +295,6 @@
           index = index+1;
         }
 
-        /*
-        markers.forEach((item, index) => {
-          var data = positions[item.user_id];
-          if (data.lat != item.lat || data.lng != item.lng) {
-            markers[index].lat = data.lat;
-            markers[index].lng = data.lng;
-    
-            var marker_data = markers[index];
-            var position = new google.maps.LatLng(marker_data.lat, marker_data.lng);
-            var content = marker_data.title || '';
-    
-            var marker = gMapMarkers[index]
-    
-            marker.setPosition(position);
-          }
-        });
-        */
   }
 
   function filterData() {
