@@ -225,6 +225,7 @@
             var position = new google.maps.LatLng(data.lat, data.lng);
             var color = "ff0000"
             var bgcolor = "fff"
+            var color2 = "red"
 
             // please read: https://developers.google.com/chart/image/docs/gallery/dynamic_icons#icon_types
             icon = 'https://chart.googleapis.com/chart?chst=d_bubble_icon_text_small&chld=location|edge_bc|'+content+'  |'+color+'|'+bgcolor;
@@ -271,7 +272,7 @@
 
             marker.setPosition(position);
 
-            console.log(data.user_id + ": " + updated_at);
+            console.log(data.user_id + ": " + updated_at + "," +color2);
     
             google.maps.event.addListener(marker,'click', (function(marker,updated_at,infoWindow){ 
                 return function() {
