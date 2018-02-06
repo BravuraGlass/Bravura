@@ -409,7 +409,11 @@ $(document).ready(function(){
     var day = date.getDate();
     var monthIndex = date.getMonth() + 1;
     var year = date.getFullYear();
-  
+    
+    if (monthIndex.toString().length == 1) {
+      monthIndex = "0" + monthIndex.toString()
+    }
+    
     return year + '-' + monthIndex + '-' + (day < 10 ? '0' + day : day);
   }
 
@@ -417,6 +421,10 @@ $(document).ready(function(){
     var day = date.getDate() + 1;
     var monthIndex = date.getMonth() + 1;
     var year = date.getFullYear();
+    
+    if (monthIndex.toString().length == 1) {
+      monthIndex = "0" + monthIndex.toString()
+    }
   
     return year + '-' + monthIndex + '-' + (day < 10 ? '0' + day : day);
   }
