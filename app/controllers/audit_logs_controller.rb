@@ -36,8 +36,11 @@ class AuditLogsController < ApplicationController
   end
 
   def init_search
-    if params[:date].blank?
+    if params[:date].blank? and params[:filter] != "all"
       @filter_today = true
+      params[:date] = Time.zone.now.strftime("%Y-%m-%d")
+    elsif params[:date].blank?
+      @filter_all = true
     elsif params[:date] == Time.zone.now.strftime("%Y-%m-%d")
       @filter_today = true
     elsif params[:date] == (Time.zone.now - 1.day).strftime("%Y-%m-%d")  
