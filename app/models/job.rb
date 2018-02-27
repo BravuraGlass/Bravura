@@ -112,7 +112,29 @@ class Job < ApplicationRecord
     return arr_products
   end  
   
-  def product_detail(statuses=[])
+  def product_detail_level_1
+    rows = []
+    self.fabrication_order.rooms.order("name asc").each do |room|
+      
+      rows << [
+        {content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"},
+        {content: room.status, prod_count: 1, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"}
+      ]
+      
+    end  
+    
+    return rows
+  end  
+  
+  def product_detail(statuses=[], level = nil)
+    if level == "3" or level.nil?
+      product_detail_level_3(statuses=[])
+    elsif level == "1"
+      product_detail_level_1
+    end    
+  end  
+  
+  def product_detail_level_3(statuses=[])
     products = []
     data = []
     total_col = 0

@@ -17,7 +17,9 @@
               <span id="job-detail-<%= @job.id %>" data-job-details="<%= @job.fabrication_order.sections_to_json %>" class="<%= class_status %>"><%= "#{status[:ready]} of #{status[:total]}" %></span>
               <%= form_tag product_detail_job_path, id: "product_detail_job_#{@job.id}", method: :get do -%>
                 <table class="datatable table table-striped table-hover nowrap">
+                  
                   <thead>
+                    <% if params[:level].nil? or params[:level] == "3" %>  
                     <th class="no-sort" style="width: 130px">
                       <% i = 0 %>
                       <% @statuses.each do |status,value| %>
@@ -29,10 +31,14 @@
                       <% 1.upto(arr_prod[:max_col]) do |idx2| %>         
                         <th class="<%= column_color(idx+1) %>"><%= (idx2 == 1) ? "#{arr_prod[:name]}" : "" %></th>
                       <% end %>  
-                    <% end %>    
+                    <% end %>
+                    <% elsif params[:level] == "1" %>
+                      <th>Room</th>
+                      <th>Status</th> 
+                    <% end %>   
                   </thead>
                   <tbody>
-                    <% @job.product_detail(@selected_status).each do |row| %>
+                    <% @job.product_detail(@selected_status, params[:level]).each do |row| %>
                       <tr>
                         <% row.each do |val| %>
                           <td class="<%= column_color(val[:prod_count]) %>">
