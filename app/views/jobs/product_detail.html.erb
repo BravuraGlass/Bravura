@@ -20,18 +20,23 @@
                   
                   <thead>
                     <% if params[:level].nil? or params[:level] == "3" %>  
-                    <th class="no-sort" style="width: 130px">
-                      <% i = 0 %>
-                      <% @statuses.each do |status,value| %>
-                        <input type="checkbox" name="status[]" class="check_status" value="<%= status %>" id="check_status_<%= i+=1 %>" <%= 'checked' if @selected_status.include? status.to_s rescue '' %>>
-                        <label for="check_status_<%= i %>"><span></span><%= value %></label>
+                      <th class="no-sort" style="width: 130px">
+                        <% i = 0 %>
+                        <% @statuses.each do |status,value| %>
+                          <input type="checkbox" name="status[]" class="check_status" value="<%= status %>" id="check_status_<%= i+=1 %>" <%= 'checked' if @selected_status.include? status.to_s rescue '' %>>
+                          <label for="check_status_<%= i %>"><span></span><%= value %></label>
+                        <% end %>
+                      </th>            
+                      <% @job.products_group.each_with_index do |arr_prod,idx| %>  
+                        <% 1.upto(arr_prod[:max_col]) do |idx2| %>         
+                          <th class="<%= column_color(idx+1) %>"><%= (idx2 == 1) ? "#{arr_prod[:name]}" : "" %></th>
+                        <% end %>  
                       <% end %>
-                    </th>            
-                    <% @job.products_group.each_with_index do |arr_prod,idx| %>  
-                      <% 1.upto(arr_prod[:max_col]) do |idx2| %>         
-                        <th class="<%= column_color(idx+1) %>"><%= (idx2 == 1) ? "#{arr_prod[:name]}" : "" %></th>
-                      <% end %>  
-                    <% end %>
+                    <% elsif params[:level] == "2" %>
+                      <th>Room</th>
+                      <% @job.products_group.each_with_index do |arr_prod,idx| %> 
+                        <th class="<%= column_color(idx+2) %>"><%= arr_prod[:name] %></th>
+                      <% end %>    
                     <% elsif params[:level] == "1" %>
                       <th>Room</th>
                       <th>Status</th> 

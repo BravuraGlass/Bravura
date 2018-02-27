@@ -112,6 +112,16 @@ class Job < ApplicationRecord
     return arr_products
   end  
   
+  def product_detail(statuses=[], level = nil)
+    if level == "3" or level.nil?
+      return product_detail_level_3(statuses=[])
+    elsif level == "1"
+      return product_detail_level_1
+    elsif level == "2"
+      return product_detail_level_2  
+    end    
+  end  
+  
   def product_detail_level_1
     rows = []
     self.fabrication_order.rooms.order("name asc").each do |room|
@@ -126,14 +136,37 @@ class Job < ApplicationRecord
     return rows
   end  
   
-  def product_detail(statuses=[], level = nil)
-    if level == "3" or level.nil?
-      product_detail_level_3(statuses=[])
-    elsif level == "1"
-      product_detail_level_1
-    end    
+  def product_detail_level_2
+    rows = []
+    self.fabrication_order.rooms.order("name asc").each do |room|      
+      cols = [
+        {content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"}
+      ]
+      
+      arr_products = self.products_group
+      
+      arr_products.each_with_index do |arr_prod,idx|
+        
+        content = ""
+        room.products.each do |prod|
+          if arr_prod[:name] == prod.name
+            content = prod.status
+            cols << {content: content, prod_count: idx+2, class_name: prod.class.to_s, id: prod.id}
+            break  
+          end
+        end
+        
+        if content.empty?
+          cols << {content: "", prod_count: idx+2}
+        end          
+      end    
+      
+      rows << cols  
+    end  
+    
+    return rows
   end  
-  
+    
   def product_detail_level_3(statuses=[])
     products = []
     data = []
