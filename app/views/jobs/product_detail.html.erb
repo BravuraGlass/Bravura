@@ -5,14 +5,19 @@
   <div class="row">
     <div class="col-lg-12">
       <div class="panel panel-default">
-        <div class="panel-heading">
-          <small></small>
-        </div>
         <div class="panel-body">
           <div class="tab-view-panel table-overflow">
             <% if @job.fabrication_order %>
               <%# render partial: "section_done" %>
               
+              <%= form_tag( product_detail_job_path(@job), method: :get, id: "level-form" ) do |f| %>
+                <% params[:level] = "3" if params[:level].nil? %>
+                <div>
+                  Display as : 
+                  <%= select_tag "level", options_for_select([["Level 1","1"],["Level 2","2"], ["Level 3","3"]],params[:level]) %>
+                </div>
+              <% end %>
+              <br />
               <%= form_tag product_detail_job_path, id: "product_detail_job_#{@job.id}", method: :get do -%>
                 <table class="datatable table table-striped table-hover nowrap">
                   

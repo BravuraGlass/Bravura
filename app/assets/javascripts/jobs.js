@@ -404,6 +404,10 @@ $(document).ready(function(){
 
   $('#pick_address').on('click', function() { BRAVURA.pickAddress(); })
   $('#pick_customer_address').on('click', function() { BRAVURA.pickCustomerAddress(); })
+  
+  $('select#level').on('change', function() {
+    jQuery('#level-form').submit();
+  });
 
   function formatDate(date) {
     var day = date.getDate();
