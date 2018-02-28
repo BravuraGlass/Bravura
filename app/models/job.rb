@@ -98,6 +98,7 @@ class Job < ApplicationRecord
   end  
   
   def products_group(level = nil)
+
     arr_products = []
     self.products.select("name").group("products.name").each do |prod|
       if level.nil? or level == "3"
@@ -147,7 +148,7 @@ class Job < ApplicationRecord
         {content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"}
       ]
       
-      arr_products = self.products_group
+      arr_products = self.products_group("2")
       
       arr_products.each_with_index do |arr_prod,idx|
         
