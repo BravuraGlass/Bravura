@@ -97,20 +97,24 @@ class Job < ApplicationRecord
     self.fabrication_order.products
   end  
   
-  def products_group
+  def products_group(level = nil)
     arr_products = []
     self.products.select("name").group("products.name").each do |prod|
-      sect_count = 0
-      max_col = 0
-      self.products.where("products.name = ?",prod.name).each do |prod2|    
-        ind_count = prod2.product_sections.count  
-        sect_count += ind_count
-        max_col = ind_count if ind_count > max_col
-      end
-      arr_products << {:name => prod.name, :sect_count => sect_count, :max_col => max_col}  
+      if level.nil? or level == "3"
+        sect_count = 0
+        max_col = 0
+        self.products.where("products.name = ?",prod.name).each do |prod2|    
+          ind_count = prod2.product_sections.count  
+          sect_count += ind_count
+          max_col = ind_count if ind_count > max_col
+        end
+        arr_products << {:name => prod.name, :sect_count => sect_count, :max_col => max_col} 
+      else
+        arr_products << {:name => prod.name}
+      end     
     end  
     return arr_products
-  end  
+  end   
   
   def product_detail(statuses=[], level = nil)
     if level == "3" or level.nil?
@@ -163,7 +167,7 @@ class Job < ApplicationRecord
       
       rows << cols  
     end  
-    
+      
     return rows
   end  
     

@@ -32,7 +32,7 @@
                       <% end %>
                     <% elsif params[:level] == "2" %>
                       <th>Room</th>
-                      <% @job.products_group.each_with_index do |arr_prod,idx| %> 
+                      <% @job.products_group(params[:level]).each_with_index do |arr_prod,idx| %> 
                         <th class="<%= column_color(idx+2) %>"><%= arr_prod[:name] %></th>
                       <% end %>    
                     <% elsif params[:level] == "1" %>
