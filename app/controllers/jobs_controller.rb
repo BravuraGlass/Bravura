@@ -180,7 +180,8 @@ class JobsController < ApplicationController
         end
     
         @job.save!
-        params_redirect = {id: @job.id}
+        
+        params_redirect = {id: params[:redirect_id].nil? ? @job.id : params[:redirect_id]}
         params_redirect.merge!({scroll: true}) if params[:scroll]
 
         format.html { redirect_to select_job_path(params_redirect), notice: 'Job was successfully updated.' }

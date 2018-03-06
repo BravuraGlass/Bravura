@@ -9,12 +9,12 @@
         <ul class="pagination small">
           <% if @prev %>
           <li class="previous">
-            <%= link_to "Previous", job_path(@prev) %>
+            <%= link_to "Previous", "#", id:"job-id-#{@prev.id}", class: "nextPrevLink" %>
           </li>
           <% end %>
           <% if @next %>
           <li class="next">
-            <%= link_to "Next", job_path(@next) %>
+            <%= link_to "Next", "#", id:"job-id-#{@next.id}", class: "nextPrevLink" %>
           </li>
           <% end %>
         </ul>
@@ -112,7 +112,21 @@
                           :class => 'btn btn-danger' if (job.id) %>
               </div>
 
-              <%= prev_next_button(@prev, @next) %>
+              <div class="dataTables_paginate">
+                <ul class="pagination small">
+                  <% if @prev %>
+                  <li class="previous">
+                    <%= link_to "Previous", "#", id:"job-id-#{@prev.id}", class: "nextPrevLink" %>
+                  </li>
+                  <% end %>
+                  <% if @next %>
+                  <li class="next">
+                    <%= link_to "Next", "#", id:"job-id-#{@next.id}", class: "nextPrevLink" %>
+                  </li>
+                  <% end %>
+                </ul>
+              </div>
+              
             </div>
             <div id="comments" class="tab-pane fade in">
               <%= render :partial => 'comments/index', locals: {job: @job }%>

@@ -5,7 +5,7 @@
       <div class="panel panel-default">
          <!--<div class="panel-heading">General Information</div>-->
          <div class="panel-body">
-            <%= form_for @job, :html => { :multipart => true, :class => "job", :role => 'form' } do |f| %>
+            <%= form_for @job, :html => { :multipart => true, :class => "job", :role => 'form', id: "job-form" } do |f| %>
 
             <% if @job.errors.any? %>
               <div id="error_expl" class="panel panel-danger">
@@ -69,6 +69,8 @@
                   <%= f.label "Apt#" %>
                     <%= f.text_field :address2, :class => 'form-control', :id => :address2, :readonly => readonly %>
                 </div>
+                
+                <%= text_field_tag "redirect_id" %>
                 
                 <div class="form-group">
                   <%= f.label :appointment %>

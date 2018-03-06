@@ -408,6 +408,13 @@ $(document).ready(function(){
   $('select#level').on('change', function() {
     jQuery('#level-form').submit();
   });
+  
+  $('.nextPrevLink').on('click', function () {
+    var job_id = $(this).attr("id").split("job-id-")[1];
+    
+    $('#redirect_id').val(job_id);
+    $('#job-form').submit();
+  });
 
   function formatDate(date) {
     var day = date.getDate();
