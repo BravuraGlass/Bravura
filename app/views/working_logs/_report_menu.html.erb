@@ -5,4 +5,10 @@
   <div class="btn btn-default <%= 'active' if params[:action] == 'index' %>">
     <%= link_to "Raw Data",working_logs_url %>
   </div>     
+  <div class="btn btn-default">
+    <%= link_to "Checkin Barcode",checkin_barcode_working_logs_url(format: :png) %>
+  </div>
+  <div class="btn btn-default">
+    <%= link_to "Checkout Barcode",checkout_barcode_working_logs_url(format: :png) %>
+  </div>        
 </div>
