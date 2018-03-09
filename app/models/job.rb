@@ -9,6 +9,9 @@ class Job < ApplicationRecord
   belongs_to :customer
   belongs_to :salesman, foreign_key: 'salesman_id', class_name: 'Employee', optional: true
   belongs_to :installer, foreign_key: 'installer_id', class_name: 'Employee', optional: true
+  
+  belongs_to :assign_to, class_name: "User", optional: true
+  
   attr_accessor :audit_user_name
 
   scope :active_job, -> { where(active: true) }

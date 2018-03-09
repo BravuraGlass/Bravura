@@ -43,7 +43,7 @@
                     <th class="sort-alpha">Job</th>
                     <th class="sort-alpha">Customer</th>
                     <th class="sort-alpha">Job Status</th>
-                    <th class="sort-alpha">FO Status</th>
+                    <th class="sort-alpha">Assign To</th>
                     <th class="no-sort">Actions</th>
                   </tr>
                 </thead>
@@ -54,23 +54,23 @@
                     </tr>
                     <% else %>
                       <% @jobs.each do |job| %>
-                        <tr onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'" class="pointer" >
-                          <td>
+                        <tr class="pointer" >
+                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
                             <%= l(job.appointment, format: '%Y/%m/%d') if job.appointment %>
                           </td>
-                          <td >
+                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
                             <span class="<%= 'confirmed' if job.confirmed_appointment %>">(<%= job.id %>) <%= job.address.nil? ? "empty" : job.address[0...30] %></span>
                           </td>
-                          <td>
+                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
                             <%= "#{job.customer_firstname} #{job.customer_lastname} - #{job.customer_company_name}" %>
                           </td>
-                          <td>
+                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
                             <%= job.status %>
                           </td>
                           <td>
-                            <%= job.fo_status %>
+                            <%= select_tag "assign_to_job_#{job.id}", options_from_collection_for_select(@sorted_users, "id", "full_name",job.assign_to_id), class: 'assign_to', include_blank: true %>
                           </td>
-                          <td>
+                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
                             <%= job.fo_id ?
                             link_to("View FO", edit_fabrication_order_path(id: job.fo_id), :class => 'btn btn-default btn-xs') :
                             link_to('Create FO', job_fabrication_orders_path(job), method: :post, class: 'btn btn-default btn-xs') %>
@@ -81,7 +81,7 @@
                           <% end %>
                 </tbody>
               </table>
-               <%= link_to t('.new', :default => t("helpers.links.new")), new_job_path, :class => 'btn btn-primary' %>
+               <%# link_to t('.new', :default => t("helpers.links.new")), new_job_path, :class => 'btn btn-primary' %>
             </div>
          </div>
       </div>

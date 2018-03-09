@@ -7,7 +7,7 @@
 #   Character.create(name: 'Luke', movie: movies.first)
 user1 = User.create(email: 'admin@admin.com',password: 'admin',first_name: 'Kevin', last_name: 'Admin',phonenumber: '555 555 5555',address: 'admin address',type_of_user: '0', always_access: true)
 user2 = User.create(email: 'admin3@admin.com',password: 'admin',first_name: 'Admin', last_name: 'Bravura',phonenumber: '555 555 5555',address: 'admin address',type_of_user: '0', always_access: true)
-user3 = User.create(email: 'employee@employee.com',password: 'employee',first_name: 'Employee', last_name: 'Superstar',phonenumber: '555 555 5555',address: 'admin address',type_of_user: '2', always_access: false)
+user3 = User.create(email: 'employee@employee.com',password: 'employee',first_name: 'Employee', last_name: '1',phonenumber: '555 555 5555',address: 'admin address',type_of_user: '2', always_access: false)
 user4 = User.create(email: 'field1@field.com',password: 'employee',first_name: 'Albert', last_name: '55',phonenumber: '555 555 5555',address: 'worker address',type_of_user: '3', always_access: true)
 user5 = User.create(email: 'field2@field.com.com',password: 'employee',first_name: 'Dany', last_name: '7',phonenumber: '555 555 5555',address: 'worker address',type_of_user: '3', always_access: true)
 

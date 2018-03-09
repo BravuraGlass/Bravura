@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
 
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail]
-  before_action :load_common_data, except: [:index]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail, :assign]
+  before_action :load_common_data, except: [:index, :assign]
   before_action :set_markers, only: [:show, :edit]
   
   skip_before_action :require_login, :verify_authenticity_token, only: [:all_active_data], if: -> { request.format.json? }   
@@ -27,6 +27,7 @@ class JobsController < ApplicationController
   def index
     @show_active = params[:active].eql?('false') ? false : true
     @selected_date = Date.today
+    @sorted_users = User.all.sort_by {|usr| usr.last_name.downcase.to_i == 0 ? 1000 : usr.last_name.downcase.to_i }
 
     if params['filter']
       case params['filter']
@@ -204,6 +205,23 @@ class JobsController < ApplicationController
       format.json { head :no_content }
     end
   end
+  
+  def assign
+      
+    @job.update_attribute(:assign_to_id, params[:user_id])
+    
+    data = {
+      id: @job.id,
+      full_name: @job.assign_to.try(:full_name)
+    }
+      
+    respond_to do |format|
+      format.json do
+        render json: data, status: :ok
+      end  
+    end  
+      
+  end  
 
   # POST /jobs/1/image
   def add_image

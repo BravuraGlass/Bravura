@@ -415,7 +415,31 @@ $(document).ready(function(){
     $('#redirect_id').val(job_id);
     $('#job-form').submit();
   });
-
+  
+  $('.assign_to').on('change', function () {
+    var job_id = $(this).attr("id").split("assign_to_job_")[1];
+    
+    $.ajax({
+      method: "POST",
+      url: "/jobs/"+job_id+"/assign.json",
+      data: {user_id: $(this).val()},
+      dataType: "json"
+    })
+    .done(function (response) {
+      var msg = "Job #"+response.id+" no longer assigned to anybody"; 
+      
+      if (response.full_name != null) {
+        msg = "Job #"+response.id+" was successfully assigned to "+response.full_name
+      }  
+      
+      $('.errors_panel').html("<div class='notice'>"+msg+"</div>");
+    }) 
+    .fail(function (response) {
+      alert('There was an error assigning a job, please try again');
+    });
+  });
+  
+  
   function formatDate(date) {
     var day = date.getDate();
     var monthIndex = date.getMonth() + 1;

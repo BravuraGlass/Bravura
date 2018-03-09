@@ -146,6 +146,7 @@ Rails.application.routes.draw do
   resources :jobs, only: [:index, :new, :create, :update, :destroy, :show] do
     member do
       get 'product_detail'
+      post 'assign'
     end  
     collection do
       get 'all_active_data'

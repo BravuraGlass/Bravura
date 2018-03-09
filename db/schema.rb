@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20180120090311) do
+ActiveRecord::Schema.define(version: 20180309023322) do
 
   create_table "assets", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string "type"
@@ -117,6 +117,7 @@ ActiveRecord::Schema.define(version: 20180120090311) do
     t.boolean "confirmed_appointment"
     t.decimal "balance", precision: 10
     t.datetime "appointment_end"
+    t.integer "assign_to_id"
     t.index ["customer_id"], name: "index_jobs_on_customer_id"
     t.index ["installer_id"], name: "index_jobs_on_installer_id"
     t.index ["salesman_id"], name: "index_jobs_on_salesman_id"
