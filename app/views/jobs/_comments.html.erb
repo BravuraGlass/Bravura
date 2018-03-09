@@ -9,7 +9,7 @@
                 <% @job.comments.each do |comment| %>
                   <tr>
                     <td><span class="comment-date"><%= l(comment.created_at, format: :short) %></span>
-                        <span class="comment-author"><%= comment.user.first_name %> </span>said: <%= comment.body %></td>
+                        <span class="comment-author"><%= comment.user.try(:first_name) %> </span>said: <%= comment.body %></td>
                     <td align="right">
                       <% if current_user.id === comment.user_id %>
                       <a href="<%= job_comment_path(@job, comment) %>" class="btn" data-confirm="Are you sure you want to delete this Comment" data-method="delete">

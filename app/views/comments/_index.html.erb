@@ -4,7 +4,7 @@
       <% job.comments.each do |comment| %>
         <tr>
           <td><span class="comment-date"><%= l(comment.created_at, format: :short) %></span>
-            <span class="comment-author"><%= comment.user.first_name %> </span>said:
+            <span class="comment-author"><%= comment.user.try(:first_name) %> </span>said:
             <%= comment.body %>
           </td>
           <td align="right">
