@@ -184,6 +184,7 @@ class JobsController < ApplicationController
         
         params_redirect = {id: params[:redirect_id].nil? ? @job.id : params[:redirect_id]}
         params_redirect.merge!({scroll: true}) if params[:scroll]
+        params_redirect.merge!(filter: :all)
 
         format.html { redirect_to select_job_path(params_redirect), notice: 'Job was successfully updated.' }
         format.json do
