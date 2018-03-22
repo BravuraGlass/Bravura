@@ -147,6 +147,7 @@ Rails.application.routes.draw do
     member do
       get 'product_detail'
       post 'assign'
+      post 'appointment'
     end  
     collection do
       get 'all_active_data'

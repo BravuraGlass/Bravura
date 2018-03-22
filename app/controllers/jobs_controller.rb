@@ -1,7 +1,7 @@
 class JobsController < ApplicationController
 
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail, :assign]
-  before_action :load_common_data, except: [:index, :assign]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail, :assign, :appointment]
+  before_action :load_common_data, except: [:index]
   before_action :set_markers, only: [:show, :edit]
   
   skip_before_action :require_login, :verify_authenticity_token, only: [:all_active_data], if: -> { request.format.json? }   
@@ -215,6 +215,25 @@ class JobsController < ApplicationController
       id: @job.id,
       full_name: @job.assign_to.try(:full_name)
     }
+      
+    respond_to do |format|
+      format.json do
+        render json: data, status: :ok
+      end  
+    end  
+      
+  end  
+  
+  def appointment
+
+    params[:time] = "00:00" if params[:time].blank?  
+    dtime = Time.zone.parse("#{params[:date]} #{params[:time]}:00")
+    
+    @job.update_attribute(:appointment, dtime)
+    
+    data = {
+      id: @job.id,
+    }   
       
     respond_to do |format|
       format.json do

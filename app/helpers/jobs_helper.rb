@@ -49,4 +49,20 @@ module JobsHelper
     end
     buttons.html_safe
   end
+  
+  def d_appointment(dtime)
+    unless dtime.nil? 
+      return l(dtime, format: '%Y-%m-%d')
+    else
+      return nil
+    end    
+  end  
+  
+  def t_appointment(dtime)
+    unless dtime.nil? 
+      return l(dtime, format: '%H:%M:%S.%L')
+    else
+      return nil
+    end    
+  end 
 end
