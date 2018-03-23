@@ -225,14 +225,28 @@ class JobsController < ApplicationController
   end  
   
   def appointment
+    
+    if params[:mode] == "today"
+      params[:date] = Time.zone.now.strftime("%Y-%m-%d")
+    elsif params[:mode] == "tomorrow"
+      params[:date] = (Time.zone.now + 1.day).strftime("%Y-%m-%d")
+    end    
 
     params[:time] = "00:00" if params[:time].blank?  
-    dtime = Time.zone.parse("#{params[:date]} #{params[:time]}:00")
+    
+    unless params[:date].blank?
+      dtime = Time.zone.parse("#{params[:date]} #{params[:time]}:00")
+    else
+      dtime = nil
+    end    
     
     @job.update_attribute(:appointment, dtime)
     
+    dtime_response = @job.appointment.nil? ? nil : l(@job.appointment, format: '%Y-%m-%d %H:%M')
+    
     data = {
       id: @job.id,
+      dtime: dtime_response 
     }   
       
     respond_to do |format|

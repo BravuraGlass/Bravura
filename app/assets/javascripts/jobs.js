@@ -438,59 +438,67 @@ $(document).ready(function(){
       alert('There was an error assigning a job, please try again');
     });
   });
-  
-  $('.date_appointment').on('change', function () {
     
-    var job_id = $(this).attr("id").split("date_appointment_job_")[1];
-    var thedate = $(this).val()
-    var theyear = Number(thedate.split("-")[0])
+  $('.set-appointment').on('click', function () {  
+    var job_id = $(this).attr("id").split("-")[3];
+    var mode = $(this).attr("id").split("-")[2];
     
-    var thetime = $("#time_appointment_job_"+job_id).val()
-    
-    if (theyear > 2000) {
-      $.ajax({
-        method: "POST",
-        url: "/jobs/"+job_id+"/appointment.json",
-        data: {date: thedate, time: thetime },
-        dataType: "json"
-      })
-      .done(function (response) {
-        var msg = "Appointment for job #"+ response.id +" was successfully updated"
-        
-        $('.errors_panel').html("<div class='notice'>"+msg+"</div>");
-      }) 
-      .fail(function (response) {
-        alert('There was an error updating appointment, please try again');
-      });    
-    }
+    $.ajax({
+      method: "POST",
+      url: "/jobs/"+job_id+"/appointment.json",
+      data: {mode: mode},
+      dataType: "json"
+    })
+    .done(function (response) {
+      var msg = "Appointment for job #"+ response.id +" was successfully updated"
+      
+      $('#dtime-'+response.id).html(response.dtime);
+      $('.errors_panel').html("<div class='notice'>"+msg+"</div>");
+    }) 
+    .fail(function (response) {
+      alert('There was an error updating appointment, please try again');
+    }); 
   });
   
-  $('.time_appointment').on('change', function () {    
-    var job_id = $(this).attr("id").split("time_appointment_job_")[1];
-    var thedate = $("#date_appointment_job_"+job_id).val();
-    var theyear = Number(thedate.split("-")[0])
+  $('.specify-appointment').on('click', function() {
+    var job_id = $(this).attr("id").split("-")[2];
+    var thedate = $("#dtime-"+job_id).text().split(" ")[0];
+    var thetime = $("#dtime-"+job_id).text().split(" ")[1];
     
-    var thetime = $("#time_appointment_job_"+job_id).val()
+    $('#job_id').val(job_id);
+    $('#date_appointment').val(thedate);
+    $('#time_appointment').val(thetime);
     
-    if (theyear > 2000) {
-      $.ajax({
-        method: "POST",
-        url: "/jobs/"+job_id+"/appointment.json",
-        data: {date: thedate, time: thetime },
-        dataType: "json"
-      })
-      .done(function (response) {
-        var msg = "Appointment for job #"+ response.id +" was successfully updated"
-        
-        $('.errors_panel').html("<div class='notice'>"+msg+"</div>");
-      }) 
-      .fail(function (response) {
-        alert('There was an error updating appointment, please try again');
-      });    
-    }
-  });
+    $('.modal-title').html("Specify Appointment for Job #"+job_id)
+    $('#appointmentMasterModal').modal({
+      show: true,
+      keyboard: false
+    });
+  }); 
+  
+  $('#appointmentModalSaveButton').on('click', function() {
+    var mode = "specify"
+    var thedate = $("#date_appointment").val();
+    var thetime = $("#time_appointment").val();
 
-  
+    $.ajax({
+      method: "POST",
+      url: "/jobs/"+$('#job_id').val()+"/appointment.json",
+      data: {mode: mode, date: thedate, time: thetime},
+      dataType: "json"
+    })
+    .done(function (response) {
+      $('#appointmentMasterModal').modal('hide');
+      var msg = "Appointment for job #"+ response.id +" was successfully updated"
+      
+      $('#dtime-'+response.id).text(response.dtime);
+      $('.errors_panel').html("<div class='notice'>"+msg+"</div>");
+    }) 
+    .fail(function (response) {
+      $('#appointmentMasterModal').modal('hide');
+      alert('There was an error updating appointment, please try again');
+    }); 
+  });  
   
   function formatDate(date) {
     var day = date.getDate();

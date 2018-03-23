@@ -2,6 +2,7 @@
 <h3><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %>
    <small>List of existing jobs</small>
 </h3>
+<%= render :partial => 'appointmentMasterModal' %>
 <div class="container-fluid">
    <div class="row">
       <div id="jobListPanel" class="col-lg-12 no-padding">
@@ -39,12 +40,13 @@
               <table class=" table table-striped table-hover responsive" id="jobs_datatable">
                 <thead>
                   <tr>
-                    <th class="sort-alpha">Appointment</th>
                     <th class="sort-alpha">Job</th>
                     <th class="sort-alpha">Customer</th>
                     <th class="sort-alpha">Job Status</th>
                     <th class="sort-alpha">Assign To</th>
                     <th class="no-sort">Actions</th>
+                    <th class="no-sort">Appointment</th>
+                    <th class="no-sort">&nbsp;</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -55,14 +57,6 @@
                     <% else %>
                       <% @jobs.each do |job| %>
                         <tr class="pointer" >
-                          <!--
-                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
-                            <%= l(job.appointment, format: '%Y/%m/%d') if job.appointment %>
-                          </td> -->
-                          <td style="padding-right:30px">
-                            <%= date_field_tag "date_appointment", d_appointment(job.appointment), style: 'display:inline !important; width: 150px;', id: "date_appointment_job_#{job.id}", class: "date_appointment" %><br />
-                            <%= time_field_tag "time_appointment", t_appointment(job.appointment), id: "time_appointment_job_#{job.id}", class: "time_appointment" %>
-                          </td>  
                           <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
                             <span class="<%= 'confirmed' if job.confirmed_appointment %>">(<%= job.id %>) <%= job.address.nil? ? "empty" : job.address[0...30] %></span>
                           </td>
@@ -79,8 +73,15 @@
                             <%= job.fo_id ?
                             link_to("View FO", edit_fabrication_order_path(id: job.fo_id), :class => 'btn btn-default btn-xs') :
                             link_to('Create FO', job_fabrication_orders_path(job), method: :post, class: 'btn btn-default btn-xs') %>
-                            <%= link_to 'View Section Detail', product_detail_job_path(job.id), :class => 'btn btn-default btn-xs'  if job.fo_id %>
+                            <%= link_to 'Section Detail', product_detail_job_path(job.id), :class => 'btn btn-default btn-xs'  if job.fo_id %>
+                          </td>
+                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'" id="dtime-<%= job.id %>"><%= l(job.appointment, format: '%Y-%m-%d %H:%M') if job.appointment %></td>  
+                          <td>
+                            <%= link_to "Today", "#", class: 'set-appointment btn btn-default btn-xs', id: "set-appment-today-#{job.id}" %>
+                            <%= link_to "Tomorrow", "#", class: 'set-appointment btn btn-default btn-xs', id: "set-appment-tomorrow-#{job.id}" %>
+                            <%= link_to "Specify", "#", class: 'specify-appointment btn btn-default btn-xs', id: "specify-appointment-#{job.id}"  %>              
                           </td>  
+
                         </tr>
                         <% end %>
                           <% end %>
