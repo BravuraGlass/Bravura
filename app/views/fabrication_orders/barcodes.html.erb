@@ -12,11 +12,10 @@
   }
 
   .address {
-    margin-top: 10px;
-    max-width: 250px; 
+    margin-top: 5px;
     display: inline-table;
-    text-align: justify;
-    font-size: x-large;
+    text-align: center;;
+    font-size: small;
   }
 
   .barcode_edge_type {
@@ -58,7 +57,7 @@
     <% @qrs.each do |qr| %>
     <div class="row" style="page-break-after: always; page-break-inside: avoid;">
       <div class="col-md-12">
-        <h1><%= qr[0] %></h1>
+        <h2><%= qr[0] %></h2>
         <div class="table">
           <%= image_tag qr[1] %>
         </div>
