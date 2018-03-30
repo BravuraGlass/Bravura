@@ -185,7 +185,7 @@ class ProductSectionsController < ApplicationController
       
       barcode = Barby::Code128B.new(shorturl)
       
-      format.png { send_data barcode.to_png,type: "image/png", disposition: 'inline' }
+      format.png { send_data barcode.to_png(height: 150),type: "image/png", disposition: 'inline' }
       format.html {render :layout => 'clean'}
     end  
   end  

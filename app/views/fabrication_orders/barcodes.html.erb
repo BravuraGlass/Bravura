@@ -64,11 +64,15 @@
         </div>
         <div class="address">
           <div><%= qr[2] %></div>
+          <!--
           <br/> Apt# <br/>
           <div><%= qr[3] %></div><br/>
           <div>Size : <%= qr[4] %></div><br/>
-          <div>Edge Type : </div>
-          <% if qr[9].present? %>
+          <div>Edge Type : </div> -->
+          
+          <% @showsize = false %>
+          
+          <% if qr[9].present? and @showsize == true %>
           <table class="barcode_edge_type"><tbody>
             <tr>
               <td colspan="3"><%= qr[5] %></td>
