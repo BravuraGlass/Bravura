@@ -1,6 +1,6 @@
 class JobsController < ApplicationController
 
-  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail, :assign, :appointment]
+  before_action :set_job, only: [:show, :edit, :update, :destroy, :destroy_image, :add_image, :product_detail, :assign, :change_status, :appointment]
   before_action :load_common_data, except: [:index]
   before_action :set_markers, only: [:show, :edit]
   
@@ -28,6 +28,7 @@ class JobsController < ApplicationController
     @show_active = params[:active].eql?('false') ? false : true
     @selected_date = Date.today
     @sorted_users = User.all.sort_by {|usr| usr.last_name.downcase.to_i == 0 ? 1000 : usr.last_name.downcase.to_i }
+    @statuses ||= Status.where(:category => Status.categories[:jobs]).order(:order)
 
     if params['filter']
       case params['filter']
@@ -223,6 +224,23 @@ class JobsController < ApplicationController
     end  
       
   end  
+  
+  def change_status
+      
+    @job.update_attribute(:status, params[:status])
+    
+    data = {
+      id: @job.id,
+      status: @job.status
+    }
+      
+    respond_to do |format|
+      format.json do
+        render json: data, status: :ok
+      end  
+    end  
+      
+  end 
   
   def appointment
     

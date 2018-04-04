@@ -259,6 +259,14 @@ class Job < ApplicationRecord
         auditable: self
       )
     end      
+    
+    unless self.active == self.active_before_last_save
+      AuditLog.create(
+        user_name: self.audit_user_name,
+        details: "updated job from #{self.active_before_last_save ? "Active" : "Not Active" } to #{self.active ? "Active" : "Not Active"}",
+        auditable: self
+      )
+    end 
   end  
   
 end

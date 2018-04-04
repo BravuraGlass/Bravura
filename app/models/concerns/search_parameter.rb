@@ -29,7 +29,7 @@ module SearchParameter
       product_ids = Product.joins(:room => {:fabrication_order => :job}).where("jobs.active = ?", true).collect {|sect| sect.id}
       section_ids = ProductSection.joins(:product => {:room => {:fabrication_order => :job}}).where("jobs.active = ?", true).collect {|sect| sect.id}
       room_ids = Room.joins(:fabrication_order => :job).where("jobs.active = ?", true).collect {|room| room.id}
-      job_ids = Job.where("active = ?", true).collect {|job| job.id}
+      job_ids = Job.all.collect {|job| job.id}
       @plain_condition << " ( "
       if product_ids.present?
         @plain_condition << " (auditable_type = 'Product' and auditable_id in (#{product_ids.join(',')})) or"

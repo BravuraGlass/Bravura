@@ -63,8 +63,8 @@
                           <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
                             <%= "#{job.customer_firstname} #{job.customer_lastname} - #{job.customer_company_name}" %>
                           </td>
-                          <td onclick="location.href = '<%=job_path(id: job.id, scroll: '')%>'">
-                            <%= job.status %>
+                          <td>
+                            <%= select_tag "job_status_#{job.id}", options_from_collection_for_select(@statuses, "name", "name",job.status), class: 'job_status', include_blank: false %>
                           </td>
                           <td>
                             <%= select_tag "assign_to_job_#{job.id}", options_from_collection_for_select(@sorted_users, "id", "full_name",job.assign_to_id), class: 'assign_to', include_blank: true %>

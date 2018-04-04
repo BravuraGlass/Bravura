@@ -416,6 +416,28 @@ $(document).ready(function(){
     $('#job-form').submit();
   });
   
+  $('.job_status').on('change', function () {
+    var job_id = $(this).attr("id").split("job_status_")[1];
+    
+    $.ajax({
+      method: "POST",
+      url: "/jobs/"+job_id+"/change_status.json",
+      data: {status: $(this).val()},
+      dataType: "json"
+    })
+    .done(function (response) { 
+      
+      if (response.status != null) {
+        msg = "Job status #"+response.id+" was successfully updated to "+response.status
+      }  
+      
+      $('.errors_panel').html("<div class='notice'>"+msg+"</div>");
+    }) 
+    .fail(function (response) {
+      alert('There was an error updated a status, please try again');
+    });
+  });
+  
   $('.assign_to').on('change', function () {
     var job_id = $(this).attr("id").split("assign_to_job_")[1];
     

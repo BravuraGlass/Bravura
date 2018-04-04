@@ -147,6 +147,7 @@ Rails.application.routes.draw do
     member do
       get 'product_detail'
       post 'assign'
+      post 'change_status'
       post 'appointment'
     end  
     collection do
