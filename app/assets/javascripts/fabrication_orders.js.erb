@@ -343,6 +343,10 @@ $(document).ready(function(){
     var product_id = product_id_temp.split(" ")[0];
     var room_id = $(this).attr("class").split("section-status-parent-room-")[1];
     
+    if ($(this).val() == 'To Temper') {
+      window.location.href = "/fabrication_orders/"+$("#fb_id").val()+"/rooms/"+room_id+"/products/"+product_id+"/product_sections/"+section_id+"/size"
+    }
+    
     if ($(this).val() == 'FINISHED') {
       var same_status = true
       
