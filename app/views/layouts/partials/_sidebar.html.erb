@@ -95,11 +95,18 @@
                <span>Edge Types</span>
             </a>
          </li>
-         <% if current_user.type_of_user == "0" %>
+
          <li class="<%= 'active' if current_controller == 'working_logs' %> menu-line">
             <a href="<%= report_working_logs_path %>" title="Product Types">
                <em><i class="icon-check"></i></em>
                <span>Working Logs</span>
+            </a>
+         </li> 
+         
+         <li class="<%= 'active' if current_controller == 'working_logs' and params[:action] == 'checkin_status' %> menu-line">
+            <a href="<%= checkin_status_working_logs_path %>" title="Product Types">
+               <em><i class="icon-check"></i></em>
+               <span>Checkin Status</span>
             </a>
          </li> 
   <!--       
@@ -113,7 +120,6 @@
        -->
          
          
-         <% end %>
 
 <% end %>
  

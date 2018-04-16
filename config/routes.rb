@@ -7,6 +7,7 @@ Rails.application.routes.draw do
   resources :working_logs, only: :index do
     collection do
       post 'checkin'
+      get 'checkin_status'
       get 'checkin_barcode'
       get 'checkout_barcode'
       post 'checkout'

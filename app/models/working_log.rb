@@ -106,6 +106,14 @@ class WorkingLog < ApplicationRecord
     end 
   end
   
+  def readable_hours
+    unless self.submit_time.blank?
+      self.submit_time.strftime("%H:%M:%S")
+    else
+      nil
+    end 
+  end
+  
   def self.create_report_detail(params)
     
     errors = []

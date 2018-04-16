@@ -6,7 +6,7 @@ class WorkingLogsController < ApplicationController
   include AuditableController
   skip_before_action :require_login, only: [:checkin, :checkout, :user_checkin_status], if: -> { request.format.json? }
   before_action :api_login_status, only: [:checkin, :checkout, :user_checkin_status], if: -> { request.format.json? }
-  before_action :require_admin, only: [:report, :report_detail, :index] 
+  before_action :require_admin, only: [:report, :report_detail, :index, :checkin_status] 
   
   def index
     @working_logs = WorkingLog.order("submit_time DESC").joins(:user).where("users.id IS NOT NULL") 
@@ -157,6 +157,12 @@ class WorkingLogsController < ApplicationController
       barcode = Barby::Code128B.new(CHECKOUT_BARCODE)
       format.png { send_data barcode.to_png,type: "image/png", disposition: 'inline' }
     end  
+  end  
+  
+  def checkin_status
+    @users = User.where("active=?", true)
+    
+    @users = @users.sort_by {|usr| usr.last_name.downcase.to_i == 0 ? 1000 : usr.last_name.downcase.to_i }
   end  
   
   def checkin

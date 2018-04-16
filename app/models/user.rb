@@ -38,6 +38,29 @@ class User < ApplicationRecord
     last_log_today.blank? ? false : last_log_today.checkin_or_checkout?
   end
   
+  def today_working_log
+    data = {}
+    
+    #set_time = (Time.zone.now-3.days).strftime("%Y%m%d")
+    set_time = Time.zone.now.strftime("%Y%m%d")
+    
+    today_logs = self.working_logs.where("submit_date=?", set_time).order("submit_time DESC")
+    last_log_today = today_logs[0]
+    
+    data[:status] = last_log_today.blank? ? "checkout" : last_log_today.checkin_or_checkout
+    data[:checkin_time] = nil
+    data[:checkout_time] = nil
+    
+    if today_logs.size == 2
+      data[:checkout_time] = today_logs[0].readable_hours
+      data[:checkin_time] = today_logs[1].readable_hours
+    elsif today_logs.size == 1   
+      data[:checkin_time] = today_logs[0].readable_hours
+    end  
+    
+    return data
+  end  
+  
   def full_name
     "#{self.first_name} #{self.last_name}"
   end  
