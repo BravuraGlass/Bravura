@@ -54,8 +54,12 @@ class User < ApplicationRecord
     if today_logs.size == 2
       data[:checkout_time] = today_logs[0].readable_hours
       data[:checkin_time] = today_logs[1].readable_hours
-    elsif today_logs.size == 1   
-      data[:checkin_time] = today_logs[0].readable_hours
+    elsif today_logs.size == 1
+      if today_logs[0].checkin_or_checkout == "checkin"   
+        data[:checkin_time] = today_logs[0].readable_hours
+      elsif today_logs[0].checkin_or_checkout == "checkout"
+        data[:checkout_time] = today_logs[0].readable_hours
+      end    
     end  
     
     return data
