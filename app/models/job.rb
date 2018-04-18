@@ -132,7 +132,7 @@ class Job < ApplicationRecord
   
   def product_detail_level_1
     rows = []
-    self.fabrication_order.rooms.order("name asc").each do |room|
+    self.fabrication_order.rooms.select("CAST(name as SIGNED) AS casted_column, rooms.*").order("casted_column asc, name asc").each do |room|
       
       rows << [
         {content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"},
@@ -146,7 +146,7 @@ class Job < ApplicationRecord
   
   def product_detail_level_2
     rows = []
-    self.fabrication_order.rooms.order("name asc").each do |room|      
+    self.fabrication_order.rooms.select("CAST(name as SIGNED) AS casted_column, rooms.*").order("casted_column asc, name asc").each do |room|      
       cols = [
         {content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"}
       ]
@@ -186,7 +186,7 @@ class Job < ApplicationRecord
       total_col += arr_prod[:max_col]
     end  
 
-    self.fabrication_order.rooms.order("name asc").each_with_index do |room, idx|
+    self.fabrication_order.rooms.select("CAST(name as SIGNED) AS casted_column, rooms.*").order("casted_column asc, name asc").each_with_index do |room, idx|
       rows = [{content: room.name, prod_count: 0, class_name: room.class.to_s, id: room.id, url: "/fabrication_orders/#{room.id}/audit_room"}]
        
       empty_count = 0 
