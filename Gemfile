@@ -14,6 +14,8 @@ gem 'geocoder', '~> 1.4', '>= 1.4.4'
 
 gem "google_url_shortener"
 
+gem 'redis', '~> 3.0'
+
 # Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
 gem 'rails', '5.1.0'
 

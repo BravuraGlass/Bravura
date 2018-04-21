@@ -15,6 +15,17 @@ class WorkingLog < ApplicationRecord
   # temporary disable
   #after_create :update_location
   
+  after_save :broadcast_save
+  
+  def broadcast_save
+    if Time.zone.now.strftime("%Y%m%d").to_i == self.submit_date
+      
+      data = self.user.today_working_log
+      
+      ActionCable.server.broadcast 'working_logs', data
+    end   
+  end
+  
   def self.submit(data, checkin_or_checkout = "checkin")
     wlog_hash = {
       user_id: data[:user_id],
@@ -251,6 +262,32 @@ class WorkingLog < ApplicationRecord
       
     return {errors: errors}
   end
+  
+  ## dummy method
+  def self.today_submit(uid=nil, method = "checkin")
+    if uid.nil?
+      uid = User.where("email = 'aditya.jamop@gmail.com'")[0].id
+    end
+      
+    wlog = WorkingLog.create(
+      submit_time: Time.zone.now,
+      submit_method: "manual",
+      user_id: uid,
+      submit_date: Time.zone.now.strftime("%Y%m%d"),
+      checkin_or_checkout: method
+    )  
+    return wlog
+  end  
+  
+  def self.today_checkin(uid = nil)
+    self.today_submit(uid, "checkin")
+  end  
+  
+  def self.today_checkout(uid = nil)
+    self.today_submit(uid, "checkout")
+  end  
+  
+  ### end of dummy method
     
   protected
   def start_time  

@@ -50,6 +50,8 @@ class User < ApplicationRecord
     data[:status] = last_log_today.blank? ? "checkout" : last_log_today.checkin_or_checkout
     data[:checkin_time] = nil
     data[:checkout_time] = nil
+    data[:user_id] = self.id
+    data[:user_name] = self.full_name
     
     if today_logs.size == 2
       data[:checkout_time] = today_logs[0].readable_hours

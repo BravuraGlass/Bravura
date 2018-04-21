@@ -12,19 +12,18 @@
                <table class="datatable table table-striped table-hover responsive">
                   <thead>
                     <tr>
-                                            <th class="sort-alpha">Name</th>
-                                            <th class="sort-alpha">Checkin Time</th>
-                                            <th class="sort-alpha">Checkout Time</th>
-                                            
+                      <th class="sort-alpha">Name</th>
+                      <th class="sort-alpha">Checkin Time</th>
+                      <th class="sort-alpha">Checkout Time</th>                      
                     </tr>
                   </thead>
                   <tbody>
                      
                      <% @users.each do |user| %>
-                        <tr class="<%= user.today_working_log[:status] %>-color">
-                            <td><%= user.try(:full_name) %></td>
-                            <td><%= user.today_working_log[:checkin_time] %></td>
-                            <td><%= user.today_working_log[:checkout_time] %></td>
+                        <tr id="status-color-<%= user.id %>" class="<%= user.today_working_log[:status] %>-color">
+                          <td id="user-name-<%= user.id %>"><%= user.try(:full_name) %></td>
+                          <td id="checkin-time-<%= user.id %>"><%= user.today_working_log[:checkin_time] %></td>
+                          <td id="checkout-time-<%= user.id %>"><%= user.today_working_log[:checkout_time] %></td>
                         </tr>
                       <% end %>
                   </tbody>
@@ -36,7 +35,7 @@
 </div>
 
 <script type="text/javascript">
-  setTimeout(function() {
-  location.reload();
-}, 15000);
+//  setTimeout(function() {
+//  location.reload();
+// }, 15000);
 </script>

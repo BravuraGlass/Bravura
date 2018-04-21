@@ -33,14 +33,22 @@
    <%= favicon_link_tag 'favicon.ico', :rel => 'shortcut icon' %>
    <%= stylesheet_link_tag 'application', media: 'all', id: "maincss" %>
    <%= csrf_meta_tags %>
+   <%= action_cable_meta_tag %>
+   
+   <!-- =============== VENDOR SCRIPTS ===============-->
+   <%= javascript_include_tag 'base' %>
+   <!-- =============== VIEW VENDOR SCRIPTS ===============-->
+   <%= javascript_include_tag params[:controller] %>
+   <!-- =============== APP SCRIPTS ===============-->
+   <%= javascript_include_tag 'application' %>
+   
+   <!-- =============== ACTION CABLE SCRIPTS ===============-->
+   <%= javascript_include_tag "cable.js" if params[:controller] == "working_logs" %>
+   <%= javascript_include_tag "channels/working_logs.js" if params[:controller] == "working_logs" %>
+   
 </head>
 
-<!-- =============== VENDOR SCRIPTS ===============-->
-<%= javascript_include_tag 'base' %>
-<!-- =============== VIEW VENDOR SCRIPTS ===============-->
-<%= javascript_include_tag params[:controller] %>
-<!-- =============== APP SCRIPTS ===============-->
-<%= javascript_include_tag 'application' %>
+
 
 <body>
    <div class="wrapper">
