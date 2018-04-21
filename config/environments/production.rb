@@ -1,9 +1,9 @@
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
   
-  config.action_cable.url = "wss://bravura-crm.com/cable"
+  config.action_cable.url = "ws://www.bravura-crm.com/cable"
   
-  config.action_cable.allowed_request_origins = ['bravura-crm.com']
+  config.action_cable.allowed_request_origins = [ "http://www.bravura-crm.com", "http://bravura-crm.com" ]
 
   # Code is not reloaded between requests.
   config.cache_classes = true
