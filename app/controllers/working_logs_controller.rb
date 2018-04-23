@@ -4,8 +4,8 @@ require 'barby/outputter/png_outputter'
 
 class WorkingLogsController < ApplicationController
   include AuditableController
-  skip_before_action :require_login, only: [:checkin, :checkout, :user_checkin_status], if: -> { request.format.json? }
-  before_action :api_login_status, only: [:checkin, :checkout, :user_checkin_status], if: -> { request.format.json? }
+  skip_before_action :require_login, only: [:checkin, :checkout, :user_checkin_status, :current_week], if: -> { request.format.json? }
+  before_action :api_login_status, only: [:checkin, :checkout, :user_checkin_status, :current_week], if: -> { request.format.json? }
   before_action :require_admin, only: [:report, :report_detail, :index, :checkin_status] 
   
   def index
@@ -38,6 +38,12 @@ class WorkingLogsController < ApplicationController
       format.json { render json: response_json}
     end
   end
+  
+  def current_week
+    respond_to do |format|
+      format.json {render json: api_response(:success, nil, @api_user.current_week_log)}
+    end  
+  end  
   
   def destroy_report
     @working_logs = WorkingLog.where("user_id=? AND id IN (?)", report_params[:user_id], report_params[:ids].split(",") )
